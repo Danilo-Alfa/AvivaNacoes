@@ -13,7 +13,8 @@ export default function Home() {
               Bem-vindo à Igreja Aviva
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-primary-foreground/90 animate-fade-in">
-              Uma comunidade de fé, esperança e amor transformando vidas através da palavra de Deus
+              Uma comunidade de fé, esperança e amor transformando vidas através
+              da palavra de Deus
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
               <Link to="/quem-somos">
@@ -37,7 +38,9 @@ export default function Home() {
           <CardContent className="p-8">
             <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Próximo Culto</p>
+                <p className="text-sm text-muted-foreground mb-1">
+                  Próximo Culto
+                </p>
                 <p className="text-2xl font-bold">Domingo</p>
               </div>
               <div>
@@ -61,15 +64,16 @@ export default function Home() {
               Uma Igreja que Transforma Vidas
             </h2>
             <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-              Somos uma comunidade de fé comprometida em levar o amor de Cristo a todas as pessoas. 
-              Através da palavra, do louvor e da comunhão, buscamos fazer a diferença na vida de cada pessoa.
+              Somos uma comunidade de fé comprometida em levar o amor de Cristo
+              a todas as pessoas. Através da palavra, do louvor e da comunhão,
+              buscamos fazer a diferença na vida de cada pessoa.
             </p>
             <div className="space-y-4 mb-8">
               {[
                 "Cultos dinâmicos e relevantes",
                 "Ministérios para todas as idades",
                 "Projetos sociais que impactam vidas",
-                "Comunidade acolhedora e familiar"
+                "Comunidade acolhedora e familiar",
               ].map((item) => (
                 <div key={item} className="flex items-center gap-3">
                   <div className="w-2 h-2 bg-accent rounded-full"></div>
@@ -85,7 +89,9 @@ export default function Home() {
             </Link>
           </div>
           <div className="aspect-video bg-gradient-accent rounded-lg shadow-medium flex items-center justify-center">
-            <span className="text-2xl text-accent-foreground font-semibold">Vídeo/Imagem</span>
+            <span className="text-2xl text-accent-foreground font-semibold">
+              Vídeo/Imagem
+            </span>
           </div>
         </div>
       </section>
@@ -98,10 +104,30 @@ export default function Home() {
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Calendar, title: "Eventos", desc: "Participe dos nossos eventos", link: "/eventos" },
-              { icon: Users, title: "Nossas Igrejas", desc: "Encontre a sede mais próxima", link: "/nossas-igrejas" },
-              { icon: Heart, title: "Projetos", desc: "Conheça nossos projetos sociais", link: "/projetos" },
-              { icon: Book, title: "Jornal Aviva", desc: "Leia nossa publicação", link: "/jornal" }
+              {
+                icon: Calendar,
+                title: "Eventos",
+                desc: "Participe dos nossos eventos",
+                link: "/eventos",
+              },
+              {
+                icon: Users,
+                title: "Nossas Igrejas",
+                desc: "Encontre a sede mais próxima",
+                link: "/nossas-igrejas",
+              },
+              {
+                icon: Heart,
+                title: "Projetos",
+                desc: "Conheça nossos projetos sociais",
+                link: "/projetos",
+              },
+              {
+                icon: Book,
+                title: "Jornal Aviva",
+                desc: "Leia nossa publicação",
+                link: "/jornal",
+              },
             ].map((item) => (
               <Link key={item.title} to={item.link}>
                 <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 h-full">
@@ -123,12 +149,17 @@ export default function Home() {
       <section className="container mx-auto px-4 py-20">
         <Card className="shadow-medium max-w-3xl mx-auto bg-gradient-hero text-primary-foreground">
           <CardContent className="p-12 text-center">
-            <p className="text-sm font-semibold mb-4 text-primary-foreground/80">VERSÍCULO DO DIA</p>
+            <p className="text-sm font-semibold mb-4 text-primary-foreground/80">
+              VERSÍCULO DO DIA
+            </p>
             <blockquote className="text-2xl md:text-3xl font-serif mb-6 leading-relaxed">
-              "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, 
-              para que todo aquele que nele crê não pereça, mas tenha a vida eterna."
+              "Porque Deus amou o mundo de tal maneira que deu o seu Filho
+              unigênito, para que todo aquele que nele crê não pereça, mas tenha
+              a vida eterna."
             </blockquote>
-            <p className="text-lg font-semibold text-primary-foreground/90">João 3:16</p>
+            <p className="text-lg font-semibold text-primary-foreground/90">
+              João 3:16
+            </p>
           </CardContent>
         </Card>
       </section>
@@ -141,7 +172,8 @@ export default function Home() {
               Faça Parte da Nossa Família
             </h2>
             <p className="text-lg text-accent-foreground/90 mb-8 max-w-2xl mx-auto">
-              Venha nos visitar e experimente uma comunidade que te acolhe com amor e verdade
+              Venha nos visitar e experimente uma comunidade que te acolhe com
+              amor e verdade
             </p>
             <Link to="/fale-conosco">
               <button className="px-8 py-4 bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all hover:-translate-y-0.5 shadow-soft">

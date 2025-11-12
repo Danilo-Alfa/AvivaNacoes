@@ -7,34 +7,38 @@ export default function RedesSociais() {
       name: "Facebook",
       icon: Facebook,
       url: "#",
-      description: "Acompanhe nossas postagens diárias, eventos e transmissões ao vivo dos cultos.",
+      description:
+        "Acompanhe nossas postagens diárias, eventos e transmissões ao vivo dos cultos.",
       followers: "10K+ seguidores",
-      color: "from-blue-600 to-blue-400"
+      color: "from-blue-600 to-blue-400",
     },
     {
       name: "Instagram",
       icon: Instagram,
       url: "#",
-      description: "Versículos inspiradores, stories dos eventos e momentos da nossa comunidade.",
+      description:
+        "Versículos inspiradores, stories dos eventos e momentos da nossa comunidade.",
       followers: "8K+ seguidores",
-      color: "from-pink-600 via-purple-600 to-orange-500"
+      color: "from-pink-600 via-purple-600 to-orange-500",
     },
     {
       name: "YouTube",
       icon: Youtube,
       url: "#",
-      description: "Assista aos cultos completos, pregações, louvores e testemunhos.",
+      description:
+        "Assista aos cultos completos, pregações, louvores e testemunhos.",
       followers: "15K+ inscritos",
-      color: "from-red-600 to-red-400"
+      color: "from-red-600 to-red-400",
     },
     {
       name: "WhatsApp",
       icon: MessageCircle,
       url: "#",
-      description: "Entre no nosso grupo para receber mensagens, avisos e oração.",
+      description:
+        "Entre no nosso grupo para receber mensagens, avisos e oração.",
       followers: "Comunidade ativa",
-      color: "from-green-600 to-green-400"
-    }
+      color: "from-green-600 to-green-400",
+    },
   ];
 
   return (
@@ -47,7 +51,7 @@ export default function RedesSociais() {
               Nossas Redes Sociais
             </h1>
             <p className="text-lg text-muted-foreground">
-              Conecte-se conosco e faça parte da nossa comunidade digital. 
+              Conecte-se conosco e faça parte da nossa comunidade digital.
               Acompanhe conteúdos inspiradores, eventos e muito mais!
             </p>
           </div>
@@ -59,17 +63,28 @@ export default function RedesSociais() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {socialNetworks.map((network) => (
-              <Card key={network.name} className="group hover:shadow-xl transition-all duration-300 border-2">
+              <Card
+                key={network.name}
+                className="group hover:shadow-xl transition-all duration-300 border-2"
+              >
                 <CardContent className="p-8">
-                  <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${network.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                  <div
+                    className={`w-16 h-16 rounded-full bg-gradient-to-r ${network.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}
+                  >
                     <network.icon className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-3 text-foreground">{network.name}</h3>
-                  <p className="text-muted-foreground mb-4">{network.description}</p>
-                  <p className="text-sm font-semibold text-primary mb-4">{network.followers}</p>
-                  <a 
-                    href={network.url} 
-                    target="_blank" 
+                  <h3 className="text-2xl font-bold mb-3 text-foreground">
+                    {network.name}
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    {network.description}
+                  </p>
+                  <p className="text-sm font-semibold text-primary mb-4">
+                    {network.followers}
+                  </p>
+                  <a
+                    href={network.url}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                   >
@@ -94,7 +109,9 @@ export default function RedesSociais() {
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">📖</span>
                 </div>
-                <h3 className="font-bold mb-2 text-foreground">Versículos Diários</h3>
+                <h3 className="font-bold mb-2 text-foreground">
+                  Versículos Diários
+                </h3>
                 <p className="text-sm text-muted-foreground">
                   Palavras de fé e esperança para o seu dia
                 </p>
@@ -103,7 +120,9 @@ export default function RedesSociais() {
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🎥</span>
                 </div>
-                <h3 className="font-bold mb-2 text-foreground">Transmissões Ao Vivo</h3>
+                <h3 className="font-bold mb-2 text-foreground">
+                  Transmissões Ao Vivo
+                </h3>
                 <p className="text-sm text-muted-foreground">
                   Cultos e eventos transmitidos em tempo real
                 </p>
@@ -112,7 +131,9 @@ export default function RedesSociais() {
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">📅</span>
                 </div>
-                <h3 className="font-bold mb-2 text-foreground">Eventos e Avisos</h3>
+                <h3 className="font-bold mb-2 text-foreground">
+                  Eventos e Avisos
+                </h3>
                 <p className="text-sm text-muted-foreground">
                   Fique por dentro de tudo que acontece
                 </p>
@@ -130,11 +151,14 @@ export default function RedesSociais() {
               Faça Parte da Nossa Comunidade
             </h2>
             <p className="text-muted-foreground mb-8">
-              Não perca nenhuma novidade! Siga-nos em todas as redes sociais e 
+              Não perca nenhuma novidade! Siga-nos em todas as redes sociais e
               fortaleça sua fé junto conosco.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <a href="#" className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-semibold">
+              <a
+                href="#"
+                className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-semibold"
+              >
                 Seguir Agora
               </a>
             </div>

@@ -28,10 +28,10 @@ export default function Galerias() {
           "Páscoa 2024",
           "Aniversário da Igreja",
           "Casamentos",
-          "Inaugurações"
+          "Inaugurações",
         ].map((album, index) => (
-          <Card 
-            key={album} 
+          <Card
+            key={album}
             className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer group"
           >
             <CardContent className="p-6">
@@ -44,7 +44,14 @@ export default function Galerias() {
               </div>
               <h3 className="font-semibold text-center text-sm">{album}</h3>
               <p className="text-xs text-center text-muted-foreground mt-1">
-                {new Date(2024, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' })}
+                {new Date(
+                  2024,
+                  Math.floor(Math.random() * 12),
+                  Math.floor(Math.random() * 28) + 1,
+                ).toLocaleDateString("pt-BR", {
+                  month: "short",
+                  year: "numeric",
+                })}
               </p>
             </CardContent>
           </Card>
@@ -56,7 +63,7 @@ export default function Galerias() {
         <h2 className="text-3xl font-bold mb-8">Últimas Fotos Adicionadas</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {Array.from({ length: 12 }).map((_, index) => (
-            <Card 
+            <Card
               key={index}
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer overflow-hidden group"
             >
@@ -75,7 +82,10 @@ export default function Galerias() {
         <h2 className="text-3xl font-bold mb-8">Momentos Especiais</h2>
         <div className="grid md:grid-cols-2 gap-6">
           {[1, 2].map((destaque) => (
-            <Card key={destaque} className="shadow-medium overflow-hidden group cursor-pointer">
+            <Card
+              key={destaque}
+              className="shadow-medium overflow-hidden group cursor-pointer"
+            >
               <CardContent className="p-0">
                 <div className="aspect-video bg-gradient-accent flex items-center justify-center group-hover:scale-105 transition-transform">
                   <span className="text-xl text-accent-foreground font-semibold">
@@ -83,9 +93,12 @@ export default function Galerias() {
                   </span>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">Título do Momento Especial</h3>
+                  <h3 className="text-xl font-bold mb-2">
+                    Título do Momento Especial
+                  </h3>
                   <p className="text-sm text-muted-foreground">
-                    Descrição do momento especial capturado nesta foto, explicando o contexto e a importância deste registro.
+                    Descrição do momento especial capturado nesta foto,
+                    explicando o contexto e a importância deste registro.
                   </p>
                 </div>
               </CardContent>

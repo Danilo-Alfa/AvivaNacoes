@@ -19,7 +19,10 @@ export default function Eventos() {
         <h2 className="text-3xl font-bold mb-8">Próximos Eventos</h2>
         <div className="space-y-6">
           {[1, 2, 3].map((evento) => (
-            <Card key={evento} className="shadow-soft hover:shadow-medium transition-all overflow-hidden">
+            <Card
+              key={evento}
+              className="shadow-soft hover:shadow-medium transition-all overflow-hidden"
+            >
               <CardContent className="p-0">
                 <div className="grid md:grid-cols-3 gap-0">
                   {/* Imagem do Evento */}
@@ -38,10 +41,13 @@ export default function Eventos() {
                         <div className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full mb-3">
                           DESTAQUE
                         </div>
-                        <h3 className="text-2xl font-bold mb-2">Nome do Evento Especial</h3>
+                        <h3 className="text-2xl font-bold mb-2">
+                          Nome do Evento Especial
+                        </h3>
                         <p className="text-muted-foreground mb-4">
-                          Descrição detalhada do evento, incluindo o que será abordado, 
-                          quem pode participar e o que os participantes podem esperar desta experiência única.
+                          Descrição detalhada do evento, incluindo o que será
+                          abordado, quem pode participar e o que os
+                          participantes podem esperar desta experiência única.
                         </p>
                       </div>
                     </div>
@@ -62,7 +68,9 @@ export default function Eventos() {
                           <Clock className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <p className="text-xs text-muted-foreground">Horário</p>
+                          <p className="text-xs text-muted-foreground">
+                            Horário
+                          </p>
                           <p className="font-semibold">19h30 às 22h</p>
                         </div>
                       </div>
@@ -82,7 +90,9 @@ export default function Eventos() {
                           <Users className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <p className="text-xs text-muted-foreground">Público</p>
+                          <p className="text-xs text-muted-foreground">
+                            Público
+                          </p>
                           <p className="font-semibold">Todas as idades</p>
                         </div>
                       </div>
@@ -105,30 +115,33 @@ export default function Eventos() {
         <Card className="shadow-medium">
           <CardContent className="p-8">
             <div className="grid grid-cols-7 gap-2 mb-4">
-              {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((dia) => (
-                <div key={dia} className="text-center font-semibold text-sm text-muted-foreground py-2">
+              {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((dia) => (
+                <div
+                  key={dia}
+                  className="text-center font-semibold text-sm text-muted-foreground py-2"
+                >
                   {dia}
                 </div>
               ))}
             </div>
-            
+
             <div className="grid grid-cols-7 gap-2">
               {Array.from({ length: 35 }).map((_, index) => {
                 const dia = index - 2;
                 const hasEvent = [5, 12, 19, 26].includes(dia);
-                
+
                 return (
                   <div
                     key={index}
                     className={`aspect-square flex items-center justify-center rounded-lg text-sm ${
                       dia < 1 || dia > 31
-                        ? 'text-muted-foreground/30'
+                        ? "text-muted-foreground/30"
                         : hasEvent
-                        ? 'bg-primary text-primary-foreground font-semibold cursor-pointer hover:bg-primary/90'
-                        : 'hover:bg-muted cursor-pointer'
+                          ? "bg-primary text-primary-foreground font-semibold cursor-pointer hover:bg-primary/90"
+                          : "hover:bg-muted cursor-pointer"
                     }`}
                   >
-                    {dia > 0 && dia <= 31 ? dia : ''}
+                    {dia > 0 && dia <= 31 ? dia : ""}
                   </div>
                 );
               })}
@@ -149,16 +162,24 @@ export default function Eventos() {
         <h2 className="text-3xl font-bold mb-8">Eventos Realizados</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((evento) => (
-            <Card key={evento} className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer overflow-hidden">
+            <Card
+              key={evento}
+              className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer overflow-hidden"
+            >
               <CardContent className="p-0">
                 <div className="aspect-video bg-muted flex items-center justify-center">
-                  <span className="text-sm text-muted-foreground">Foto do Evento</span>
+                  <span className="text-sm text-muted-foreground">
+                    Foto do Evento
+                  </span>
                 </div>
                 <div className="p-4">
-                  <div className="text-xs text-muted-foreground mb-2">15 de Novembro, 2024</div>
+                  <div className="text-xs text-muted-foreground mb-2">
+                    15 de Novembro, 2024
+                  </div>
                   <h3 className="font-semibold mb-2">Nome do Evento Passado</h3>
                   <p className="text-sm text-muted-foreground line-clamp-2">
-                    Breve descrição do evento que foi realizado e seu impacto na comunidade.
+                    Breve descrição do evento que foi realizado e seu impacto na
+                    comunidade.
                   </p>
                 </div>
               </CardContent>

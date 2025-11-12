@@ -27,8 +27,8 @@ export default function FaleConosco() {
               <form className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="nome">Nome Completo *</Label>
-                  <Input 
-                    id="nome" 
+                  <Input
+                    id="nome"
                     placeholder="Seu nome completo"
                     className="h-11"
                   />
@@ -37,8 +37,8 @@ export default function FaleConosco() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">E-mail *</Label>
-                    <Input 
-                      id="email" 
+                    <Input
+                      id="email"
                       type="email"
                       placeholder="seu@email.com"
                       className="h-11"
@@ -47,8 +47,8 @@ export default function FaleConosco() {
 
                   <div className="space-y-2">
                     <Label htmlFor="telefone">Telefone</Label>
-                    <Input 
-                      id="telefone" 
+                    <Input
+                      id="telefone"
                       type="tel"
                       placeholder="(00) 00000-0000"
                       className="h-11"
@@ -58,8 +58,8 @@ export default function FaleConosco() {
 
                 <div className="space-y-2">
                   <Label htmlFor="assunto">Assunto *</Label>
-                  <Input 
-                    id="assunto" 
+                  <Input
+                    id="assunto"
                     placeholder="Sobre o que você quer falar?"
                     className="h-11"
                   />
@@ -67,14 +67,14 @@ export default function FaleConosco() {
 
                 <div className="space-y-2">
                   <Label htmlFor="mensagem">Mensagem *</Label>
-                  <Textarea 
-                    id="mensagem" 
+                  <Textarea
+                    id="mensagem"
                     placeholder="Escreva sua mensagem aqui..."
                     className="min-h-[150px] resize-none"
                   />
                 </div>
 
-                <Button 
+                <Button
                   type="submit"
                   className="w-full h-11 bg-gradient-hero text-primary-foreground font-semibold hover:opacity-90"
                 >
@@ -94,7 +94,9 @@ export default function FaleConosco() {
           {/* Contatos Diretos */}
           <Card className="shadow-soft">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-bold mb-6">Informações de Contato</h2>
+              <h2 className="text-2xl font-bold mb-6">
+                Informações de Contato
+              </h2>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -102,8 +104,12 @@ export default function FaleConosco() {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Telefone</h3>
-                    <p className="text-muted-foreground text-sm">(00) 0000-0000</p>
-                    <p className="text-muted-foreground text-sm">(00) 00000-0000</p>
+                    <p className="text-muted-foreground text-sm">
+                      (00) 0000-0000
+                    </p>
+                    <p className="text-muted-foreground text-sm">
+                      (00) 00000-0000
+                    </p>
                   </div>
                 </div>
 
@@ -113,8 +119,12 @@ export default function FaleConosco() {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">E-mail</h3>
-                    <p className="text-muted-foreground text-sm">contato@igrejaaviva.com.br</p>
-                    <p className="text-muted-foreground text-sm">secretaria@igrejaaviva.com.br</p>
+                    <p className="text-muted-foreground text-sm">
+                      contato@igrejaaviva.com.br
+                    </p>
+                    <p className="text-muted-foreground text-sm">
+                      secretaria@igrejaaviva.com.br
+                    </p>
                   </div>
                 </div>
 
@@ -123,10 +133,14 @@ export default function FaleConosco() {
                     <MapPin className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Endereço - Sede Principal</h3>
+                    <h3 className="font-semibold mb-1">
+                      Endereço - Sede Principal
+                    </h3>
                     <p className="text-muted-foreground text-sm">
-                      Rua Exemplo, 123 - Bairro Centro<br />
-                      Cidade - Estado<br />
+                      Rua Exemplo, 123 - Bairro Centro
+                      <br />
+                      Cidade - Estado
+                      <br />
                       CEP 00000-000
                     </p>
                   </div>
@@ -137,9 +151,12 @@ export default function FaleConosco() {
                     <Clock className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Horário de Atendimento</h3>
+                    <h3 className="font-semibold mb-1">
+                      Horário de Atendimento
+                    </h3>
                     <p className="text-muted-foreground text-sm">
-                      Segunda a Sexta: 9h às 17h<br />
+                      Segunda a Sexta: 9h às 17h
+                      <br />
                       Sábado: 9h às 12h
                     </p>
                   </div>
@@ -169,16 +186,18 @@ export default function FaleConosco() {
                 Fique por dentro de tudo que acontece na nossa igreja
               </p>
               <div className="flex justify-center gap-4">
-                {["Facebook", "Instagram", "YouTube", "WhatsApp"].map((rede) => (
-                  <button
-                    key={rede}
-                    className="w-12 h-12 bg-primary-foreground/20 hover:bg-primary-foreground/30 rounded-full flex items-center justify-center transition-colors"
-                  >
-                    <span className="text-xs text-primary-foreground font-medium">
-                      {rede[0]}
-                    </span>
-                  </button>
-                ))}
+                {["Facebook", "Instagram", "YouTube", "WhatsApp"].map(
+                  (rede) => (
+                    <button
+                      key={rede}
+                      className="w-12 h-12 bg-primary-foreground/20 hover:bg-primary-foreground/30 rounded-full flex items-center justify-center transition-colors"
+                    >
+                      <span className="text-xs text-primary-foreground font-medium">
+                        {rede[0]}
+                      </span>
+                    </button>
+                  ),
+                )}
               </div>
             </CardContent>
           </Card>

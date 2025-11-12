@@ -23,7 +23,8 @@ export default function Jornal() {
               <div className="max-w-3xl w-full">
                 <div className="aspect-[9/16] bg-background rounded-lg shadow-soft flex items-center justify-center">
                   <p className="text-muted-foreground">
-                    [Visualização do Jornal em formato vertical - similar a apresentação de slides]
+                    [Visualização do Jornal em formato vertical - similar a
+                    apresentação de slides]
                   </p>
                 </div>
               </div>
@@ -38,17 +39,19 @@ export default function Jornal() {
                   Baixar PDF
                 </button>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <button className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/70 rounded-lg transition-colors text-sm font-medium">
                   <ChevronLeft className="w-4 h-4" />
                   Anterior
                 </button>
-                
+
                 <div className="text-sm text-muted-foreground">
-                  Página <span className="font-semibold text-foreground">1</span> de <span className="font-semibold text-foreground">8</span>
+                  Página{" "}
+                  <span className="font-semibold text-foreground">1</span> de{" "}
+                  <span className="font-semibold text-foreground">8</span>
                 </div>
-                
+
                 <button className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/70 rounded-lg transition-colors text-sm font-medium">
                   Próxima
                   <ChevronRight className="w-4 h-4" />
@@ -64,20 +67,27 @@ export default function Jornal() {
         <h2 className="text-3xl font-bold mb-8">Edições Anteriores</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
           {Array.from({ length: 12 }).map((_, index) => {
-            const mes = new Date(2024, 11 - index, 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
-            
+            const mes = new Date(2024, 11 - index, 1).toLocaleDateString(
+              "pt-BR",
+              { month: "long", year: "numeric" },
+            );
+
             return (
-              <Card 
-                key={index} 
+              <Card
+                key={index}
                 className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer group"
               >
                 <CardContent className="p-4">
                   <div className="aspect-[9/16] bg-gradient-hero rounded-lg mb-3 flex items-center justify-center group-hover:scale-105 transition-transform">
                     <span className="text-xs text-primary-foreground font-semibold text-center px-2">
-                      Capa<br/>Jornal
+                      Capa
+                      <br />
+                      Jornal
                     </span>
                   </div>
-                  <p className="text-xs font-medium text-center capitalize">{mes}</p>
+                  <p className="text-xs font-medium text-center capitalize">
+                    {mes}
+                  </p>
                 </CardContent>
               </Card>
             );
@@ -92,16 +102,22 @@ export default function Jornal() {
           {[
             "Mensagem do Pastor",
             "Testemunho do Mês",
-            "Eventos em Destaque"
+            "Eventos em Destaque",
           ].map((destaque, index) => (
-            <Card key={destaque} className="shadow-soft hover:shadow-medium transition-all">
+            <Card
+              key={destaque}
+              className="shadow-soft hover:shadow-medium transition-all"
+            >
               <CardContent className="p-6">
                 <div className="w-12 h-12 bg-gradient-accent rounded-lg mb-4 flex items-center justify-center">
-                  <span className="text-xl font-bold text-accent-foreground">{index + 1}</span>
+                  <span className="text-xl font-bold text-accent-foreground">
+                    {index + 1}
+                  </span>
                 </div>
                 <h3 className="text-lg font-bold mb-2">{destaque}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Breve descrição do conteúdo desta seção do jornal e por que você deve ler.
+                  Breve descrição do conteúdo desta seção do jornal e por que
+                  você deve ler.
                 </p>
               </CardContent>
             </Card>
@@ -117,7 +133,8 @@ export default function Jornal() {
               Receba o Jornal por E-mail
             </h2>
             <p className="text-lg text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-              Cadastre-se para receber as próximas edições do Aviva News diretamente no seu e-mail
+              Cadastre-se para receber as próximas edições do Aviva News
+              diretamente no seu e-mail
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input

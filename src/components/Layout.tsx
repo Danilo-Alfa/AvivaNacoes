@@ -68,7 +68,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 onClick={() => setIsDark(!isDark)}
                 className="rounded-full"
               >
-                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                {isDark ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
               </Button>
 
               <Button
@@ -77,7 +81,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 className="xl:hidden"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {mobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
               </Button>
             </div>
           </div>
@@ -114,13 +122,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-lg font-bold mb-4 text-foreground">Igreja Aviva</h3>
+              <h3 className="text-lg font-bold mb-4 text-foreground">
+                Igreja Aviva
+              </h3>
               <p className="text-sm text-muted-foreground">
                 Levando esperança e transformação através da palavra de Deus.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-bold mb-4 text-foreground">Redes Sociais</h3>
+              <h3 className="text-lg font-bold mb-4 text-foreground">
+                Redes Sociais
+              </h3>
               <p className="text-sm text-muted-foreground">
                 Siga-nos nas redes sociais para ficar por dentro de tudo!
               </p>
