@@ -25,7 +25,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename="/AvivaNacoes">
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
