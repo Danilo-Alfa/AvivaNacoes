@@ -14,7 +14,7 @@ import Eventos from "./pages/Eventos";
 import Videos from "./pages/Videos";
 import FaleConosco from "./pages/FaleConosco";
 import Jornal from "./pages/Jornal";
-import Gibi from "./pages/Gibi";
+import RedesSociais from "./pages/RedesSociais";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,7 +37,7 @@ const App = () => (
             <Route path="/videos" element={<Videos />} />
             <Route path="/fale-conosco" element={<FaleConosco />} />
             <Route path="/jornal" element={<Jornal />} />
-            <Route path="/gibi" element={<Gibi />} />
+            <Route path="/redes-sociais" element={<RedesSociais />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

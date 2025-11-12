@@ -43,7 +43,7 @@ export default function Programacao() {
     <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
       <div className="mb-16 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">
           Programação
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
