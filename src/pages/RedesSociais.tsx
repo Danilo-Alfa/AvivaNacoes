@@ -1,4 +1,13 @@
-import { Facebook, Instagram, Youtube, MessageCircle } from "lucide-react";
+import {
+  Facebook,
+  Instagram,
+  Youtube,
+  Radio,
+  Heart,
+  Newspaper,
+  Users,
+  Music,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function RedesSociais() {
@@ -6,38 +15,82 @@ export default function RedesSociais() {
     {
       name: "Facebook",
       icon: Facebook,
-      url: "#",
+      url: "https://web.facebook.com/igrejaevangelicaaviva/",
       description:
         "Acompanhe nossas postagens diárias, eventos e transmissões ao vivo dos cultos.",
-      followers: "10K+ seguidores",
+      followers: "Seguidores ativos",
       color: "from-blue-600 to-blue-400",
+      bgColor: "bg-blue-600",
     },
     {
       name: "Instagram",
       icon: Instagram,
-      url: "#",
+      url: "https://www.instagram.com/igrejaavinanacoes/",
       description:
         "Versículos inspiradores, stories dos eventos e momentos da nossa comunidade.",
-      followers: "8K+ seguidores",
+      followers: "Comunidade engajada",
       color: "from-pink-600 via-purple-600 to-orange-500",
+      bgColor: "bg-gradient-to-r from-pink-600 via-purple-600 to-orange-500",
     },
     {
-      name: "YouTube",
+      name: "Canal Aviva Nações",
       icon: Youtube,
-      url: "#",
+      url: "https://www.youtube.com/@TvAvivaNacoes",
       description:
         "Assista aos cultos completos, pregações, louvores e testemunhos.",
-      followers: "15K+ inscritos",
+      followers: "Inscritos no canal",
       color: "from-red-600 to-red-400",
+      bgColor: "bg-red-600",
     },
     {
-      name: "WhatsApp",
-      icon: MessageCircle,
-      url: "#",
+      name: "WebRádio",
+      icon: Radio,
+      url: "https://app.mobileradio.com.br/WebRadioAvivaNacoes",
       description:
-        "Entre no nosso grupo para receber mensagens, avisos e oração.",
-      followers: "Comunidade ativa",
-      color: "from-green-600 to-green-400",
+        "Ouça nossa programação 24 horas com louvores, pregações e conteúdo edificante.",
+      followers: "Ouvintes online",
+      color: "from-gray-700 to-gray-500",
+      bgColor: "bg-gray-700",
+    },
+    {
+      name: "Associação Benificiente EL Roi",
+      icon: Heart,
+      url: "https://www.facebook.com/share/194jRRsrGp/",
+      description:
+        "Conheça nossos projetos sociais e ações de amor ao próximo na comunidade.",
+      followers: "Vidas impactadas",
+      color: "from-pink-500 to-pink-300",
+      bgColor: "bg-pink-500",
+    },
+    {
+      name: "Jornal Aviva News",
+      icon: Newspaper,
+      url: "https://portaldojoan.my.canva.site/",
+      description:
+        "Notícias, artigos e conteúdo informativo sobre fé, família e sociedade.",
+      followers: "Leitores",
+      color: "from-blue-500 to-blue-300",
+      bgColor: "bg-blue-500",
+    },
+    {
+      name: "Aviva Jovens",
+      icon: Users,
+      url: "https://www.instagram.com/_aviva.jovens",
+      description:
+        "Ministério voltado para jovens com eventos, encontros e conteúdo relevante.",
+      followers: "Jovens conectados",
+      color: "from-purple-600 to-purple-400",
+      bgColor: "bg-purple-600",
+    },
+    {
+      name: "SPOTIFY",
+      icon: Music,
+      url: "https://open.spotify.com/show/6UxigeE1ZivVsJxRdVokSJ",
+      description:
+        "Ouça nossas playlists, pregações e louvores na maior plataforma de streaming.",
+      followers: "Ouvintes mensais",
+      color: "from-green-500 to-green-400",
+      bgColor: "bg-green-500",
     },
   ];
 
@@ -47,10 +100,10 @@ export default function RedesSociais() {
       <section className="relative bg-gradient-hero py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 pb-2">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 pb-2">
               Nossas Redes Sociais
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-slate-300">
               Conecte-se conosco e faça parte da nossa comunidade digital.
               Acompanhe conteúdos inspiradores, eventos e muito mais!
             </p>
@@ -143,28 +196,6 @@ export default function RedesSociais() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center bg-gradient-hero p-12 rounded-2xl">
-            <h2 className="text-3xl font-bold mb-4 text-foreground pb-2">
-              Faça Parte da Nossa Comunidade
-            </h2>
-            <p className="text-muted-foreground mb-8">
-              Não perca nenhuma novidade! Siga-nos em todas as redes sociais e
-              fortaleça sua fé junto conosco.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <a
-                href="#"
-                className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-semibold"
-              >
-                Seguir Agora
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

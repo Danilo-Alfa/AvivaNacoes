@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Calendar, Users, Heart, Book } from "lucide-react";
+import { ArrowRight, Book, Calendar, Heart, Users } from "lucide-react";
+import ReactPlayer from "react-player";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -88,10 +89,15 @@ export default function Home() {
               </button>
             </Link>
           </div>
-          <div className="aspect-video bg-gradient-accent rounded-lg shadow-medium flex items-center justify-center">
-            <span className="text-2xl text-accent-foreground font-semibold">
-              Vídeo/Imagem
-            </span>
+          <div className="aspect-video bg-black rounded-lg shadow-medium overflow-hidden">
+            <ReactPlayer
+              src="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
+              width="100%"
+              height="100%"
+              controls
+              light
+              playing={false}
+            />
           </div>
         </div>
       </section>

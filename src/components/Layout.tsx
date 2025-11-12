@@ -1,24 +1,52 @@
 import { Link, useLocation } from "react-router-dom";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import {
+  Moon,
+  Sun,
+  Menu,
+  ChevronLeft,
+  ChevronRight,
+  Home,
+  FolderKanban,
+  Image,
+  Calendar,
+  Video,
+  MessageSquare,
+  Newspaper,
+  BookOpen,
+} from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
-const navigation = [
+// Links principais - exibidos na barra superior
+const primaryNavigation = [
   { name: "QUEM SOMOS", href: "/quem-somos" },
   { name: "NOSSAS IGREJAS", href: "/nossas-igrejas" },
-  { name: "PROJETOS", href: "/projetos" },
   { name: "PROGRAMAÇÃO", href: "/programacao" },
-  { name: "GALERIAS DE FOTOS", href: "/galerias" },
-  { name: "EVENTOS", href: "/eventos" },
-  { name: "VÍDEOS", href: "/videos" },
-  { name: "FALE CONOSCO", href: "/fale-conosco" },
-  { name: "JORNAL AVIVA NEWS", href: "/jornal" },
   { name: "REDES SOCIAIS", href: "/redes-sociais" },
+];
+
+// Links secundários - exibidos na sidebar lateral
+const secondaryNavigation = [
+  { name: "PROJETOS", href: "/projetos", icon: FolderKanban },
+  { name: "FOTOS", href: "/galerias", icon: Image },
+  { name: "EVENTOS", href: "/eventos", icon: Calendar },
+  { name: "VÍDEOS", href: "/videos", icon: Video },
+  { name: "VERSÍCULO DO DIA", href: "/versiculo-do-dia", icon: BookOpen },
+  { name: "JORNAL", href: "/jornal", icon: Newspaper },
+  { name: "FALE CONOSCO", href: "/fale-conosco", icon: MessageSquare },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
@@ -35,21 +63,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b-2 border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <nav className="container mx-auto px-4">
-          <div className="flex h-20 items-center justify-between">
+          <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
-              <div className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              <div className="text-xl md:text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                 IGREJA AVIVA
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden xl:flex xl:items-center xl:gap-1 xl:flex-wrap">
-              {navigation.map((item) => (
+            {/* Primary Navigation - Desktop */}
+            <div className="hidden md:flex items-center gap-6">
+              {primaryNavigation.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`px-2.5 py-2 text-xs font-medium transition-colors hover:text-primary whitespace-nowrap ${
+                  className={`text-sm font-medium transition-colors hover:text-primary ${
                     location.pathname === item.href
                       ? "text-primary"
                       : "text-muted-foreground"
@@ -75,47 +103,117 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 )}
               </Button>
 
-              <Button
-                variant="ghost"
-                size="icon"
-                className="xl:hidden"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              >
-                {mobileMenuOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
-              </Button>
+              {/* Mobile Menu with Sheet */}
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden rounded-full"
+                  >
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                  <SheetHeader>
+                    <SheetTitle className="text-left">Menu</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-8 flex flex-col gap-4">
+                    {[...primaryNavigation, ...secondaryNavigation].map(
+                      (item) => (
+                        <Link
+                          key={item.name}
+                          to={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`px-4 py-3 text-sm font-medium rounded-lg transition-all ${
+                            location.pathname === item.href
+                              ? "bg-primary text-primary-foreground shadow-sm"
+                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                          }`}
+                        >
+                          {item.name}
+                        </Link>
+                      )
+                    )}
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </nav>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="xl:hidden border-t-2 border-border">
-            <div className="container mx-auto px-4 py-4 space-y-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                    location.pathname === item.href
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-muted"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </header>
 
-      {/* Main Content */}
-      <main>{children}</main>
+      {/* Layout com Sidebar */}
+      <div className="flex">
+        {/* Sidebar - Desktop apenas */}
+        <aside
+          className={`hidden md:block sticky top-16 h-[calc(100vh-4rem)] border-r-2 border-border bg-background/50 backdrop-blur transition-all duration-300 ${
+            sidebarOpen ? "w-60" : "w-16"
+          }`}
+        >
+          <div className="flex flex-col h-full">
+            {/* Toggle Button */}
+            <div className="p-3 border-b-2 border-border flex justify-end">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="rounded-full"
+              >
+                {sidebarOpen ? (
+                  <ChevronLeft className="h-5 w-5" />
+                ) : (
+                  <ChevronRight className="h-5 w-5" />
+                )}
+              </Button>
+            </div>
+
+            {/* Navigation Items */}
+            <nav className="flex-1 p-3 space-y-2">
+              <Link
+                to="/"
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+                  !sidebarOpen && "justify-center"
+                } ${
+                  location.pathname === "/"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                <Home className="h-5 w-5 flex-shrink-0" />
+                {sidebarOpen && (
+                  <span className="text-sm font-medium">HOME</span>
+                )}
+              </Link>
+
+              {secondaryNavigation.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+                      !sidebarOpen && "justify-center"
+                    } ${
+                      location.pathname === item.href
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    }`}
+                  >
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    {sidebarOpen && (
+                      <span className="text-sm font-medium">{item.name}</span>
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1">{children}</main>
+      </div>
 
       {/* Footer */}
       <footer className="mt-20 border-t-2 border-border bg-muted/30">

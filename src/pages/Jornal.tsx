@@ -21,11 +21,17 @@ export default function Jornal() {
             {/* Área de Visualização - Formato Vertical */}
             <div className="bg-muted flex items-center justify-center py-12 px-4">
               <div className="max-w-3xl w-full">
-                <div className="aspect-[9/16] bg-background rounded-lg shadow-soft flex items-center justify-center">
-                  <p className="text-muted-foreground">
-                    [Visualização do Jornal em formato vertical - similar a
-                    apresentação de slides]
-                  </p>
+                <div className="aspect-[9/16] bg-background rounded-lg shadow-soft overflow-hidden">
+                  <iframe
+                    loading="lazy"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      border: "none",
+                    }}
+                    src="https://www.canva.com/design/DAG33x5eSQk/AV0b9R1BrdZcFfMo9Hijog/view?embed"
+                    allow="fullscreen"
+                  ></iframe>
                 </div>
               </div>
             </div>
@@ -34,28 +40,22 @@ export default function Jornal() {
             <div className="p-6 border-t border-border bg-background">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold">Edição Dezembro 2024</h2>
-                <button className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium">
+                <a
+                  href="https://www.canva.com/design/DAG33x5eSQk/AV0b9R1BrdZcFfMo9Hijog/view?utm_content=DAG33x5eSQk&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h3300a91a33"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+                >
                   <Download className="w-4 h-4" />
-                  Baixar PDF
-                </button>
+                  Ver em Tela Cheia
+                </a>
               </div>
 
-              <div className="flex items-center justify-between">
-                <button className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/70 rounded-lg transition-colors text-sm font-medium">
-                  <ChevronLeft className="w-4 h-4" />
-                  Anterior
-                </button>
-
-                <div className="text-sm text-muted-foreground">
-                  Página{" "}
-                  <span className="font-semibold text-foreground">1</span> de{" "}
-                  <span className="font-semibold text-foreground">8</span>
-                </div>
-
-                <button className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/70 rounded-lg transition-colors text-sm font-medium">
-                  Próxima
-                  <ChevronRight className="w-4 h-4" />
-                </button>
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">
+                  Use os controles dentro da visualização para navegar entre as
+                  páginas
+                </p>
               </div>
             </div>
           </CardContent>
@@ -123,31 +123,6 @@ export default function Jornal() {
             </Card>
           ))}
         </div>
-      </section>
-
-      {/* CTA para Assinar */}
-      <section className="mt-16">
-        <Card className="shadow-medium bg-gradient-hero">
-          <CardContent className="p-12 text-center">
-            <h2 className="text-3xl font-bold mb-4 text-primary-foreground">
-              Receba o Jornal por E-mail
-            </h2>
-            <p className="text-lg text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-              Cadastre-se para receber as próximas edições do Aviva News
-              diretamente no seu e-mail
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Seu melhor e-mail"
-                className="flex-1 px-4 py-3 rounded-lg bg-background text-foreground"
-              />
-              <button className="px-6 py-3 bg-accent text-accent-foreground font-semibold rounded-lg hover:bg-accent/90 transition-colors whitespace-nowrap">
-                Assinar Agora
-              </button>
-            </div>
-          </CardContent>
-        </Card>
       </section>
     </div>
   );

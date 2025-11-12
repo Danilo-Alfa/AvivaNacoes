@@ -4,8 +4,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 
 export default function FaleConosco() {
+  // IMPORTANTE: Usar a mesma API Key
+  const GOOGLE_MAPS_API_KEY = "AIzaSyCkN8txAwSMXcQUYln22XKt1kDP9P8RDuY";
+
+  // Localização da sede principal - SUBSTITUA com as coordenadas reais
+  const mainChurchLocation = { lat: -23.5505, lng: -46.6333 };
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
@@ -166,12 +172,37 @@ export default function FaleConosco() {
           </Card>
 
           {/* Mapa */}
-          <Card className="shadow-soft">
+          <Card className="shadow-soft overflow-hidden">
             <CardContent className="p-0">
-              <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-                <p className="text-muted-foreground text-sm">
-                  [Mapa do Google Maps]
-                </p>
+              <div className="h-[350px] w-full">
+                <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
+                  <Map
+                    defaultCenter={mainChurchLocation}
+                    defaultZoom={15}
+                    mapId="contact-map"
+                    gestureHandling="cooperative"
+                    disableDefaultUI={false}
+                  >
+                    <AdvancedMarker position={mainChurchLocation}>
+                      <Pin
+                        background="#6366F1"
+                        borderColor="#4F46E5"
+                        glyphColor="#FFFFFF"
+                      />
+                    </AdvancedMarker>
+                  </Map>
+                </APIProvider>
+              </div>
+              <div className="p-4 border-t border-border bg-background">
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${mainChurchLocation.lat},${mainChurchLocation.lng}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-primary hover:text-primary/80 font-medium flex items-center justify-center gap-2"
+                >
+                  <MapPin className="w-4 h-4" />
+                  Ver rotas no Google Maps
+                </a>
               </div>
             </CardContent>
           </Card>
@@ -185,19 +216,31 @@ export default function FaleConosco() {
               <p className="text-primary-foreground/90 mb-6 text-sm">
                 Fique por dentro de tudo que acontece na nossa igreja
               </p>
-              <div className="flex justify-center gap-4">
-                {["Facebook", "Instagram", "YouTube", "WhatsApp"].map(
-                  (rede) => (
-                    <button
-                      key={rede}
-                      className="w-12 h-12 bg-primary-foreground/20 hover:bg-primary-foreground/30 rounded-full flex items-center justify-center transition-colors"
-                    >
-                      <span className="text-xs text-primary-foreground font-medium">
-                        {rede[0]}
-                      </span>
-                    </button>
-                  ),
-                )}
+              <div className="flex flex-wrap justify-center gap-3">
+                <a
+                  href="https://web.facebook.com/igrejaevangelicaaviva/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 bg-primary-foreground/20 hover:bg-primary-foreground/30 rounded-lg transition-colors text-primary-foreground text-sm font-medium"
+                >
+                  Facebook
+                </a>
+                <a
+                  href="https://www.instagram.com/igrejaavinanacoes/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 bg-primary-foreground/20 hover:bg-primary-foreground/30 rounded-lg transition-colors text-primary-foreground text-sm font-medium"
+                >
+                  Instagram
+                </a>
+                <a
+                  href="https://www.youtube.com/@TvAvivaNacoes"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 bg-primary-foreground/20 hover:bg-primary-foreground/30 rounded-lg transition-colors text-primary-foreground text-sm font-medium"
+                >
+                  YouTube
+                </a>
               </div>
             </CardContent>
           </Card>

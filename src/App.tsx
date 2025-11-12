@@ -15,6 +15,7 @@ import Videos from "./pages/Videos";
 import FaleConosco from "./pages/FaleConosco";
 import Jornal from "./pages/Jornal";
 import RedesSociais from "./pages/RedesSociais";
+import VersiculoDoDia from "./pages/VersiculoDoDia";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/fale-conosco" element={<FaleConosco />} />
             <Route path="/jornal" element={<Jornal />} />
             <Route path="/redes-sociais" element={<RedesSociais />} />
+            <Route path="/versiculo-do-dia" element={<VersiculoDoDia />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

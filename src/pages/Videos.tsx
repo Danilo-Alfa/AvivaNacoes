@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Play, Clock } from "lucide-react";
+import { Clock, Play } from "lucide-react";
+import ReactPlayer from "react-player";
 
 export default function Videos() {
   return (
@@ -18,19 +19,15 @@ export default function Videos() {
       <section className="mb-16">
         <Card className="shadow-medium overflow-hidden">
           <CardContent className="p-0">
-            <div className="aspect-video bg-gradient-hero flex items-center justify-center cursor-pointer group relative">
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors"></div>
-              <div className="relative z-10 flex flex-col items-center">
-                <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Play
-                    className="w-10 h-10 text-accent-foreground ml-1"
-                    fill="currentColor"
-                  />
-                </div>
-                <p className="mt-4 text-primary-foreground font-semibold">
-                  Vídeo em Destaque
-                </p>
-              </div>
+            <div className="aspect-video bg-black">
+              <ReactPlayer
+                src="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
+                width="100%"
+                height="100%"
+                controls
+                light
+                playing={false}
+              />
             </div>
             <div className="p-6">
               <h2 className="text-2xl font-bold mb-2">
@@ -89,17 +86,15 @@ export default function Videos() {
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer overflow-hidden group"
             >
               <CardContent className="p-0">
-                <div className="aspect-video bg-muted flex items-center justify-center relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 group-hover:opacity-80 transition-opacity"></div>
-                  <div className="relative z-10 w-14 h-14 bg-accent/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Play
-                      className="w-7 h-7 text-accent-foreground ml-0.5"
-                      fill="currentColor"
-                    />
-                  </div>
-                  <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded">
-                    45:30
-                  </div>
+                <div className="aspect-video bg-black">
+                  <ReactPlayer
+                    src="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
+                    width="100%"
+                    height="100%"
+                    controls={false}
+                    light
+                    playing={false}
+                  />
                 </div>
                 <div className="p-4">
                   <h3 className="font-semibold mb-2 line-clamp-2">

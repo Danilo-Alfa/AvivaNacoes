@@ -80,24 +80,6 @@ export default function Projetos() {
           </Card>
         ))}
       </div>
-
-      {/* Call to Action */}
-      <section className="mt-16">
-        <Card className="shadow-medium bg-gradient-hero">
-          <CardContent className="p-12 text-center">
-            <h2 className="text-3xl font-bold mb-4 text-primary-foreground">
-              Faça Parte da Transformação
-            </h2>
-            <p className="text-lg text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-              Você pode ajudar a fazer a diferença! Entre em contato para saber
-              como participar dos nossos projetos.
-            </p>
-            <button className="px-8 py-3 bg-accent text-accent-foreground font-semibold rounded-lg hover:bg-accent/90 transition-colors">
-              Entre em Contato
-            </button>
-          </CardContent>
-        </Card>
-      </section>
     </div>
   );
 }
