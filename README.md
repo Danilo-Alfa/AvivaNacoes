@@ -1,4 +1,28 @@
-# Welcome to your Lovable project
+# Igreja Aviva - Website Oficial
+
+Site institucional da Igreja Aviva com sistema de transmissão ao vivo integrado.
+
+## 🎥 Sistema de Live Streaming (NOVO!)
+
+Este projeto agora inclui um **sistema completo de transmissão ao vivo** profissional!
+
+### 📚 Documentação do Sistema de Live:
+- **[🚀 INÍCIO RÁPIDO](INICIO-RAPIDO.md)** - Comece aqui! (5 min de leitura)
+- **[📘 Guia Contabo VPS](GUIA-CONTABO.md)** - Configure o servidor (R$ 27/mês)
+- **[🎬 Guia OBS Studio](GUIA-OBS-STUDIO.md)** - Configure a transmissão
+- **[🔄 Alternativas](ALTERNATIVAS-SERVIDOR.md)** - Outras opções de servidores
+- **[📖 README Completo](STREAMING-README.md)** - Documentação detalhada
+- **[✅ Implementação](IMPLEMENTACAO-COMPLETA.md)** - Visão técnica completa
+
+### ✨ Características:
+- ✅ **Custo:** R$ 27/mês (Contabo VPS - Melhor custo-benefício)
+- ✅ **Capacidade:** 100+ viewers simultâneos
+- ✅ **Qualidade:** Full HD (1080p)
+- ✅ **Independente:** Sem políticas de terceiros (YouTube, etc)
+- ✅ **Completo:** Player + servidor + documentação
+- ✅ **Disponibilidade:** Imediata (não depende de sorte)
+
+---
 
 ## Project info
 

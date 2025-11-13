@@ -13,6 +13,7 @@ import {
   MessageSquare,
   Newspaper,
   BookOpen,
+  Radio,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,7 @@ const primaryNavigation = [
 
 // Links secundários - exibidos na sidebar lateral
 const secondaryNavigation = [
+  { name: "LIVE", href: "/live", icon: Radio },
   { name: "PROJETOS", href: "/projetos", icon: FolderKanban },
   { name: "FOTOS", href: "/galerias", icon: Image },
   { name: "EVENTOS", href: "/eventos", icon: Calendar },
