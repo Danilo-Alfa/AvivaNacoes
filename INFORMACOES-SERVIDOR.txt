@@ -1,0 +1,124 @@
+========================================
+INFORMAÇÕES DO SERVIDOR DE STREAMING
+Igreja Aviva Nações
+========================================
+
+📍 SERVIDOR CONTABO
+------------------
+IP do Servidor: 66.94.98.143
+Usuário SSH: root
+Senha: [A que você definiu com o comando passwd]
+
+Comando para conectar via SSH:
+ssh root@66.94.98.143
+
+
+🎥 CONFIGURAÇÃO DO OBS (PARA O PASTOR)
+--------------------------------------
+Servidor RTMP: rtmp://66.94.98.143:1935/live
+Chave de Transmissão: stream
+
+Como configurar no OBS:
+1. Abra o OBS Studio
+2. Vá em: Configurações > Transmissão
+3. Serviço: Personalizado
+4. Servidor: rtmp://66.94.98.143:1935/live
+5. Chave de Transmissão: stream
+6. Clique em "Aplicar" e "OK"
+7. Clique em "Iniciar Transmissão"
+
+
+🌐 CONFIGURAÇÃO DO SITE REACT
+-----------------------------
+URL do Stream: http://66.94.98.143/live/stream.m3u8
+
+Arquivo .env (criar na raiz do projeto):
+VITE_STREAM_URL=http://66.94.98.143/live/stream.m3u8
+
+
+🔗 PÁGINAS ÚTEIS
+----------------
+Página de Status: http://66.94.98.143
+Estatísticas RTMP: http://66.94.98.143/stat
+Player de Teste: http://66.94.98.143/live/stream.m3u8
+
+
+⚙️ COMANDOS ÚTEIS DO SERVIDOR
+-----------------------------
+# Conectar via SSH
+ssh root@66.94.98.143
+
+# Ver status do Nginx
+sudo systemctl status nginx
+
+# Reiniciar Nginx
+sudo systemctl restart nginx
+
+# Ver logs de erro
+sudo tail -f /var/log/nginx/error.log
+
+# Ver logs de acesso
+sudo tail -f /var/log/nginx/access.log
+
+# Parar Nginx
+sudo systemctl stop nginx
+
+# Iniciar Nginx
+sudo systemctl start nginx
+
+
+💰 CUSTOS MENSAIS
+-----------------
+VPS Contabo: €4.50/mês (~R$ 27/mês)
+Backup (se contratou): €1/mês (~R$ 6/mês)
+
+
+📋 CHECKLIST DE USO
+-------------------
+ANTES DA LIVE:
+☐ Servidor Contabo está rodando (sempre fica ligado 24/7)
+☐ Pastor configurou OBS com as informações acima
+☐ Site está publicado no GitHub Pages/Vercel
+☐ Arquivo .env está configurado no projeto
+
+DURANTE A LIVE:
+☐ Pastor abre OBS
+☐ Pastor clica em "Iniciar Transmissão"
+☐ Membros acessam o site e vão em /live
+☐ Assiste a transmissão
+
+APÓS A LIVE:
+☐ Pastor clica em "Parar Transmissão" no OBS
+☐ Pastor pode fechar o OBS
+
+
+🔒 SEGURANÇA
+------------
+- Nunca compartilhe a chave de transmissão "stream" publicamente
+- Apenas o pastor deve ter acesso às configurações do OBS
+- A senha SSH é confidencial
+- Se quiser trocar a chave de transmissão, edite: /etc/nginx/nginx.conf
+
+
+📞 SUPORTE CONTABO
+------------------
+Email: support@contabo.com
+Painel: https://my.contabo.com/
+Login: [seu email cadastrado]
+
+
+🎯 RESUMO RÁPIDO
+----------------
+1. Pastor transmite do OBS usando: rtmp://66.94.98.143:1935/live
+2. Site React pega o stream de: http://66.94.98.143/live/stream.m3u8
+3. Pessoas assistem acessando: seu-site.com/live
+4. Servidor fica 24/7 rodando na Contabo
+5. Nada precisa rodar no seu PC ou do pastor (exceto o OBS durante a live)
+
+
+========================================
+⚠️ GUARDE ESTE ARQUIVO COM SEGURANÇA!
+========================================
+
+Data de criação: 14/11/2025
+Criado por: Claude Code

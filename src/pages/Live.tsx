@@ -1,0 +1,236 @@
+import { useState, useEffect } from "react";
+import ReactPlayer from "react-player";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, Radio, Users } from "lucide-react";
+
+export default function Live() {
+  const [isLive, setIsLive] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [viewers, setViewers] = useState(0);
+
+  // TODO: Substituir pela URL do seu servidor Oracle Cloud
+  // Formato: https://seu-ip-oracle.com/live/stream.m3u8
+  const streamUrl = import.meta.env.VITE_STREAM_URL || "https://seu-servidor.com/live/stream.m3u8";
+
+  // Verificar se a live está ativa
+  useEffect(() => {
+    const checkLiveStatus = async () => {
+      try {
+        const response = await fetch(streamUrl);
+
+        // Verifica se a resposta foi bem-sucedida e tem conteúdo
+        if (response.ok) {
+          const text = await response.text();
+          // Se o arquivo .m3u8 tem conteúdo válido, está ao vivo
+          if (text && text.includes('#EXTM3U')) {
+            setIsLive(true);
+          } else {
+            setIsLive(false);
+          }
+        } else {
+          setIsLive(false);
+        }
+      } catch (error) {
+        console.log("Stream não disponível:", error);
+        setIsLive(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkLiveStatus();
+
+    // Verificar a cada 10 segundos
+    const interval = setInterval(checkLiveStatus, 10000);
+
+    return () => clearInterval(interval);
+  }, [streamUrl]);
+
+  // Simular contador de viewers (opcional - você pode implementar websocket depois)
+  useEffect(() => {
+    if (isLive) {
+      // Número aleatório entre 10-50 para demonstração
+      setViewers(Math.floor(Math.random() * 40) + 10);
+    } else {
+      setViewers(0);
+    }
+  }, [isLive]);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <Card>
+          <CardContent className="flex items-center justify-center min-h-[400px]">
+            <div className="flex flex-col items-center gap-4">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <p className="text-muted-foreground">Verificando transmissão...</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <Card>
+        <CardHeader>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <CardTitle className="text-2xl md:text-3xl">Transmissão ao Vivo</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">
+                Assista aos cultos e eventos da Igreja Aviva
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              {isLive && (
+                <>
+                  <Badge variant="secondary" className="gap-1.5">
+                    <Users className="h-3 w-3" />
+                    {viewers} assistindo
+                  </Badge>
+                  <Badge variant="destructive" className="animate-pulse gap-1.5">
+                    <Radio className="h-3 w-3" />
+                    AO VIVO
+                  </Badge>
+                </>
+              )}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {isLive ? (
+            <>
+              <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                <ReactPlayer
+                  url={streamUrl}
+                  playing
+                  controls
+                  width="100%"
+                  height="100%"
+                  config={{
+                    file: {
+                      hlsOptions: {
+                        enableWorker: true,
+                        lowLatencyMode: true,
+                        maxBufferLength: 10,
+                        maxMaxBufferLength: 30,
+                      },
+                      attributes: {
+                        controlsList: "nodownload",
+                      },
+                    },
+                  }}
+                  onError={(e) => {
+                    console.error("Erro no player:", e);
+                    setIsLive(false);
+                  }}
+                />
+              </div>
+
+              <Alert>
+                <Radio className="h-4 w-4" />
+                <AlertDescription>
+                  Transmissão ao vivo ativa. Se houver problemas de reprodução,
+                  tente recarregar a página ou verificar sua conexão com a internet.
+                </AlertDescription>
+              </Alert>
+            </>
+          ) : (
+            <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
+              <div className="text-center p-8">
+                <div className="mb-4">
+                  <Radio className="h-16 w-16 mx-auto text-muted-foreground/50" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">
+                  Nenhuma transmissão ao vivo no momento
+                </h3>
+                <p className="text-muted-foreground mb-6">
+                  Fique atento aos nossos horários de culto e eventos especiais!
+                </p>
+                <div className="bg-background rounded-lg p-6 max-w-md mx-auto">
+                  <h4 className="font-semibold mb-3">Horários dos Cultos:</h4>
+                  <ul className="text-sm text-muted-foreground space-y-2 text-left">
+                    <li className="flex justify-between">
+                      <span>Segunda (Noite):</span>
+                      <span className="font-medium">Após live do Youtube</span>
+                    </li>
+                    <li className="flex justify-between">
+                      <span>Quarta (Noite):</span>
+                      <span className="font-medium">Após live do Youtube</span>
+                    </li>
+                    <li className="flex justify-between">
+                      <span>Sexta (Noite):</span>
+                      <span className="font-medium">Após live do Youtube</span>
+                    </li>
+                    <li className="flex justify-between">
+                      <span>Sabado (Noite):</span>
+                      <span className="font-medium">Após live do Youtube</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Seção de informações adicionais */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Próximas Transmissões</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-primary"></div>
+                    <span>Domingo - Culto de Celebração - 10:00h</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-primary"></div>
+                    <span>Domingo - Culto da Família - 18:00h</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-primary"></div>
+                    <span>Quarta - Culto de Doutrina - 19:30h</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Compartilhe</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Convide seus amigos e familiares para assistirem conosco!
+                </p>
+                <div className="flex gap-2">
+                  <a
+                    href={`https://api.whatsapp.com/send?text=Assista%20a%20live%20da%20Igreja%20Aviva%20${window.location.href}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4"
+                  >
+                    WhatsApp
+                  </a>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      alert("Link copiado!");
+                    }}
+                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4"
+                  >
+                    Copiar Link
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
