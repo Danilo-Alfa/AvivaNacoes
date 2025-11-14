@@ -105,24 +105,20 @@ export default function Live() {
             <>
               <div className="aspect-video bg-black rounded-lg overflow-hidden">
                 <ReactPlayer
-                  url={streamUrl}
+                  src={streamUrl}
                   playing
                   controls
                   width="100%"
                   height="100%"
                   config={{
-                    file: {
-                      hlsOptions: {
-                        enableWorker: true,
-                        lowLatencyMode: true,
-                        maxBufferLength: 10,
-                        maxMaxBufferLength: 30,
-                      },
-                      attributes: {
-                        controlsList: "nodownload",
-                      },
+                    hls: {
+                      enableWorker: true,
+                      lowLatencyMode: true,
+                      maxBufferLength: 10,
+                      maxMaxBufferLength: 30,
                     },
                   }}
+                  controlsList="nodownload"
                   onError={(e) => {
                     console.error("Erro no player:", e);
                     setIsLive(false);
