@@ -4,7 +4,7 @@ import ReactPlayer from "react-player";
 
 export default function Videos() {
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12">
+    <div className="container mx-auto px-4 py-8 md:py-12 overflow-x-hidden">
       {/* Hero Section */}
       <div className="mb-8 md:mb-16 text-center">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">
@@ -19,15 +19,18 @@ export default function Videos() {
       <section className="mb-8 md:mb-16">
         <Card className="shadow-medium overflow-hidden">
           <CardContent className="p-0">
-            <div className="aspect-video bg-black">
-              <ReactPlayer
-                src="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
-                width="100%"
-                height="100%"
-                controls
-                light
-                playing={false}
-              />
+            <div className="aspect-video bg-black relative">
+              <div className="absolute inset-0">
+                <ReactPlayer
+                  url="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
+                  width="100%"
+                  height="100%"
+                  controls
+                  light
+                  playing={false}
+                  style={{ position: 'absolute', top: 0, left: 0 }}
+                />
+              </div>
             </div>
             <div className="p-4 md:p-6">
               <h2 className="text-xl md:text-2xl font-bold mb-2">
@@ -86,15 +89,18 @@ export default function Videos() {
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer overflow-hidden group"
             >
               <CardContent className="p-0">
-                <div className="aspect-video bg-black">
-                  <ReactPlayer
-                    src="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
-                    width="100%"
-                    height="100%"
-                    controls={false}
-                    light
-                    playing={false}
-                  />
+                <div className="aspect-video bg-black relative">
+                  <div className="absolute inset-0">
+                    <ReactPlayer
+                      url="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
+                      width="100%"
+                      height="100%"
+                      controls={false}
+                      light
+                      playing={false}
+                      style={{ position: 'absolute', top: 0, left: 0 }}
+                    />
+                  </div>
                 </div>
                 <div className="p-4">
                   <h3 className="font-semibold mb-2 line-clamp-2">

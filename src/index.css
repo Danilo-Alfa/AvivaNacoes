@@ -7,6 +7,15 @@ All colors MUST be HSL.
 */
 
 @layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    @apply overflow-x-hidden;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 215 25% 15%;
