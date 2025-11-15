@@ -43,8 +43,8 @@ const churches = [
 export default function NossasIgrejas() {
   const [selectedChurch, setSelectedChurch] = useState<number | null>(null);
 
-  // IMPORTANTE: Substitua pela sua chave da API do Google Maps
-  const GOOGLE_MAPS_API_KEY = "AIzaSyCkN8txAwSMXcQUYln22XKt1kDP9P8RDuY";
+  // Chave da API do Google Maps vinda das variáveis de ambiente
+  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "AIzaSyCkN8txAwSMXcQUYln22XKt1kDP9P8RDuY";
 
   // Calcular centro do mapa baseado em todas as igrejas
   const centerMap = {
