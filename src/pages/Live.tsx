@@ -9,10 +9,15 @@ export default function Live() {
   const [isLive, setIsLive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [viewers, setViewers] = useState(0);
+  const [showMixedContentWarning, setShowMixedContentWarning] = useState(false);
 
   // TODO: Substituir pela URL do seu servidor Oracle Cloud
   // Formato: https://seu-ip-oracle.com/live/stream.m3u8
   const streamUrl = import.meta.env.VITE_STREAM_URL || "https://seu-servidor.com/live/stream.m3u8";
+
+  // Detectar se está em HTTPS e stream é HTTP (mixed content)
+  const isHttps = window.location.protocol === 'https:';
+  const isStreamHttp = streamUrl.startsWith('http:');
 
   // Verificar se a live está ativa
   useEffect(() => {
@@ -35,6 +40,11 @@ export default function Live() {
       } catch (error) {
         console.log("Stream não disponível:", error);
         setIsLive(false);
+
+        // Se é HTTPS + HTTP, mostrar aviso de mixed content
+        if (isHttps && isStreamHttp) {
+          setShowMixedContentWarning(true);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -101,6 +111,27 @@ export default function Live() {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* Alerta de Mixed Content */}
+          {showMixedContentWarning && isHttps && isStreamHttp && (
+            <Alert variant="destructive">
+              <AlertDescription className="space-y-3">
+                <p className="font-semibold">⚠️ Conteúdo bloqueado pelo navegador</p>
+                <p className="text-sm">
+                  O navegador está bloqueando a transmissão porque o site usa HTTPS mas o servidor de streaming usa HTTP.
+                </p>
+                <div className="text-sm space-y-2">
+                  <p className="font-semibold">Como permitir:</p>
+                  <ol className="list-decimal list-inside space-y-1 ml-2">
+                    <li><strong>Chrome/Edge:</strong> Clique no ícone de cadeado na barra de endereços → "Configurações do site" → Em "Conteúdo inseguro", selecione "Permitir"</li>
+                    <li><strong>Firefox:</strong> Clique no ícone de escudo à esquerda da barra → Desative "Proteção aprimorada contra rastreamento" para este site</li>
+                    <li><strong>Safari:</strong> Vá em Preferências → Segurança → Desmarque "Avisar ao visitar um site fraudulento"</li>
+                  </ol>
+                  <p className="mt-2">Após permitir, recarregue a página (F5).</p>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+
           {isLive ? (
             <>
               <div className="aspect-video bg-black rounded-lg overflow-hidden">
