@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
+import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import QuemSomos from "./pages/QuemSomos";
 import NossasIgrejas from "./pages/NossasIgrejas";
@@ -16,6 +17,7 @@ import FaleConosco from "./pages/FaleConosco";
 import Jornal from "./pages/Jornal";
 import RedesSociais from "./pages/RedesSociais";
 import VersiculoDoDia from "./pages/VersiculoDoDia";
+import AdminVersiculos from "./pages/AdminVersiculos";
 import Live from "./pages/Live";
 import NotFound from "./pages/NotFound";
 
@@ -27,6 +29,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter basename="/AvivaNacoes">
+        <ScrollToTop />
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -41,6 +44,7 @@ const App = () => (
             <Route path="/jornal" element={<Jornal />} />
             <Route path="/redes-sociais" element={<RedesSociais />} />
             <Route path="/versiculo-do-dia" element={<VersiculoDoDia />} />
+            <Route path="/admin/versiculos" element={<AdminVersiculos />} />
             <Route path="/live" element={<Live />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

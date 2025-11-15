@@ -1,9 +1,25 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Book, Calendar, Heart, Users } from "lucide-react";
+import { ArrowRight, Users2Icon, BookOpen, Calendar, Heart, Users, } from "lucide-react";
 import ReactPlayer from "react-player";
 import { Link } from "react-router-dom";
+import { versiculoService } from "@/services/versiculoService";
+import { Versiculo } from "@/lib/supabase";
 
 export default function Home() {
+  const [versiculoDoDia, setVersiculoDoDia] = useState<Versiculo | null>(null);
+  const [loadingVersiculo, setLoadingVersiculo] = useState(true);
+
+  useEffect(() => {
+    carregarVersiculoDoDia();
+  }, []);
+
+  const carregarVersiculoDoDia = async () => {
+    setLoadingVersiculo(true);
+    const versiculo = await versiculoService.getVersiculoDoDia();
+    setVersiculoDoDia(versiculo);
+    setLoadingVersiculo(false);
+  };
   return (
     <div>
       {/* Hero Section */}
@@ -111,6 +127,12 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
+                icon: Users2Icon,
+                title: "Quem somos",
+                desc: "Venha nos conhecer",
+                link: "/quem-somos",
+              },
+              {
                 icon: Calendar,
                 title: "Eventos",
                 desc: "Participe dos nossos eventos",
@@ -127,13 +149,7 @@ export default function Home() {
                 title: "Projetos",
                 desc: "Conheça nossos projetos sociais",
                 link: "/projetos",
-              },
-              {
-                icon: Book,
-                title: "Jornal Aviva",
-                desc: "Leia nossa publicação",
-                link: "/jornal",
-              },
+              }
             ].map((item) => (
               <Link key={item.title} to={item.link}>
                 <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 h-full">
@@ -153,21 +169,61 @@ export default function Home() {
 
       {/* Versículo do Dia */}
       <section className="container mx-auto px-4 py-20">
-        <Card className="shadow-medium max-w-3xl mx-auto bg-gradient-hero text-primary-foreground">
-          <CardContent className="p-12 text-center">
-            <p className="text-sm font-semibold mb-4 text-primary-foreground/80">
-              VERSÍCULO DO DIA
-            </p>
-            <blockquote className="text-2xl md:text-3xl font-serif mb-6 leading-relaxed">
-              "Porque Deus amou o mundo de tal maneira que deu o seu Filho
-              unigênito, para que todo aquele que nele crê não pereça, mas tenha
-              a vida eterna."
-            </blockquote>
-            <p className="text-lg font-semibold text-primary-foreground/90">
-              João 3:16
-            </p>
-          </CardContent>
-        </Card>
+        {loadingVersiculo ? (
+          <Card className="shadow-medium max-w-3xl mx-auto">
+            <CardContent className="p-12 text-center">
+              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+            </CardContent>
+          </Card>
+        ) : versiculoDoDia ? (
+          <Card className="shadow-medium max-w-3xl mx-auto bg-gradient-hero text-primary-foreground">
+            <CardContent className="p-8 md:p-12">
+              <div className="flex items-center justify-center gap-2 mb-6">
+                <BookOpen className="w-5 h-5 text-primary-foreground/80" />
+                <p className="text-sm font-semibold text-primary-foreground/80">
+                  VERSÍCULO DO DIA
+                </p>
+              </div>
+
+              {versiculoDoDia.titulo && (
+                <h3 className="text-xl md:text-2xl font-bold mb-4 text-center text-primary-foreground">
+                  {versiculoDoDia.titulo}
+                </h3>
+              )}
+
+              {/* Preview compacto do post */}
+              <div className="bg-background/10 rounded-lg p-6 mb-6">
+                <p className="text-primary-foreground/90 text-center text-sm">
+                  Venha conferir a mensagem do dia 📖
+                </p>
+              </div>
+
+              <div className="flex justify-center gap-4">
+                <Link to="/versiculo-do-dia">
+                  <button className="px-6 py-3 bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all hover:-translate-y-0.5">
+                    Ver Mensagem Completa
+                  </button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="shadow-medium max-w-3xl mx-auto bg-gradient-hero text-primary-foreground">
+            <CardContent className="p-12 text-center">
+              <p className="text-sm font-semibold mb-4 text-primary-foreground/80">
+                VERSÍCULO DO DIA
+              </p>
+              <p className="text-lg text-primary-foreground/90 mb-6">
+                Em breve teremos uma nova mensagem para você!
+              </p>
+              <Link to="/versiculo-do-dia">
+                <button className="px-6 py-3 bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all">
+                  Ver Versículos Anteriores
+                </button>
+              </Link>
+            </CardContent>
+          </Card>
+        )}
       </section>
 
       {/* CTA Final */}

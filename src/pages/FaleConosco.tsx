@@ -1,10 +1,15 @@
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
-import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  AdvancedMarker,
+  APIProvider,
+  Map,
+  Pin,
+} from "@vis.gl/react-google-maps";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 
 export default function FaleConosco() {
   // IMPORTANTE: Usar a mesma API Key
@@ -226,7 +231,7 @@ export default function FaleConosco() {
                   Facebook
                 </a>
                 <a
-                  href="https://www.instagram.com/igrejaavinanacoes/"
+                  href="https://www.instagram.com/igrejaavivanacoes/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2 bg-primary-foreground/20 hover:bg-primary-foreground/30 rounded-lg transition-colors text-primary-foreground text-sm font-medium"
