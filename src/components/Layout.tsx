@@ -62,8 +62,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b-2 border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      {/* Header - Fixed */}
+      <header className="fixed top-0 z-50 w-full border-b-2 border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <nav className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
@@ -146,14 +146,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Layout com Sidebar */}
-      <div className="flex">
-        {/* Sidebar - Desktop apenas */}
+      <div className="flex pt-16">
+        {/* Sidebar - Desktop apenas - Fixed */}
         <aside
-          className={`hidden md:block sticky top-16 h-[calc(100vh-4rem)] border-r-2 border-border bg-background/50 backdrop-blur transition-all duration-300 ${
+          className={`hidden md:block fixed left-0 top-16 h-screen border-r-2 border-border bg-background/95 backdrop-blur transition-all duration-300 overflow-y-auto ${
             sidebarOpen ? "w-60" : "w-16"
           }`}
         >
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col">
             {/* Toggle Button */}
             <div className="p-3 border-b-2 border-border flex justify-end">
               <Button
@@ -171,7 +171,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* Navigation Items */}
-            <nav className="flex-1 p-3 space-y-2">
+            <nav className="p-3 space-y-2 pb-6">
               <Link
                 to="/"
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
@@ -213,8 +213,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </aside>
 
-        {/* Main Content */}
-        <main className="flex-1">{children}</main>
+        {/* Main Content - Com margin-left para compensar a sidebar fixa */}
+        <main
+          className={`flex-1 transition-all duration-300 ${
+            sidebarOpen ? "md:ml-60" : "md:ml-16"
+          }`}
+        >
+          {children}
+        </main>
       </div>
 
       {/* Footer */}

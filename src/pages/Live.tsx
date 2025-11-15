@@ -5,11 +5,20 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Radio, Users } from "lucide-react";
 
+// Declarar gtag para TypeScript
+declare global {
+  interface Window {
+    gtag?: (command: string, ...args: any[]) => void;
+  }
+}
+
 export default function Live() {
   const [isLive, setIsLive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [viewers, setViewers] = useState(0);
   const [showMixedContentWarning, setShowMixedContentWarning] = useState(false);
+  const [isWatching, setIsWatching] = useState(false);
+  const [watchStartTime, setWatchStartTime] = useState<number>(0);
 
   // TODO: Substituir pela URL do seu servidor Oracle Cloud
   // Formato: https://seu-ip-oracle.com/live/stream.m3u8
@@ -67,6 +76,41 @@ export default function Live() {
       setViewers(0);
     }
   }, [isLive]);
+
+  // Google Analytics - Rastrear quando usuário começa a assistir
+  useEffect(() => {
+    if (isLive && !isWatching) {
+      setIsWatching(true);
+      setWatchStartTime(Date.now());
+
+      // Enviar evento: Usuário começou a assistir
+      if (window.gtag) {
+        window.gtag('event', 'live_stream_start', {
+          event_category: 'Live Stream',
+          event_label: 'User started watching',
+          value: 1
+        });
+      }
+    }
+  }, [isLive, isWatching]);
+
+  // Google Analytics - Rastrear quando usuário para de assistir
+  useEffect(() => {
+    return () => {
+      if (isWatching && watchStartTime > 0) {
+        const watchDuration = Math.floor((Date.now() - watchStartTime) / 1000); // em segundos
+
+        // Enviar evento: Usuário parou de assistir + tempo assistido
+        if (window.gtag) {
+          window.gtag('event', 'live_stream_end', {
+            event_category: 'Live Stream',
+            event_label: 'User stopped watching',
+            value: watchDuration
+          });
+        }
+      }
+    };
+  }, [isWatching, watchStartTime]);
 
   if (isLoading) {
     return (
