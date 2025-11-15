@@ -223,8 +223,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </main>
       </div>
 
-      {/* Footer */}
-      <footer className="mt-20 border-t-2 border-border bg-muted/30">
+      {/* Footer - Fora da div principal para ocupar 100% da largura */}
+      <footer className={`mt-20 border-t-2 border-border bg-muted/30 transition-all duration-300 ${
+        sidebarOpen ? "md:ml-60" : "md:ml-10"
+      }`}>
         <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -244,8 +246,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </p>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t-2 border-border text-center text-sm text-muted-foreground">
-            © 2024 Igreja Aviva. Todos os direitos reservados.
+        </div>
+        <div className="border-t-2 border-border">
+          <div className="container mx-auto px-4 py-8 text-center text-sm text-muted-foreground">
+            © 2025 Igreja Aviva. Todos os direitos reservados.
           </div>
         </div>
       </footer>

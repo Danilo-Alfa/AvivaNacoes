@@ -1,14 +1,14 @@
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Facebook,
-  Instagram,
-  Youtube,
-  Radio,
   Heart,
-  Newspaper,
-  Users,
+  Instagram,
   Music,
+  Newspaper,
+  Radio,
+  Users,
+  Youtube,
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 
 export default function RedesSociais() {
   const socialNetworks = [
@@ -25,7 +25,7 @@ export default function RedesSociais() {
     {
       name: "Instagram",
       icon: Instagram,
-      url: "https://www.instagram.com/igrejaavinanacoes/",
+      url: "https://www.instagram.com/igrejaavivanacoes/",
       description:
         "Versículos inspiradores, stories dos eventos e momentos da nossa comunidade.",
       followers: "Comunidade engajada",
@@ -195,7 +195,6 @@ export default function RedesSociais() {
           </div>
         </div>
       </section>
-
     </div>
   );
 }

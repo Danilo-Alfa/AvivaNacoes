@@ -1,9 +1,11 @@
 # Aviva Nações - Church Website Project Context
 
 ## Project Overview
+
 This is a church website for **Igreja Aviva Nações** built with React, TypeScript, Vite, and Tailwind CSS, using shadcn/ui component library.
 
 ## Tech Stack
+
 - **Framework**: React 18 with TypeScript
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS
@@ -17,6 +19,7 @@ This is a church website for **Igreja Aviva Nações** built with React, TypeScr
 ## Project Structure
 
 ### Pages (`src/pages/`)
+
 - **Home.tsx**: Homepage with hero section, about, events, and CTAs
 - **QuemSomos.tsx**: About page (history, mission, vision, leadership, ministries)
 - **NossasIgrejas.tsx**: Churches/locations page
@@ -32,19 +35,24 @@ This is a church website for **Igreja Aviva Nações** built with React, TypeScr
 - **NotFound.tsx**: 404 page
 
 ### Components (`src/components/`)
+
 - **Layout.tsx**: Main layout with dual navigation system (top bar + collapsible sidebar)
 
 ## Navigation Architecture
 
 ### Primary Navigation (Top Bar)
+
 Displayed in the header on desktop and in mobile menu:
+
 - QUEM SOMOS (`/quem-somos`)
 - NOSSAS IGREJAS (`/nossas-igrejas`)
 - PROGRAMAÇÃO (`/programacao`)
 - REDES SOCIAIS (`/redes-sociais`)
 
 ### Secondary Navigation (Sidebar)
+
 Displayed in collapsible left sidebar on desktop and in mobile menu:
+
 - HOME (`/`) - Icon: Home
 - PROJETOS (`/projetos`) - Icon: FolderKanban
 - FOTOS (`/galerias`) - Icon: Image
@@ -55,11 +63,13 @@ Displayed in collapsible left sidebar on desktop and in mobile menu:
 - JORNAL (`/jornal`) - Icon: Newspaper
 
 ### Mobile Navigation
+
 - Uses shadcn/ui Sheet component (slide-in menu from right)
 - Shows all primary + secondary navigation items
 - Closes automatically on navigation
 
 ### Sidebar Features
+
 - Collapsible (240px expanded / 64px collapsed)
 - Icons always visible
 - Labels visible only when expanded
@@ -71,30 +81,37 @@ Displayed in collapsible left sidebar on desktop and in mobile menu:
 The church has 8 official social media platforms and channels:
 
 1. **Facebook**
+
    - URL: `https://web.facebook.com/igrejaevangelicaaviva/`
    - Description: Daily posts, events, live broadcasts
 
 2. **Instagram**
-   - URL: `https://www.instagram.com/igrejaavinanacoes/`
+
+   - URL: `https://www.instagram.com/igrejaavivanacoes/`
    - Description: Inspirational verses, event stories, community moments
 
 3. **Canal Aviva Nações (YouTube)**
+
    - URL: `https://www.youtube.com/@TvAvivaNacoes`
    - Description: Full services, sermons, worship, testimonies
 
 4. **WebRádio**
+
    - URL: `https://app.mobileradio.com.br/WebRadioAvivaNacoes`
    - Description: 24/7 programming with worship, sermons, uplifting content
 
 5. **Associação Benificiente EL Roi**
+
    - URL: `https://www.facebook.com/share/194jRRsrGp/`
    - Description: Social projects and community love actions
 
 6. **Jornal Aviva News**
+
    - URL: `https://portaldojoan.my.canva.site/`
    - Description: News, articles, content about faith, family, society
 
 7. **Aviva Jovens**
+
    - URL: `https://www.instagram.com/_aviva.jovens`
    - Description: Youth ministry with events, meetings, relevant content
 
@@ -107,6 +124,7 @@ All links open in new tabs with `target="_blank"` and `rel="noopener noreferrer"
 ## Video Integration
 
 ### react-player Implementation
+
 ```typescript
 import ReactPlayer from "react-player";
 
@@ -116,17 +134,19 @@ import ReactPlayer from "react-player";
     width="100%"
     height="100%"
     controls
-    light  // Shows thumbnail before loading
+    light // Shows thumbnail before loading
     playing={false}
   />
-</div>
+</div>;
 ```
 
 ### Pages with Video Players
+
 - **Home.tsx**: Institutional video in "About" section
 - **Videos.tsx**: Featured video + grid of 9 videos
 
 ### Video Hosting Strategy
+
 - Use YouTube embeds (not direct file hosting)
 - GitHub Pages/Vercel have file size limitations
 - `light` mode for performance (loads thumbnail first)
@@ -134,6 +154,7 @@ import ReactPlayer from "react-player";
 ## Versículo do Dia Page
 
 ### Facebook Iframe Embed
+
 ```typescript
 <iframe
   src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fweb.facebook.com%2Fapostolorowilson%2Fposts%2F..."
@@ -149,6 +170,7 @@ import ReactPlayer from "react-player";
 ```
 
 ### Page Sections
+
 1. Hero with BookOpen icon
 2. Featured daily verse with Facebook embed
 3. Previous verses grid (6 cards)
@@ -158,37 +180,41 @@ import ReactPlayer from "react-player";
 ## Design System
 
 ### Color Scheme
+
 - Primary gradient: `bg-gradient-hero`
 - Accent gradient: `bg-gradient-accent`
 - Uses Tailwind's color system with CSS variables
 
 ### Shadows
+
 - `shadow-soft`: Subtle shadow for cards
 - `shadow-medium`: More pronounced shadow for elevated elements
 
 ### Animations
+
 - `animate-fade-in`: Fade in animation
 - `hover:-translate-y-1`: Lift effect on hover
 - Smooth transitions with `transition-all`
 
 ### Typography
+
 - Headings use gradient text: `bg-gradient-hero bg-clip-text text-transparent`
 - Consistent spacing with mb-4, mb-6, mb-8
 
 ## Common Patterns
 
 ### Card Component Usage
+
 ```typescript
 import { Card, CardContent } from "@/components/ui/card";
 
 <Card className="shadow-medium">
-  <CardContent className="p-8">
-    {/* Content */}
-  </CardContent>
-</Card>
+  <CardContent className="p-8">{/* Content */}</CardContent>
+</Card>;
 ```
 
 ### Navigation Links
+
 ```typescript
 import { Link } from "react-router-dom";
 
@@ -196,10 +222,11 @@ import { Link } from "react-router-dom";
   <button className="px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all">
     Button Text
   </button>
-</Link>
+</Link>;
 ```
 
 ### External Links (Social Media)
+
 ```typescript
 <a
   href="https://example.com"
@@ -223,6 +250,7 @@ import { Link } from "react-router-dom";
 ## Content Guidelines
 
 ### Placeholder Content
+
 Many pages have placeholder text in brackets like `[Descrição do ministério]`. These should be replaced with actual church content:
 
 - **QuemSomos.tsx**: History, mission, vision, values, leadership bios, ministry descriptions
@@ -233,7 +261,9 @@ Many pages have placeholder text in brackets like `[Descrição do ministério]`
 - **Programacao.tsx**: Weekly schedule details
 
 ### Image Placeholders
+
 Replace placeholder divs with actual images:
+
 - Leadership photos in QuemSomos
 - Church building photos in NossasIgrejas
 - Event photos in Eventos and Galerias
@@ -264,6 +294,7 @@ npm run preview
 ## Google Maps Integration
 
 ### Setup Required
+
 1. Obtain Google Maps API Key from [Google Cloud Console](https://console.cloud.google.com/)
 2. Enable Maps JavaScript API
 3. Configure API key restrictions for security
@@ -272,6 +303,7 @@ npm run preview
 See [GOOGLE_MAPS_SETUP.md](GOOGLE_MAPS_SETUP.md) for detailed instructions.
 
 ### Features Implemented
+
 - Interactive map with custom pins for each church
 - Click markers to highlight corresponding church card
 - Automatic center calculation based on all church locations
@@ -280,6 +312,7 @@ See [GOOGLE_MAPS_SETUP.md](GOOGLE_MAPS_SETUP.md) for detailed instructions.
 - Color-coded pins (changes color when selected)
 
 ### Church Data Structure
+
 ```typescript
 {
   id: number,
@@ -295,6 +328,7 @@ See [GOOGLE_MAPS_SETUP.md](GOOGLE_MAPS_SETUP.md) for detailed instructions.
 ```
 
 ### How to Add Churches
+
 1. Update the `churches` array in `src/pages/NossasIgrejas.tsx`
 2. Get coordinates from Google Maps (right-click > "What's here?")
 3. Add all church details
@@ -305,12 +339,14 @@ See [GOOGLE_MAPS_SETUP.md](GOOGLE_MAPS_SETUP.md) for detailed instructions.
 For displaying photos without hosting them:
 
 ### Recommended Solutions:
+
 1. **Google Photos** - Free, unlimited storage, public albums
 2. **Instagram Embed** - Already using `@igrejaavinanacoes`
 3. **Cloudinary** - 25GB free tier, CDN, automatic optimization
 4. **Imgur** - Simple, free, direct URLs
 
 ### Current Status
+
 Pending implementation - user to decide which solution to use.
 
 ## Future Enhancements (Ideas)
