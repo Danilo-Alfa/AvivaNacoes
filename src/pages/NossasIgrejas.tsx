@@ -8,13 +8,13 @@ const churches = [
   {
     id: 1,
     name: "Sede Central",
-    neighborhood: "Centro",
-    address: "Rua Exemplo, 123 - Centro",
-    city: "Cidade - Estado, CEP 00000-000",
+    neighborhood: "Jardim Esther",
+    address: "Rua Lucas Padilha, 7 – Jd Esther",
+    city: "São Paulo - SP, CEP 05366-080",
     phone: "(00) 00000-0000",
-    schedule: "Domingo: 09h e 19h\nQuarta: 19h30",
+    schedule: "Aberto todos os dias as 18h",
     pastor: "Nome do Pastor(a)",
-    position: { lat: -23.5505, lng: -46.6333 }, // Exemplo: São Paulo
+    position: { lat: -23.574401, lng: -46.758482 }, // Coordenadas do Jardim Esther, São Paulo
   },
   {
     id: 2,

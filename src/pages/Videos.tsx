@@ -21,17 +21,12 @@ export default function Videos() {
           <CardContent className="p-0 w-full">
             <div className="aspect-video bg-black relative w-full overflow-hidden">
               <ReactPlayer
-                url="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
+                src="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
                 width="100%"
                 height="100%"
                 controls
                 light
                 playing={false}
-                config={{
-                  youtube: {
-                    playerVars: { showinfo: 1 }
-                  }
-                }}
               />
             </div>
             <div className="p-4 md:p-6">
@@ -93,7 +88,7 @@ export default function Videos() {
               <CardContent className="p-0 w-full">
                 <div className="aspect-video bg-black relative w-full overflow-hidden">
                   <ReactPlayer
-                    url="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
+                    src="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
                     width="100%"
                     height="100%"
                     controls={false}
@@ -125,12 +120,24 @@ export default function Videos() {
         <h2 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">Séries e Playlists</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
           {[
-            "Série: Fundamentos da Fé",
-            "Série: Família Abençoada",
-            "Testemunhos 2024",
+            {
+              nome: "Série: Fundamentos da Fé",
+              descricao: "Descrição da série de vídeos e os temas abordados ao longo dos episódios.",
+              link: "https://www.youtube.com/playlist?list=EXEMPLO1"
+            },
+            {
+              nome: "Série: Família Abençoada",
+              descricao: "Descrição da série de vídeos e os temas abordados ao longo dos episódios.",
+              link: "https://www.youtube.com/playlist?list=EXEMPLO2"
+            },
+            {
+              nome: "Testemunhos 2024",
+              descricao: "Descrição da série de vídeos e os temas abordados ao longo dos episódios.",
+              link: "https://www.youtube.com/playlist?list=EXEMPLO3"
+            },
           ].map((serie, index) => (
             <Card
-              key={serie}
+              key={serie.nome}
               className="shadow-soft hover:shadow-medium transition-all overflow-hidden w-full"
             >
               <CardContent className="p-0 w-full">
@@ -144,15 +151,19 @@ export default function Videos() {
                     </div>
                   </div>
                   <div className="flex-1 sm:col-span-2 p-4 md:p-6 flex flex-col justify-center">
-                    <h3 className="text-lg md:text-xl font-bold mb-2">{serie}</h3>
+                    <h3 className="text-lg md:text-xl font-bold mb-2">{serie.nome}</h3>
                     <p className="text-xs md:text-sm text-muted-foreground mb-3 md:mb-4 line-clamp-2">
-                      Descrição da série de vídeos e os temas abordados ao longo
-                      dos episódios.
+                      {serie.descricao}
                     </p>
-                    <button className="text-xs md:text-sm font-semibold text-primary hover:text-primary/80 transition-colors flex items-center gap-1 w-fit">
+                    <a
+                      href={serie.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs md:text-sm font-semibold text-primary hover:text-primary/80 transition-colors flex items-center gap-1 w-fit"
+                    >
                       Ver Playlist
                       <Play className="w-3 h-3 md:w-4 md:h-4" />
-                    </button>
+                    </a>
                   </div>
                 </div>
               </CardContent>
