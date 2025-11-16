@@ -18,6 +18,8 @@ import Jornal from "./pages/Jornal";
 import RedesSociais from "./pages/RedesSociais";
 import VersiculoDoDia from "./pages/VersiculoDoDia";
 import AdminVersiculos from "./pages/AdminVersiculos";
+import AdminJornais from "./pages/AdminJornais";
+import AdminGalerias from "./pages/AdminGalerias";
 import Live from "./pages/Live";
 import NotFound from "./pages/NotFound";
 
@@ -44,7 +46,9 @@ const App = () => (
             <Route path="/jornal" element={<Jornal />} />
             <Route path="/redes-sociais" element={<RedesSociais />} />
             <Route path="/versiculo-do-dia" element={<VersiculoDoDia />} />
-            <Route path="/admin/versiculos" element={<AdminVersiculos />} />
+            <Route path="/admin/versiculo-do-dia" element={<AdminVersiculos />} />
+            <Route path="/admin/jornal" element={<AdminJornais />} />
+            <Route path="/admin/galerias" element={<AdminGalerias />} />
             <Route path="/live" element={<Live />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
