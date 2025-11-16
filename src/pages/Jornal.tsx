@@ -1,7 +1,48 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, Download } from "lucide-react";
+import { Download, FileText } from "lucide-react";
+import { getUltimosJornais, type Jornal } from "@/services/jornalService";
 
 export default function Jornal() {
+  const [jornais, setJornais] = useState<Jornal[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    carregarJornais();
+  }, []);
+
+  const carregarJornais = async () => {
+    try {
+      setLoading(true);
+      const data = await getUltimosJornais();
+      setJornais(data);
+    } catch (error) {
+      console.error("Erro ao carregar jornais:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Converte automaticamente links do Canva para formato embed
+  const converterParaEmbed = (url: string): string => {
+    // Canva: converte /view para /view?embed
+    if (url.includes("canva.com/design/") && url.includes("/view")) {
+      // Remove parâmetros existentes e adiciona ?embed
+      const urlBase = url.split("?")[0];
+      return `${urlBase}?embed`;
+    }
+
+    // Issuu: converte para embed
+    if (url.includes("issuu.com/") && !url.includes("/embed")) {
+      return url.replace("issuu.com/", "issuu.com/embed/");
+    }
+
+    // Para outros links, retorna o original
+    return url;
+  };
+
+  const jornalMaisRecente = jornais[0];
+
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
@@ -14,116 +55,107 @@ export default function Jornal() {
         </p>
       </div>
 
-      {/* Visualizador de Jornal (Estilo Vertical) */}
-      <section className="mb-16">
-        <Card className="shadow-medium overflow-hidden">
-          <CardContent className="p-0">
-            {/* Área de Visualização - Formato Vertical */}
-            <div className="bg-muted flex items-center justify-center py-12 px-4">
-              <div className="max-w-3xl w-full">
-                <div className="aspect-[9/16] bg-background rounded-lg shadow-soft overflow-hidden">
-                  <iframe
-                    loading="lazy"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      border: "none",
-                    }}
-                    src="https://www.canva.com/design/DAG33x5eSQk/AV0b9R1BrdZcFfMo9Hijog/view?embed"
-                    allow="fullscreen"
-                  ></iframe>
-                </div>
-              </div>
-            </div>
-
-            {/* Controles */}
-            <div className="p-6 border-t border-border bg-background">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">Edição Dezembro 2024</h2>
-                <a
-                  href="https://www.canva.com/design/DAG33x5eSQk/AV0b9R1BrdZcFfMo9Hijog/view?utm_content=DAG33x5eSQk&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h3300a91a33"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
-                >
-                  <Download className="w-4 h-4" />
-                  Ver em Tela Cheia
-                </a>
-              </div>
-
-              <div className="text-center">
-                <p className="text-sm text-muted-foreground">
-                  Use os controles dentro da visualização para navegar entre as
-                  páginas
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-
-      {/* Edições Anteriores */}
-      <section className="mb-16">
-        <h2 className="text-3xl font-bold mb-8">Edições Anteriores</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-          {Array.from({ length: 12 }).map((_, index) => {
-            const mes = new Date(2024, 11 - index, 1).toLocaleDateString(
-              "pt-BR",
-              { month: "long", year: "numeric" },
-            );
-
-            return (
-              <Card
-                key={index}
-                className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer group"
-              >
-                <CardContent className="p-4">
-                  <div className="aspect-[9/16] bg-gradient-hero rounded-lg mb-3 flex items-center justify-center group-hover:scale-105 transition-transform">
-                    <span className="text-xs text-primary-foreground font-semibold text-center px-2">
-                      Capa
-                      <br />
-                      Jornal
-                    </span>
-                  </div>
-                  <p className="text-xs font-medium text-center capitalize">
-                    {mes}
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })}
+      {loading ? (
+        <div className="text-center py-20">
+          <p className="text-muted-foreground">Carregando jornais...</p>
         </div>
-      </section>
-
-      {/* Destaques da Edição Atual */}
-      <section>
-        <h2 className="text-3xl font-bold mb-8">Destaques desta Edição</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            "Mensagem do Pastor",
-            "Testemunho do Mês",
-            "Eventos em Destaque",
-          ].map((destaque, index) => (
-            <Card
-              key={destaque}
-              className="shadow-soft hover:shadow-medium transition-all"
-            >
-              <CardContent className="p-6">
-                <div className="w-12 h-12 bg-gradient-accent rounded-lg mb-4 flex items-center justify-center">
-                  <span className="text-xl font-bold text-accent-foreground">
-                    {index + 1}
-                  </span>
+      ) : jornais.length === 0 ? (
+        <div className="text-center py-20">
+          <FileText className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+          <p className="text-lg text-muted-foreground">
+            Nenhum jornal disponível no momento
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* Visualizador do Jornal Mais Recente */}
+          <section className="mb-16">
+            <Card className="shadow-medium overflow-hidden">
+              <CardContent className="p-0">
+                {/* Área de Visualização - PDF Embed */}
+                <div className="bg-muted flex items-center justify-center py-12 px-4">
+                  <div className="max-w-3xl w-full">
+                    <div className="aspect-[9/16] bg-background rounded-lg shadow-soft overflow-hidden">
+                      <iframe
+                        loading="lazy"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          border: "none",
+                        }}
+                        src={converterParaEmbed(jornalMaisRecente.url_pdf)}
+                        title={jornalMaisRecente.titulo || "Jornal"}
+                        allow="fullscreen"
+                      ></iframe>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-lg font-bold mb-2">{destaque}</h3>
-                <p className="text-sm text-muted-foreground">
-                  Breve descrição do conteúdo desta seção do jornal e por que
-                  você deve ler.
-                </p>
+
+                {/* Controles */}
+                <div className="p-6 border-t border-border bg-background">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h2 className="text-xl font-bold">
+                        {jornalMaisRecente.titulo || "Última Edição"}
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(jornalMaisRecente.data + "T00:00:00").toLocaleDateString(
+                          "pt-BR",
+                          { day: "numeric", month: "long", year: "numeric" }
+                        )}
+                      </p>
+                    </div>
+                    <a
+                      href={jornalMaisRecente.url_pdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+                    >
+                      <Download className="w-4 h-4" />
+                      Ver em Tela Cheia
+                    </a>
+                  </div>
+                </div>
               </CardContent>
             </Card>
-          ))}
-        </div>
-      </section>
+          </section>
+
+          {/* Edições Anteriores */}
+          {jornais.length > 1 && (
+            <section className="mb-16">
+              <h2 className="text-3xl font-bold mb-8">Edições Anteriores</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {jornais.slice(1).map((jornal) => (
+                  <a
+                    key={jornal.id}
+                    href={jornal.url_pdf}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer group">
+                      <CardContent className="p-4">
+                        <div className="aspect-[3/4] bg-gradient-hero rounded-lg mb-3 flex items-center justify-center group-hover:scale-105 transition-transform">
+                          <FileText className="w-12 h-12 text-primary-foreground" />
+                        </div>
+                        <p className="text-sm font-semibold text-center mb-1 line-clamp-2">
+                          {jornal.titulo || "Jornal"}
+                        </p>
+                        <p className="text-xs text-muted-foreground text-center">
+                          {new Date(jornal.data + "T00:00:00").toLocaleDateString(
+                            "pt-BR",
+                            { month: "short", year: "numeric" }
+                          )}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+        </>
+      )}
     </div>
   );
 }
