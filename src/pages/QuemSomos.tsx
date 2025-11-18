@@ -1,4 +1,39 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { useTilt } from "@/hooks/useTilt";
+
+function PastorCard({ pastor }: { pastor: number }) {
+  const tiltRef = useTilt<HTMLDivElement>({
+    maxTilt: 10,
+    perspective: 1000,
+    scale: 1.05,
+    speed: 400,
+    glare: true,
+    maxGlare: 0.3,
+  });
+
+  return (
+    <Card
+      ref={tiltRef}
+      className="shadow-soft hover:shadow-medium transition-shadow"
+      style={{ transformStyle: 'preserve-3d' }}
+    >
+      <CardContent className="p-6" style={{ transform: 'translateZ(20px)' }}>
+        <div className="aspect-square bg-gradient-hero rounded-lg mb-4 flex items-center justify-center">
+          <span className="text-4xl text-primary-foreground font-bold">
+            Foto
+          </span>
+        </div>
+        <h3 className="text-xl font-bold mb-1">Pastor(a) Nome</h3>
+        <p className="text-sm text-accent font-medium mb-3">
+          Cargo/Função
+        </p>
+        <p className="text-sm text-muted-foreground">
+          [Breve biografia e informações sobre o pastor(a)]
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function QuemSomos() {
   return (
@@ -93,25 +128,7 @@ export default function QuemSomos() {
         <h2 className="text-3xl font-bold mb-8 text-center">Nossa Liderança</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {[1, 2, 3].map((pastor) => (
-            <Card
-              key={pastor}
-              className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
-            >
-              <CardContent className="p-6">
-                <div className="aspect-square bg-gradient-hero rounded-lg mb-4 flex items-center justify-center">
-                  <span className="text-4xl text-primary-foreground font-bold">
-                    Foto
-                  </span>
-                </div>
-                <h3 className="text-xl font-bold mb-1">Pastor(a) Nome</h3>
-                <p className="text-sm text-accent font-medium mb-3">
-                  Cargo/Função
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  [Breve biografia e informações sobre o pastor(a)]
-                </p>
-              </CardContent>
-            </Card>
+            <PastorCard key={pastor} pastor={pastor} />
           ))}
         </div>
       </section>
