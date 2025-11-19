@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Trash2, Edit, FileText } from "lucide-react";
 import ProtectedAdmin from "@/components/ProtectedAdmin";
+import { toast } from "@/components/ui/sonner";
 import {
   getTodosJornais,
   criarJornal,
@@ -36,7 +37,9 @@ function AdminJornaisContent() {
       setJornais(data);
     } catch (error) {
       console.error("Erro ao carregar jornais:", error);
-      alert("Erro ao carregar jornais");
+      toast.error("Erro ao carregar jornais", {
+        description: "Não foi possível carregar a lista de jornais. Tente novamente."
+      });
     } finally {
       setLoading(false);
     }
@@ -46,17 +49,23 @@ function AdminJornaisContent() {
     e.preventDefault();
 
     if (!urlPdf || !data) {
-      alert("Por favor, preencha a URL do PDF e a data");
+      toast.error("Campos obrigatórios faltando", {
+        description: "Por favor, preencha a URL do PDF e a data"
+      });
       return;
     }
 
     try {
       if (editando) {
         await atualizarJornal(editando, urlPdf, titulo || null, data);
-        alert("Jornal atualizado com sucesso!");
+        toast.success("Jornal atualizado!", {
+          description: `O jornal${titulo ? ` "${titulo}"` : ''} foi atualizado com sucesso.`
+        });
       } else {
         await criarJornal(urlPdf, titulo || null, data);
-        alert("Jornal criado com sucesso!");
+        toast.success("Jornal criado!", {
+          description: `O jornal${titulo ? ` "${titulo}"` : ''} foi criado com sucesso.`
+        });
       }
 
       // Limpar formulário
@@ -69,7 +78,9 @@ function AdminJornaisContent() {
       carregarJornais();
     } catch (error) {
       console.error("Erro ao salvar jornal:", error);
-      alert("Erro ao salvar jornal");
+      toast.error("Erro ao salvar jornal", {
+        description: "Não foi possível salvar o jornal. Tente novamente."
+      });
     }
   };
 
@@ -88,18 +99,22 @@ function AdminJornaisContent() {
     setData(new Date().toISOString().split("T")[0]);
   };
 
-  const handleDeletar = async (id: string) => {
-    if (!confirm("Tem certeza que deseja deletar este jornal?")) {
+  const handleDeletar = async (id: string, titulo: string | null) => {
+    if (!confirm(`Tem certeza que deseja deletar o jornal${titulo ? ` "${titulo}"` : ''}?`)) {
       return;
     }
 
     try {
       await deletarJornal(id);
-      alert("Jornal deletado com sucesso!");
+      toast.success("Jornal deletado!", {
+        description: `O jornal${titulo ? ` "${titulo}"` : ''} foi deletado com sucesso.`
+      });
       carregarJornais();
     } catch (error) {
       console.error("Erro ao deletar jornal:", error);
-      alert("Erro ao deletar jornal");
+      toast.error("Erro ao deletar jornal", {
+        description: "Não foi possível deletar o jornal. Tente novamente."
+      });
     }
   };
 
@@ -225,7 +240,7 @@ function AdminJornaisContent() {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => handleDeletar(jornal.id)}
+                      onClick={() => handleDeletar(jornal.id, jornal.titulo)}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>

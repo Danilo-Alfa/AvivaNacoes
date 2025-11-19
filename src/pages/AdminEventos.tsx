@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Trash2, Edit, Calendar } from "lucide-react";
 import ProtectedAdmin from "@/components/ProtectedAdmin";
+import { toast } from "@/components/ui/sonner";
 import {
   getTodosEventos,
   criarEvento,
@@ -44,7 +45,9 @@ function AdminEventosContent() {
       setEventos(data);
     } catch (error) {
       console.error("Erro ao carregar eventos:", error);
-      alert("Erro ao carregar eventos");
+      toast.error("Erro ao carregar eventos", {
+        description: "Não foi possível carregar a lista de eventos. Tente novamente."
+      });
     } finally {
       setLoading(false);
     }
@@ -54,12 +57,16 @@ function AdminEventosContent() {
     e.preventDefault();
 
     if (!titulo || !dataInicio) {
-      alert("Por favor, preencha título e data de início");
+      toast.error("Campos obrigatórios faltando", {
+        description: "Por favor, preencha título e data de início"
+      });
       return;
     }
 
     if (!diaInteiro && !horaInicio) {
-      alert("Por favor, preencha a hora de início ou marque 'Dia Inteiro'");
+      toast.error("Hora de início obrigatória", {
+        description: "Por favor, preencha a hora de início ou marque 'Dia Inteiro'"
+      });
       return;
     }
 
@@ -83,7 +90,9 @@ function AdminEventosContent() {
           destaque,
           imagemUrl || null
         );
-        alert("Evento atualizado com sucesso!");
+        toast.success("Evento atualizado!", {
+          description: `O evento "${titulo}" foi atualizado com sucesso.`
+        });
       } else {
         await criarEvento(
           titulo,
@@ -95,7 +104,9 @@ function AdminEventosContent() {
           destaque,
           imagemUrl || null
         );
-        alert("Evento criado com sucesso!");
+        toast.success("Evento criado!", {
+          description: `O evento "${titulo}" foi criado com sucesso.`
+        });
       }
 
       // Limpar formulário
@@ -103,7 +114,9 @@ function AdminEventosContent() {
       carregarEventos();
     } catch (error) {
       console.error("Erro ao salvar evento:", error);
-      alert("Erro ao salvar evento");
+      toast.error("Erro ao salvar evento", {
+        description: "Não foi possível salvar o evento. Tente novamente."
+      });
     }
   };
 
@@ -149,18 +162,22 @@ function AdminEventosContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleDeletar = async (id: string) => {
-    if (!confirm("Tem certeza que deseja deletar este evento?")) {
+  const handleDeletar = async (id: string, titulo: string) => {
+    if (!confirm(`Tem certeza que deseja deletar o evento "${titulo}"?`)) {
       return;
     }
 
     try {
       await deletarEvento(id);
-      alert("Evento deletado com sucesso!");
+      toast.success("Evento deletado!", {
+        description: `O evento "${titulo}" foi deletado com sucesso.`
+      });
       carregarEventos();
     } catch (error) {
       console.error("Erro ao deletar evento:", error);
-      alert("Erro ao deletar evento");
+      toast.error("Erro ao deletar evento", {
+        description: "Não foi possível deletar o evento. Tente novamente."
+      });
     }
   };
 
@@ -173,6 +190,57 @@ function AdminEventosContent() {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const formatarDataHoraEvento = (inicio: string, fim: string | null) => {
+    const dataInicio = new Date(inicio);
+    const horaInicioStr = dataInicio.toTimeString().slice(0, 5);
+
+    const dataFormatada = dataInicio.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+    // Verificar se é evento de dia inteiro
+    let isDiaInteiro = false;
+
+    if (fim) {
+      const dataFim = new Date(fim);
+      const horaFimStr = dataFim.toTimeString().slice(0, 5);
+
+      // Se os horários são iguais OU ambos são 12:00, é evento de dia inteiro
+      if (horaInicioStr === horaFimStr || (horaInicioStr === "12:00" && horaFimStr === "12:00")) {
+        isDiaInteiro = true;
+      }
+    } else if (horaInicioStr === "12:00") {
+      // Se não tem fim e início é 12:00, é dia inteiro
+      isDiaInteiro = true;
+    }
+
+    if (isDiaInteiro) {
+      if (fim) {
+        const dataFim = new Date(fim);
+        const dataFimFormatada = dataFim.toLocaleDateString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+
+        // Se as datas são diferentes, mostra o período
+        if (dataFormatada !== dataFimFormatada) {
+          return `${dataFormatada} até ${dataFimFormatada} (Dia inteiro)`;
+        }
+      }
+      return `${dataFormatada} (Dia inteiro)`;
+    }
+
+    // Se não é dia inteiro, mostra normalmente
+    let resultado = formatarDataHora(inicio);
+    if (fim) {
+      resultado += ` até ${formatarDataHora(fim)}`;
+    }
+    return resultado;
   };
 
   return (
@@ -371,8 +439,7 @@ function AdminEventosContent() {
                       </p>
                     )}
                     <p className="text-xs text-muted-foreground">
-                      📅 {formatarDataHora(evento.data_inicio)}
-                      {evento.data_fim && ` até ${formatarDataHora(evento.data_fim)}`}
+                      📅 {formatarDataHoraEvento(evento.data_inicio, evento.data_fim)}
                     </p>
                     {evento.local && (
                       <p className="text-xs text-muted-foreground">
@@ -397,7 +464,7 @@ function AdminEventosContent() {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => handleDeletar(evento.id)}
+                      onClick={() => handleDeletar(evento.id, evento.titulo)}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>

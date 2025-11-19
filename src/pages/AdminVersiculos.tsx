@@ -16,6 +16,7 @@ import {
 import { versiculoService } from "@/services/versiculoService";
 import { Versiculo } from "@/lib/supabase";
 import ProtectedAdmin from "@/components/ProtectedAdmin";
+import { toast } from "@/components/ui/sonner";
 
 function AdminVersiculosContent() {
   const [versiculos, setVersiculos] = useState<Versiculo[]>([]);
@@ -50,7 +51,9 @@ function AdminVersiculosContent() {
     e.preventDefault();
 
     if (!urlPost || !data) {
-      alert("URL do post e data são obrigatórios!");
+      toast.error("Campos obrigatórios faltando", {
+        description: "URL do post e data são obrigatórios!"
+      });
       return;
     }
 
@@ -61,11 +64,17 @@ function AdminVersiculosContent() {
       : await versiculoService.criarVersiculo(urlPost, titulo, data);
 
     if (resultado.success) {
-      alert(editandoId ? "Versículo atualizado!" : "Versículo criado!");
+      toast.success(editandoId ? "Versículo atualizado!" : "Versículo criado!", {
+        description: editandoId
+          ? "O versículo foi atualizado com sucesso."
+          : "O versículo foi criado com sucesso."
+      });
       limparForm();
       carregarVersiculos();
     } else {
-      alert(`Erro: ${resultado.error}`);
+      toast.error("Erro ao salvar versículo", {
+        description: resultado.error
+      });
     }
 
     setSalvando(false);
@@ -85,10 +94,14 @@ function AdminVersiculosContent() {
     const resultado = await versiculoService.deletarVersiculo(id);
 
     if (resultado.success) {
-      alert("Versículo deletado!");
+      toast.success("Versículo deletado!", {
+        description: "O versículo foi deletado com sucesso."
+      });
       carregarVersiculos();
     } else {
-      alert(`Erro: ${resultado.error}`);
+      toast.error("Erro ao deletar versículo", {
+        description: resultado.error
+      });
     }
   };
 
@@ -96,9 +109,16 @@ function AdminVersiculosContent() {
     const resultado = await versiculoService.toggleAtivo(id, !ativo);
 
     if (resultado.success) {
+      toast.success(ativo ? "Versículo desativado!" : "Versículo ativado!", {
+        description: ativo
+          ? "O versículo foi desativado com sucesso."
+          : "O versículo foi ativado com sucesso."
+      });
       carregarVersiculos();
     } else {
-      alert(`Erro: ${resultado.error}`);
+      toast.error("Erro ao alterar status", {
+        description: resultado.error
+      });
     }
   };
 

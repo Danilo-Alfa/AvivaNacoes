@@ -122,6 +122,12 @@ export default function Eventos() {
     if (fim) {
       const horaInicio = formatarHora(inicio);
       const horaFim = formatarHora(fim);
+
+      // Se os horários forem iguais, é evento de dia inteiro
+      if (horaInicio === horaFim) {
+        return "Dia inteiro";
+      }
+
       return `${horaInicio} às ${horaFim}`;
     }
 

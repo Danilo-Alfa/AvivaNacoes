@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Trash2, Edit, Images } from "lucide-react";
 import ProtectedAdmin from "@/components/ProtectedAdmin";
+import { toast } from "@/components/ui/sonner";
 import {
   getTodasGalerias,
   criarGaleria,
@@ -37,7 +38,9 @@ function AdminGaleriasContent() {
       setGalerias(data);
     } catch (error) {
       console.error("Erro ao carregar galerias:", error);
-      alert("Erro ao carregar galerias");
+      toast.error("Erro ao carregar galerias", {
+        description: "Não foi possível carregar a lista de galerias. Tente novamente."
+      });
     } finally {
       setLoading(false);
     }
@@ -47,7 +50,9 @@ function AdminGaleriasContent() {
     e.preventDefault();
 
     if (!urlAlbum || !titulo || !data) {
-      alert("Por favor, preencha a URL do álbum, título e data");
+      toast.error("Campos obrigatórios faltando", {
+        description: "Por favor, preencha a URL do álbum, título e data"
+      });
       return;
     }
 
@@ -61,7 +66,9 @@ function AdminGaleriasContent() {
           data,
           capaUrl || null
         );
-        alert("Galeria atualizada com sucesso!");
+        toast.success("Galeria atualizada!", {
+          description: `A galeria "${titulo}" foi atualizada com sucesso.`
+        });
       } else {
         await criarGaleria(
           urlAlbum,
@@ -70,7 +77,9 @@ function AdminGaleriasContent() {
           data,
           capaUrl || null
         );
-        alert("Galeria criada com sucesso!");
+        toast.success("Galeria criada!", {
+          description: `A galeria "${titulo}" foi criada com sucesso.`
+        });
       }
 
       // Limpar formulário
@@ -85,7 +94,9 @@ function AdminGaleriasContent() {
       carregarGalerias();
     } catch (error) {
       console.error("Erro ao salvar galeria:", error);
-      alert("Erro ao salvar galeria");
+      toast.error("Erro ao salvar galeria", {
+        description: "Não foi possível salvar a galeria. Tente novamente."
+      });
     }
   };
 
@@ -108,18 +119,22 @@ function AdminGaleriasContent() {
     setCapaUrl("");
   };
 
-  const handleDeletar = async (id: string) => {
-    if (!confirm("Tem certeza que deseja deletar esta galeria?")) {
+  const handleDeletar = async (id: string, titulo: string) => {
+    if (!confirm(`Tem certeza que deseja deletar a galeria "${titulo}"?`)) {
       return;
     }
 
     try {
       await deletarGaleria(id);
-      alert("Galeria deletada com sucesso!");
+      toast.success("Galeria deletada!", {
+        description: `A galeria "${titulo}" foi deletada com sucesso.`
+      });
       carregarGalerias();
     } catch (error) {
       console.error("Erro ao deletar galeria:", error);
-      alert("Erro ao deletar galeria");
+      toast.error("Erro ao deletar galeria", {
+        description: "Não foi possível deletar a galeria. Tente novamente."
+      });
     }
   };
 
@@ -275,7 +290,7 @@ function AdminGaleriasContent() {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => handleDeletar(galeria.id)}
+                      onClick={() => handleDeletar(galeria.id, galeria.titulo)}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
