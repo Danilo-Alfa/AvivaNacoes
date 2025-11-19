@@ -10,11 +10,13 @@ export interface Evento {
   tipo: string | null;
   destaque: boolean;
   imagem_url: string | null;
+  cor: string | null;
   created_at: string;
 }
 
 /**
  * Busca eventos futuros (a partir de hoje)
+ * Inclui eventos que ainda não terminaram (data_fim >= hoje OU data_inicio >= hoje)
  */
 export async function getEventosFuturos(): Promise<Evento[]> {
   const hoje = new Date().toISOString();
@@ -22,7 +24,7 @@ export async function getEventosFuturos(): Promise<Evento[]> {
   const { data, error } = await supabase
     .from("eventos")
     .select("*")
-    .gte("data_inicio", hoje)
+    .or(`data_inicio.gte.${hoje},data_fim.gte.${hoje}`)
     .order("data_inicio", { ascending: true });
 
   if (error) {
@@ -57,6 +59,7 @@ export async function getEventosDoMes(ano: number, mes: number): Promise<Evento[
 
 /**
  * Busca eventos em destaque
+ * Inclui eventos que ainda não terminaram (data_fim >= hoje OU data_inicio >= hoje)
  */
 export async function getEventosDestaque(): Promise<Evento[]> {
   const hoje = new Date().toISOString();
@@ -65,7 +68,7 @@ export async function getEventosDestaque(): Promise<Evento[]> {
     .from("eventos")
     .select("*")
     .eq("destaque", true)
-    .gte("data_inicio", hoje)
+    .or(`data_inicio.gte.${hoje},data_fim.gte.${hoje}`)
     .order("data_inicio", { ascending: true })
     .limit(3);
 
@@ -105,7 +108,8 @@ export async function criarEvento(
   local: string | null,
   tipo: string | null,
   destaque: boolean,
-  imagemUrl: string | null
+  imagemUrl: string | null,
+  cor: string | null
 ): Promise<Evento> {
   const { data: evento, error } = await supabase
     .from("eventos")
@@ -119,6 +123,7 @@ export async function criarEvento(
         tipo,
         destaque,
         imagem_url: imagemUrl,
+        cor,
       },
     ])
     .select()
@@ -144,7 +149,8 @@ export async function atualizarEvento(
   local: string | null,
   tipo: string | null,
   destaque: boolean,
-  imagemUrl: string | null
+  imagemUrl: string | null,
+  cor: string | null
 ): Promise<Evento> {
   const { data: evento, error } = await supabase
     .from("eventos")
@@ -157,6 +163,7 @@ export async function atualizarEvento(
       tipo,
       destaque,
       imagem_url: imagemUrl,
+      cor,
     })
     .eq("id", id)
     .select()

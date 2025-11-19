@@ -33,6 +33,7 @@ function AdminEventosContent() {
   const [destaque, setDestaque] = useState(false);
   const [imagemUrl, setImagemUrl] = useState("");
   const [diaInteiro, setDiaInteiro] = useState(false);
+  const [cor, setCor] = useState("#3b82f6"); // Azul padrão
 
   useEffect(() => {
     carregarEventos();
@@ -88,7 +89,8 @@ function AdminEventosContent() {
           local || null,
           tipo || null,
           destaque,
-          imagemUrl || null
+          imagemUrl || null,
+          cor || null
         );
         toast.success("Evento atualizado!", {
           description: `O evento "${titulo}" foi atualizado com sucesso.`
@@ -102,7 +104,8 @@ function AdminEventosContent() {
           local || null,
           tipo || null,
           destaque,
-          imagemUrl || null
+          imagemUrl || null,
+          cor || null
         );
         toast.success("Evento criado!", {
           description: `O evento "${titulo}" foi criado com sucesso.`
@@ -132,6 +135,7 @@ function AdminEventosContent() {
     setDestaque(false);
     setImagemUrl("");
     setDiaInteiro(false);
+    setCor("#3b82f6");
     setEditando(null);
   };
 
@@ -159,6 +163,7 @@ function AdminEventosContent() {
     setTipo(evento.tipo || "");
     setDestaque(evento.destaque);
     setImagemUrl(evento.imagem_url || "");
+    setCor(evento.cor || "#3b82f6");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -372,6 +377,23 @@ function AdminEventosContent() {
                 value={imagemUrl}
                 onChange={(e) => setImagemUrl(e.target.value)}
               />
+            </div>
+
+            <div>
+              <Label htmlFor="cor">Cor do Evento no Calendário</Label>
+              <div className="flex gap-2 items-center">
+                <Input
+                  id="cor"
+                  type="color"
+                  value={cor}
+                  onChange={(e) => setCor(e.target.value)}
+                  className="w-20 h-10 cursor-pointer"
+                />
+                <span className="text-sm text-muted-foreground">{cor}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Escolha uma cor para identificar este evento no calendário
+              </p>
             </div>
 
             <div className="flex items-center space-x-2">

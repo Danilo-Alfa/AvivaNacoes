@@ -155,10 +155,10 @@ export default function Eventos() {
     return dias;
   };
 
-  const temEventoNoDia = (dia: number) => {
+  const getEventosDoDia = (dia: number) => {
     const dataAlvo = new Date(mesAtual.getFullYear(), mesAtual.getMonth(), dia, 12, 0, 0);
 
-    return eventosDoMes.some((evento) => {
+    return eventosDoMes.filter((evento) => {
       const dataInicio = new Date(evento.data_inicio);
       const dataFim = evento.data_fim ? new Date(evento.data_fim) : dataInicio;
 
@@ -169,6 +169,10 @@ export default function Eventos() {
       // Verificar se a data alvo está entre início e fim (inclusive)
       return dataAlvo >= inicioNormalizado && dataAlvo <= fimNormalizado;
     });
+  };
+
+  const temEventoNoDia = (dia: number) => {
+    return getEventosDoDia(dia).length > 0;
   };
 
   const mudarMes = (direcao: number) => {
@@ -354,20 +358,47 @@ export default function Eventos() {
 
                 {/* Dias do mês */}
                 <div className="grid grid-cols-7 gap-2">
-                  {gerarCalendario().map((dia, index) => (
-                    <div
-                      key={index}
-                      className={`aspect-square flex items-center justify-center rounded-lg text-sm ${
-                        dia
-                          ? temEventoNoDia(dia)
-                            ? "bg-primary text-primary-foreground font-semibold hover:bg-primary/90 cursor-pointer"
+                  {gerarCalendario().map((dia, index) => {
+                    if (!dia) return <div key={index} />;
+
+                    const eventosNoDia = getEventosDoDia(dia);
+                    const temEvento = eventosNoDia.length > 0;
+                    const corEvento = temEvento && eventosNoDia[0].cor ? eventosNoDia[0].cor : "#3b82f6";
+
+                    return (
+                      <div
+                        key={index}
+                        className={`aspect-square flex items-center justify-center rounded-lg text-sm relative group ${
+                          temEvento
+                            ? "font-semibold hover:opacity-90 cursor-pointer"
                             : "hover:bg-accent cursor-pointer"
-                          : ""
-                      }`}
-                    >
-                      {dia}
-                    </div>
-                  ))}
+                        }`}
+                        style={temEvento ? {
+                          backgroundColor: corEvento,
+                          color: '#ffffff'
+                        } : {}}
+                        title={temEvento ? eventosNoDia.map(e => e.titulo).join(', ') : ''}
+                      >
+                        {dia}
+                        {temEvento && eventosNoDia.length > 0 && (
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 w-max max-w-xs">
+                            <div className="bg-popover text-popover-foreground p-3 rounded-lg shadow-lg border">
+                              <div className="space-y-1">
+                                {eventosNoDia.map((evento) => (
+                                  <div key={evento.id} className="text-xs">
+                                    <div className="font-semibold">{evento.titulo}</div>
+                                    {evento.tipo && (
+                                      <div className="text-muted-foreground">{evento.tipo}</div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>

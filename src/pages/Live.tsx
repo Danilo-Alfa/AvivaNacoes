@@ -8,6 +8,7 @@ import { Loader2, Radio, Users } from "lucide-react";
 // Declarar gtag para TypeScript
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     gtag?: (command: string, ...args: any[]) => void;
   }
 }
