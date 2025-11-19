@@ -4,7 +4,7 @@ import ReactPlayer from "react-player";
 
 export default function Videos() {
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8 md:py-12">
+    <div className="container mx-auto px-4 py-8 md:py-12">
       {/* Hero Section */}
       <div className="mb-8 md:mb-16 text-center">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">
@@ -16,10 +16,10 @@ export default function Videos() {
       </div>
 
       {/* Vídeo em Destaque */}
-      <section className="mb-8 md:mb-16 w-full">
-        <Card className="shadow-medium overflow-hidden w-full">
-          <CardContent className="p-0 w-full">
-            <div className="aspect-video bg-black relative w-full overflow-hidden">
+      <section className="mb-8 md:mb-16">
+        <Card className="shadow-medium">
+          <CardContent className="p-0">
+            <div className="aspect-video bg-black rounded-lg overflow-hidden">
               <ReactPlayer
                 src="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
                 width="100%"
@@ -83,10 +83,10 @@ export default function Videos() {
           {Array.from({ length: 9 }).map((_, index) => (
             <Card
               key={index}
-              className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer overflow-hidden group"
+              className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer group"
             >
-              <CardContent className="p-0 w-full">
-                <div className="aspect-video bg-black relative w-full overflow-hidden">
+              <CardContent className="p-0">
+                <div className="aspect-video bg-black overflow-hidden">
                   <ReactPlayer
                     src="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
                     width="100%"
@@ -116,9 +116,9 @@ export default function Videos() {
       </section>
 
       {/* Séries de Vídeos */}
-      <section className="w-full">
+      <section>
         <h2 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">Séries e Playlists</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {[
             {
               nome: "Série: Fundamentos da Fé",
@@ -138,10 +138,10 @@ export default function Videos() {
           ].map((serie, index) => (
             <Card
               key={serie.nome}
-              className="shadow-soft hover:shadow-medium transition-all overflow-hidden w-full"
+              className="shadow-soft hover:shadow-medium transition-all"
             >
-              <CardContent className="p-0 w-full">
-                <div className="flex sm:grid sm:grid-cols-3 gap-0 w-full">
+              <CardContent className="p-0">
+                <div className="flex sm:grid sm:grid-cols-3 gap-0">
                   <div className="w-24 sm:w-auto sm:col-span-1 bg-gradient-hero flex items-center justify-center p-4">
                     <div className="text-center text-primary-foreground">
                       <div className="text-2xl sm:text-3xl font-bold mb-1">

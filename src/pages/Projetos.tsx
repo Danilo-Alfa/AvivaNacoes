@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { useTilt } from "@/hooks/useTilt";
 
 export default function Projetos() {
   return (
@@ -15,12 +16,25 @@ export default function Projetos() {
 
       {/* Grid de Projetos */}
       <div className="space-y-12">
-        {[1, 2, 3, 4].map((projeto, index) => (
-          <Card
-            key={projeto}
-            className="shadow-soft hover:shadow-medium transition-shadow overflow-hidden"
-          >
-            <CardContent className="p-0">
+        {[1, 2, 3, 4].map((projeto, index) => {
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          const tiltRef = useTilt<HTMLDivElement>({
+            maxTilt: 5,
+            perspective: 2000,
+            scale: 1.01,
+            speed: 400,
+            glare: true,
+            maxGlare: 0.15,
+            tiltThreshold: 0.5,
+          });
+
+          return (
+            <Card
+              key={projeto}
+              ref={tiltRef}
+              className="shadow-soft hover:shadow-medium transition-shadow"
+            >
+              <CardContent className="p-0">
               <div
                 className={`grid md:grid-cols-2 gap-0 ${index % 2 === 1 ? "md:grid-flow-dense" : ""}`}
               >
@@ -78,7 +92,8 @@ export default function Projetos() {
               </div>
             </CardContent>
           </Card>
-        ))}
+        );
+        })}
       </div>
     </div>
   );

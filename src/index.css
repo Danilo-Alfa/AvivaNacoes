@@ -11,9 +11,8 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
-  html,
   body {
-    @apply overflow-x-hidden;
+    @apply min-h-screen;
   }
 
   :root {

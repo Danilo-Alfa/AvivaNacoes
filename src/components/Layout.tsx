@@ -225,7 +225,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Footer - Fora da div principal para ocupar 100% da largura */}
       <footer className={`mt-20 border-t-2 border-border bg-muted/30 transition-all duration-300 ${
-        sidebarOpen ? "md:ml-60" : "md:ml-10"
+        sidebarOpen ? "md:ml-60" : "md:ml-16"
       }`}>
         <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
