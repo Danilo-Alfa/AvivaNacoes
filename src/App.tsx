@@ -21,6 +21,8 @@ import AdminVersiculos from "./pages/AdminVersiculos";
 import AdminJornais from "./pages/AdminJornais";
 import AdminGalerias from "./pages/AdminGalerias";
 import AdminEventos from "./pages/AdminEventos";
+import AdminVideos from "./pages/AdminVideos";
+import AdminLive from "./pages/AdminLive";
 import Live from "./pages/Live";
 import NotFound from "./pages/NotFound";
 
@@ -51,6 +53,8 @@ const App = () => (
             <Route path="/admin/jornal" element={<AdminJornais />} />
             <Route path="/admin/galerias" element={<AdminGalerias />} />
             <Route path="/admin/eventos" element={<AdminEventos />} />
+            <Route path="/admin/videos" element={<AdminVideos />} />
+            <Route path="/admin/live" element={<AdminLive />} />
             <Route path="/live" element={<Live />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

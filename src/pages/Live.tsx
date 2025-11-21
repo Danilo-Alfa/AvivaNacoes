@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Radio, Users } from "lucide-react";
+import { getLiveConfig, type LiveConfig } from "@/services/liveService";
 
 // Declarar gtag para TypeScript
 declare global {
@@ -14,6 +15,7 @@ declare global {
 }
 
 export default function Live() {
+  const [config, setConfig] = useState<LiveConfig | null>(null);
   const [isLive, setIsLive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [viewers, setViewers] = useState(0);
@@ -21,52 +23,38 @@ export default function Live() {
   const [isWatching, setIsWatching] = useState(false);
   const [watchStartTime, setWatchStartTime] = useState<number>(0);
 
-  // TODO: Substituir pela URL do seu servidor Oracle Cloud
-  // Formato: https://seu-ip-oracle.com/live/stream.m3u8
-  const streamUrl = import.meta.env.VITE_STREAM_URL || "https://seu-servidor.com/live/stream.m3u8";
+  const streamUrl = config?.url_stream || import.meta.env.VITE_STREAM_URL || "";
 
   // Detectar se está em HTTPS e stream é HTTP (mixed content)
   const isHttps = window.location.protocol === 'https:';
   const isStreamHttp = streamUrl.startsWith('http:');
 
-  // Verificar se a live está ativa
+  // Carregar configuração do Supabase
   useEffect(() => {
-    const checkLiveStatus = async () => {
+    const carregarConfig = async () => {
       try {
-        const response = await fetch(streamUrl);
+        const data = await getLiveConfig();
+        setConfig(data);
 
-        // Verifica se a resposta foi bem-sucedida e tem conteúdo
-        if (response.ok) {
-          const text = await response.text();
-          // Se o arquivo .m3u8 tem conteúdo válido, está ao vivo
-          if (text && text.includes('#EXTM3U')) {
-            setIsLive(true);
-          } else {
-            setIsLive(false);
-          }
-        } else {
-          setIsLive(false);
+        // Define se está ao vivo com base na configuração do admin
+        if (data) {
+          setIsLive(data.ativa);
         }
       } catch (error) {
-        console.log("Stream não disponível:", error);
+        console.error("Erro ao carregar configuração da live:", error);
         setIsLive(false);
-
-        // Se é HTTPS + HTTP, mostrar aviso de mixed content
-        if (isHttps && isStreamHttp) {
-          setShowMixedContentWarning(true);
-        }
       } finally {
         setIsLoading(false);
       }
     };
 
-    checkLiveStatus();
+    carregarConfig();
 
-    // Verificar a cada 10 segundos
-    const interval = setInterval(checkLiveStatus, 10000);
+    // Atualizar a cada 10 segundos
+    const interval = setInterval(carregarConfig, 10000);
 
     return () => clearInterval(interval);
-  }, [streamUrl]);
+  }, []);
 
   // Simular contador de viewers (opcional - você pode implementar websocket depois)
   useEffect(() => {
@@ -134,19 +122,27 @@ export default function Live() {
         <CardHeader>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <CardTitle className="text-2xl md:text-3xl">Transmissão ao Vivo</CardTitle>
+              <CardTitle className="text-2xl md:text-3xl">
+                {config?.titulo || "Transmissão ao Vivo"}
+              </CardTitle>
               <p className="text-sm text-muted-foreground mt-1">
-                Assista aos cultos e eventos da Igreja Aviva
+                {config?.descricao || "Assista aos cultos e eventos da Igreja Aviva"}
               </p>
             </div>
             <div className="flex items-center gap-3">
               {isLive && (
                 <>
-                  <Badge variant="secondary" className="gap-1.5">
-                    <Users className="h-3 w-3" />
-                    {viewers} assistindo
-                  </Badge>
-                  <Badge variant="destructive" className="animate-pulse gap-1.5">
+                  {config?.mostrar_contador_viewers && (
+                    <Badge variant="secondary" className="gap-1.5">
+                      <Users className="h-3 w-3" />
+                      {viewers} assistindo
+                    </Badge>
+                  )}
+                  <Badge
+                    variant="destructive"
+                    className="animate-pulse gap-1.5"
+                    style={{ backgroundColor: config?.cor_badge || "#ef4444" }}
+                  >
                     <Radio className="h-3 w-3" />
                     AO VIVO
                   </Badge>
@@ -217,11 +213,32 @@ export default function Live() {
                   <Radio className="h-16 w-16 mx-auto text-muted-foreground/50" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">
-                  Nenhuma transmissão ao vivo no momento
+                  {config?.mensagem_offline?.split(".")[0] || "Nenhuma transmissão ao vivo no momento"}
                 </h3>
                 <p className="text-muted-foreground mb-6">
-                  Fique atento aos nossos horários de culto e eventos especiais!
+                  {config?.mensagem_offline || "Fique atento aos nossos horários de culto e eventos especiais!"}
                 </p>
+
+                {config?.proxima_live_titulo && config?.proxima_live_data && (
+                  <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 mb-6 max-w-md mx-auto">
+                    <h4 className="font-semibold text-primary mb-2">📅 Próxima Transmissão:</h4>
+                    <p className="font-semibold">{config.proxima_live_titulo}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(config.proxima_live_data).toLocaleDateString("pt-BR", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                    {config.proxima_live_descricao && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {config.proxima_live_descricao}
+                      </p>
+                    )}
+                  </div>
+                )}
                 <div className="bg-background rounded-lg p-6 max-w-md mx-auto">
                   <h4 className="font-semibold mb-3">Horários dos Cultos:</h4>
                   <ul className="text-sm text-muted-foreground space-y-2 text-left">
