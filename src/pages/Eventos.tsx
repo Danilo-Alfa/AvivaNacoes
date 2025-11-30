@@ -316,16 +316,17 @@ export default function Eventos() {
 
           {/* Calendário do Mês */}
           <section className="mb-16">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold">Calendário</h2>
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-3">
+              <h2 className="text-2xl sm:text-3xl font-bold">Calendário</h2>
+              <div className="flex items-center gap-2 sm:gap-4">
                 <button
                   onClick={() => mudarMes(-1)}
-                  className="p-2 hover:bg-accent rounded-lg transition-colors"
+                  className="min-w-[44px] min-h-[44px] p-2 hover:bg-accent rounded-lg transition-colors text-xl sm:text-2xl flex items-center justify-center"
+                  aria-label="Mês anterior"
                 >
                   ‹
                 </button>
-                <span className="font-semibold">
+                <span className="font-semibold text-sm sm:text-base min-w-[140px] sm:min-w-[160px] text-center">
                   {mesAtual.toLocaleDateString("pt-BR", {
                     month: "long",
                     year: "numeric",
@@ -333,7 +334,8 @@ export default function Eventos() {
                 </span>
                 <button
                   onClick={() => mudarMes(1)}
-                  className="p-2 hover:bg-accent rounded-lg transition-colors"
+                  className="min-w-[44px] min-h-[44px] p-2 hover:bg-accent rounded-lg transition-colors text-xl sm:text-2xl flex items-center justify-center"
+                  aria-label="Próximo mês"
                 >
                   ›
                 </button>
@@ -341,14 +343,14 @@ export default function Eventos() {
             </div>
 
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-3 sm:p-4 md:p-6">
                 {/* Dias da semana */}
-                <div className="grid grid-cols-7 gap-2 mb-4">
+                <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2 sm:mb-4">
                   {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(
                     (dia) => (
                       <div
                         key={dia}
-                        className="text-center font-semibold text-sm text-muted-foreground"
+                        className="text-center font-semibold text-xs sm:text-sm text-muted-foreground"
                       >
                         {dia}
                       </div>
@@ -357,7 +359,7 @@ export default function Eventos() {
                 </div>
 
                 {/* Dias do mês */}
-                <div className="grid grid-cols-7 gap-2">
+                <div className="grid grid-cols-7 gap-1 sm:gap-2">
                   {gerarCalendario().map((dia, index) => {
                     if (!dia) return <div key={index} />;
 
@@ -368,7 +370,7 @@ export default function Eventos() {
                     return (
                       <div
                         key={index}
-                        className={`aspect-square flex items-center justify-center rounded-lg text-sm relative group ${
+                        className={`aspect-square flex items-center justify-center rounded-md sm:rounded-lg text-xs sm:text-sm md:text-base relative group ${
                           temEvento
                             ? "font-semibold hover:opacity-90 cursor-pointer"
                             : "hover:bg-accent cursor-pointer"
@@ -381,14 +383,14 @@ export default function Eventos() {
                       >
                         {dia}
                         {temEvento && eventosNoDia.length > 0 && (
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 w-max max-w-xs">
-                            <div className="bg-popover text-popover-foreground p-3 rounded-lg shadow-lg border">
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-[100] w-max max-w-[90vw] sm:max-w-xs pointer-events-none">
+                            <div className="bg-popover text-popover-foreground p-2 sm:p-3 rounded-lg shadow-lg border">
                               <div className="space-y-1">
                                 {eventosNoDia.map((evento) => (
-                                  <div key={evento.id} className="text-xs">
-                                    <div className="font-semibold">{evento.titulo}</div>
+                                  <div key={evento.id} className="text-[10px] sm:text-xs">
+                                    <div className="font-semibold truncate">{evento.titulo}</div>
                                     {evento.tipo && (
-                                      <div className="text-muted-foreground">{evento.tipo}</div>
+                                      <div className="text-muted-foreground truncate">{evento.tipo}</div>
                                     )}
                                   </div>
                                 ))}
