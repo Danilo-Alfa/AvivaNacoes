@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { api } from "@/lib/api";
 
 // =====================================================
 // INTERFACES
@@ -20,21 +20,32 @@ export interface LiveConfig {
   updated_at: string;
 }
 
-export interface LiveSchedule {
-  id: string;
-  titulo: string;
-  descricao: string | null;
-  data_inicio: string;
-  data_fim: string | null;
-  url_stream: string | null;
+export interface LiveStatus {
   ativa: boolean;
-  notificar_usuarios: boolean;
-  created_at: string;
-  updated_at: string;
+  titulo: string | null;
+  descricao: string | null;
+  viewers: number;
+  url_stream: string | null;
 }
 
-// ID fixo da única configuração da live
-const LIVE_CONFIG_ID = "c0000000-0000-0000-0000-000000000001";
+export interface LiveViewer {
+  id: string;
+  session_id: string;
+  nome: string | null;
+  email: string | null;
+  ip_address: string | null;
+  user_agent: string | null;
+  entrou_em: string;
+  ultima_atividade: string;
+  assistindo: boolean;
+}
+
+export interface ViewerStats {
+  viewers_ativos: number;
+  total_registros: number;
+  primeiro_viewer: string | null;
+  ultimo_viewer: string | null;
+}
 
 // =====================================================
 // FUNÇÕES PARA CONFIGURAÇÃO DA LIVE
@@ -42,27 +53,25 @@ const LIVE_CONFIG_ID = "c0000000-0000-0000-0000-000000000001";
 
 /**
  * Busca a configuração da live
- * Sempre retorna 1 registro (ou null se não existir)
  */
 export async function getLiveConfig(): Promise<LiveConfig | null> {
-  const { data, error } = await supabase
-    .from("live_config")
-    .select("*")
-    .eq("id", LIVE_CONFIG_ID)
-    .single();
-
-  if (error && error.code !== "PGRST116") {
-    // PGRST116 = nenhum resultado encontrado
+  try {
+    return await api.get<LiveConfig>("/live/config");
+  } catch (error) {
     console.error("Erro ao buscar configuração da live:", error);
-    throw error;
+    return null;
   }
-
-  return data || null;
 }
 
 /**
- * Atualiza a configuração da live
- * Apenas 1 registro existe, então sempre faz UPDATE
+ * Busca o status atual da live (público)
+ */
+export async function getLiveStatus(): Promise<LiveStatus> {
+  return api.get<LiveStatus>("/live/status");
+}
+
+/**
+ * Atualiza a configuração da live (admin)
  */
 export async function atualizarLiveConfig(
   ativa: boolean,
@@ -76,9 +85,9 @@ export async function atualizarLiveConfig(
   mostrarContadorViewers: boolean,
   corBadge: string
 ): Promise<LiveConfig> {
-  const { data: config, error } = await supabase
-    .from("live_config")
-    .update({
+  return api.patch<LiveConfig>(
+    "/live/config",
+    {
       ativa,
       url_stream: urlStream,
       titulo,
@@ -89,188 +98,163 @@ export async function atualizarLiveConfig(
       proxima_live_descricao: proximaLiveDescricao,
       mostrar_contador_viewers: mostrarContadorViewers,
       cor_badge: corBadge,
-    })
-    .eq("id", LIVE_CONFIG_ID)
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Erro ao atualizar configuração da live:", error);
-    throw error;
-  }
-
-  return config;
+    },
+    { useAdminPassword: true }
+  );
 }
 
 /**
- * Liga a transmissão (ativa = true)
+ * Liga a transmissão (ativa = true) - Para automação
  */
 export async function ligarLive(
   urlStream: string,
   titulo: string,
   descricao: string | null
 ): Promise<LiveConfig> {
-  const { data: config, error } = await supabase
-    .from("live_config")
-    .update({
-      ativa: true,
+  return api.post<LiveConfig>(
+    "/live/iniciar",
+    {
       url_stream: urlStream,
       titulo,
       descricao,
-    })
-    .eq("id", LIVE_CONFIG_ID)
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Erro ao ligar live:", error);
-    throw error;
-  }
-
-  return config;
+    },
+    { useApiKey: true }
+  );
 }
 
 /**
- * Desliga a transmissão (ativa = false)
+ * Desliga a transmissão (ativa = false) - Para automação
  */
 export async function desligarLive(): Promise<LiveConfig> {
-  const { data: config, error } = await supabase
-    .from("live_config")
-    .update({ ativa: false })
-    .eq("id", LIVE_CONFIG_ID)
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Erro ao desligar live:", error);
-    throw error;
-  }
-
-  return config;
+  return api.post<LiveConfig>("/live/parar", undefined, { useApiKey: true });
 }
 
 // =====================================================
-// FUNÇÕES PARA AGENDAMENTO DE LIVES
+// FUNÇÕES PARA VIEWERS DA LIVE
 // =====================================================
 
 /**
- * Busca todas as lives agendadas (futuras)
+ * Gera um ID de sessão único para o navegador
  */
-export async function getLivesAgendadas(): Promise<LiveSchedule[]> {
-  const agora = new Date().toISOString();
+export function gerarSessionId(): string {
+  let sessionId = localStorage.getItem("live_session_id");
 
-  const { data, error } = await supabase
-    .from("live_schedule")
-    .select("*")
-    .eq("ativa", true)
-    .gte("data_inicio", agora)
-    .order("data_inicio", { ascending: true });
-
-  if (error) {
-    console.error("Erro ao buscar lives agendadas:", error);
-    throw error;
+  if (!sessionId) {
+    sessionId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem("live_session_id", sessionId);
   }
 
-  return data || [];
+  return sessionId;
 }
 
 /**
- * Busca todas as lives agendadas (incluindo passadas) - Para admin
+ * Registra um novo viewer ou atualiza se já existe
  */
-export async function getTodasLivesAgendadas(): Promise<LiveSchedule[]> {
-  const { data, error } = await supabase
-    .from("live_schedule")
-    .select("*")
-    .order("data_inicio", { ascending: false });
+export async function registrarViewer(
+  sessionId: string,
+  nome?: string,
+  email?: string
+): Promise<LiveViewer> {
+  const userAgent = navigator.userAgent;
 
-  if (error) {
-    console.error("Erro ao buscar todas as lives agendadas:", error);
-    throw error;
-  }
-
-  return data || [];
+  return api.post<LiveViewer>("/viewers/registrar", {
+    session_id: sessionId,
+    nome: nome || null,
+    email: email || null,
+    user_agent: userAgent,
+  });
 }
 
 /**
- * Cria um novo agendamento de live
+ * Atualiza o heartbeat do viewer (confirma que ainda está assistindo)
  */
-export async function criarLiveAgendada(
-  titulo: string,
-  descricao: string | null,
-  dataInicio: string,
-  dataFim: string | null,
-  urlStream: string | null,
-  ativa: boolean,
-  notificarUsuarios: boolean
-): Promise<LiveSchedule> {
-  const { data: schedule, error } = await supabase
-    .from("live_schedule")
-    .insert([
-      {
-        titulo,
-        descricao,
-        data_inicio: dataInicio,
-        data_fim: dataFim,
-        url_stream: urlStream,
-        ativa,
-        notificar_usuarios: notificarUsuarios,
-      },
-    ])
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Erro ao criar live agendada:", error);
-    throw error;
+export async function atualizarHeartbeat(sessionId: string): Promise<void> {
+  try {
+    await api.post("/viewers/heartbeat", { session_id: sessionId });
+  } catch (error) {
+    console.error("Erro ao atualizar heartbeat:", error);
+    // Não lançar erro para não interromper a experiência do usuário
   }
-
-  return schedule;
 }
 
 /**
- * Atualiza um agendamento de live
+ * Marca o viewer como não assistindo mais
  */
-export async function atualizarLiveAgendada(
-  id: string,
-  titulo: string,
-  descricao: string | null,
-  dataInicio: string,
-  dataFim: string | null,
-  urlStream: string | null,
-  ativa: boolean,
-  notificarUsuarios: boolean
-): Promise<LiveSchedule> {
-  const { data: schedule, error } = await supabase
-    .from("live_schedule")
-    .update({
-      titulo,
-      descricao,
-      data_inicio: dataInicio,
-      data_fim: dataFim,
-      url_stream: urlStream,
-      ativa,
-      notificar_usuarios: notificarUsuarios,
-    })
-    .eq("id", id)
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Erro ao atualizar live agendada:", error);
-    throw error;
+export async function sairDaLive(sessionId: string): Promise<void> {
+  try {
+    await api.post("/viewers/sair", { session_id: sessionId });
+  } catch (error) {
+    console.error("Erro ao sair da live:", error);
   }
-
-  return schedule;
 }
 
 /**
- * Deleta um agendamento de live
+ * Conta o número de viewers ativos
  */
-export async function deletarLiveAgendada(id: string): Promise<void> {
-  const { error } = await supabase.from("live_schedule").delete().eq("id", id);
+export async function contarViewersAtivos(): Promise<number> {
+  try {
+    const response = await api.get<{ viewers: number }>("/viewers/contagem");
+    return response.viewers;
+  } catch (error) {
+    console.error("Erro ao contar viewers:", error);
+    return 0;
+  }
+}
 
-  if (error) {
-    console.error("Erro ao deletar live agendada:", error);
-    throw error;
+/**
+ * Busca informações do viewer atual
+ */
+export async function getViewerAtual(
+  sessionId: string
+): Promise<LiveViewer | null> {
+  try {
+    return await api.get<LiveViewer>(`/viewers/${sessionId}`);
+  } catch (error) {
+    console.error("Erro ao buscar viewer:", error);
+    return null;
+  }
+}
+
+/**
+ * Busca estatísticas dos viewers
+ */
+export async function getViewersEstatisticas(): Promise<ViewerStats> {
+  return api.get<ViewerStats>("/viewers/estatisticas");
+}
+
+/**
+ * Limpa viewers inativos (via API Key)
+ */
+export async function limparViewersInativos(): Promise<{ removidos: number }> {
+  return api.delete<{ removidos: number }>("/viewers/inativos", {
+    useApiKey: true,
+  });
+}
+
+/**
+ * Busca todos os viewers (ativos e inativos) - Para admin
+ */
+export async function getTodosViewers(): Promise<LiveViewer[]> {
+  try {
+    return await api.get<LiveViewer[]>("/viewers/todos", {
+      useAdminPassword: true,
+    });
+  } catch (error) {
+    console.error("Erro ao buscar viewers:", error);
+    return [];
+  }
+}
+
+/**
+ * Busca apenas viewers ativos - Para admin
+ */
+export async function getViewersAtivos(): Promise<LiveViewer[]> {
+  try {
+    return await api.get<LiveViewer[]>("/viewers/ativos", {
+      useAdminPassword: true,
+    });
+  } catch (error) {
+    console.error("Erro ao buscar viewers ativos:", error);
+    return [];
   }
 }

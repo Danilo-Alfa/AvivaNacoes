@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
-import { Radio, Power, PowerOff, Clock } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Radio, Power, PowerOff, Clock, Users, RefreshCw, User, Mail, Monitor } from "lucide-react";
 import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { toast } from "@/components/ui/sonner";
 import {
@@ -14,12 +14,22 @@ import {
   atualizarLiveConfig,
   ligarLive,
   desligarLive,
+  getViewersAtivos,
+  getTodosViewers,
+  limparViewersInativos,
   type LiveConfig,
+  type LiveViewer,
 } from "@/services/liveService";
 
 function AdminLiveContent() {
   const [config, setConfig] = useState<LiveConfig | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Viewers
+  const [viewers, setViewers] = useState<LiveViewer[]>([]);
+  const [viewersAtivos, setViewersAtivos] = useState<LiveViewer[]>([]);
+  const [mostrarTodosViewers, setMostrarTodosViewers] = useState(false);
+  const [loadingViewers, setLoadingViewers] = useState(false);
 
   // Formulário
   const [ativa, setAtiva] = useState(false);
@@ -34,9 +44,41 @@ function AdminLiveContent() {
   const [mostrarContadorViewers, setMostrarContadorViewers] = useState(true);
   const [corBadge, setCorBadge] = useState("#ef4444");
 
+  const carregarViewers = useCallback(async () => {
+    setLoadingViewers(true);
+    try {
+      const [ativos, todos] = await Promise.all([
+        getViewersAtivos(),
+        getTodosViewers(),
+      ]);
+      setViewersAtivos(ativos);
+      setViewers(todos);
+    } catch (error) {
+      console.error("Erro ao carregar viewers:", error);
+    } finally {
+      setLoadingViewers(false);
+    }
+  }, []);
+
   useEffect(() => {
     carregarConfig();
-  }, []);
+    carregarViewers();
+
+    // Atualizar viewers a cada 30 segundos
+    const interval = setInterval(carregarViewers, 30000);
+    return () => clearInterval(interval);
+  }, [carregarViewers]);
+
+  const handleLimparInativos = async () => {
+    try {
+      await limparViewersInativos();
+      toast.success("Viewers inativos removidos!");
+      carregarViewers();
+    } catch (error) {
+      console.error("Erro ao limpar viewers:", error);
+      toast.error("Erro ao limpar viewers inativos");
+    }
+  };
 
   const carregarConfig = async () => {
     try {
@@ -228,6 +270,152 @@ function AdminLiveContent() {
               </p>
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Seção de Viewers */}
+      <Card className="mb-6">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="w-5 h-5" />
+                Viewers da Live
+              </CardTitle>
+              <CardDescription>
+                Pessoas que estão ou estiveram assistindo a transmissão
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={carregarViewers}
+                disabled={loadingViewers}
+              >
+                <RefreshCw className={`w-4 h-4 mr-1 ${loadingViewers ? "animate-spin" : ""}`} />
+                Atualizar
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLimparInativos}
+              >
+                Limpar Inativos
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {/* Resumo */}
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 text-center">
+              <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+                {viewersAtivos.length}
+              </p>
+              <p className="text-sm text-muted-foreground">Assistindo agora</p>
+            </div>
+            <div className="bg-muted/50 rounded-lg p-4 text-center">
+              <p className="text-3xl font-bold">{viewers.length}</p>
+              <p className="text-sm text-muted-foreground">Total registrados</p>
+            </div>
+          </div>
+
+          {/* Toggle para mostrar todos */}
+          <div className="flex items-center gap-2 mb-4">
+            <Switch
+              id="mostrarTodos"
+              checked={mostrarTodosViewers}
+              onCheckedChange={setMostrarTodosViewers}
+            />
+            <Label htmlFor="mostrarTodos" className="cursor-pointer">
+              Mostrar todos os viewers (incluindo inativos)
+            </Label>
+          </div>
+
+          {/* Lista de Viewers */}
+          <div className="border rounded-lg overflow-hidden">
+            <div className="bg-muted/50 px-4 py-2 border-b">
+              <div className="grid grid-cols-12 gap-2 text-xs font-medium text-muted-foreground">
+                <div className="col-span-1">Status</div>
+                <div className="col-span-3">Nome</div>
+                <div className="col-span-3">Email</div>
+                <div className="col-span-2">Entrou em</div>
+                <div className="col-span-3">Ultima atividade</div>
+              </div>
+            </div>
+            <div className="max-h-[400px] overflow-y-auto">
+              {(mostrarTodosViewers ? viewers : viewersAtivos).length === 0 ? (
+                <div className="px-4 py-8 text-center text-muted-foreground">
+                  {mostrarTodosViewers
+                    ? "Nenhum viewer registrado ainda"
+                    : "Nenhum viewer assistindo no momento"}
+                </div>
+              ) : (
+                (mostrarTodosViewers ? viewers : viewersAtivos).map((viewer) => {
+                  const isAtivo =
+                    viewer.assistindo &&
+                    new Date(viewer.ultima_atividade) >
+                      new Date(Date.now() - 2 * 60 * 1000);
+
+                  return (
+                    <div
+                      key={viewer.id}
+                      className="px-4 py-3 border-b last:border-b-0 hover:bg-muted/30"
+                    >
+                      <div className="grid grid-cols-12 gap-2 items-center text-sm">
+                        <div className="col-span-1">
+                          {isAtivo ? (
+                            <Badge variant="default" className="bg-green-500 text-xs">
+                              Online
+                            </Badge>
+                          ) : (
+                            <Badge variant="secondary" className="text-xs">
+                              Offline
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="col-span-3 flex items-center gap-2">
+                          <User className="w-4 h-4 text-muted-foreground" />
+                          <span className="font-medium truncate">
+                            {viewer.nome || "Anonimo"}
+                          </span>
+                        </div>
+                        <div className="col-span-3 flex items-center gap-2">
+                          <Mail className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-muted-foreground truncate">
+                            {viewer.email || "-"}
+                          </span>
+                        </div>
+                        <div className="col-span-2 text-muted-foreground text-xs">
+                          {new Date(viewer.entrou_em).toLocaleString("pt-BR", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </div>
+                        <div className="col-span-3 text-muted-foreground text-xs flex items-center gap-1">
+                          <Monitor className="w-3 h-3" />
+                          {new Date(viewer.ultima_atividade).toLocaleString("pt-BR", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+
+          <p className="text-xs text-muted-foreground mt-3">
+            Atualiza automaticamente a cada 30 segundos. Viewers sao considerados inativos apos 2 minutos sem atividade.
+          </p>
         </CardContent>
       </Card>
 

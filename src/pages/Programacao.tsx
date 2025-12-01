@@ -1,52 +1,51 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Clock, MapPin } from "lucide-react";
-
-const diasSemana = [
-  { dia: "Segunda", atividades: [] },
-  {
-    dia: "Terça",
-    atividades: [
-      {
-        titulo: "Reunião de Oração",
-        horario: "19h30",
-        local: "Sede Principal",
-      },
-    ],
-  },
-  { dia: "Quarta", atividades: [] },
-  {
-    dia: "Quinta",
-    atividades: [
-      { titulo: "Estudo Bíblico", horario: "19h30", local: "Todas as Sedes" },
-    ],
-  },
-  {
-    dia: "Sexta",
-    atividades: [
-      { titulo: "Culto de Jovens", horario: "20h", local: "Sede Central" },
-    ],
-  },
-  {
-    dia: "Sábado",
-    atividades: [
-      {
-        titulo: "Ministério Infantil",
-        horario: "15h",
-        local: "Sede Principal",
-      },
-    ],
-  },
-  {
-    dia: "Domingo",
-    atividades: [
-      { titulo: "Escola Dominical", horario: "09h", local: "Todas as Sedes" },
-      { titulo: "Culto Matinal", horario: "10h", local: "Todas as Sedes" },
-      { titulo: "Culto Vespertino", horario: "19h", local: "Todas as Sedes" },
-    ],
-  },
-];
+import {
+  getProgramacaoAtiva,
+  DIAS_SEMANA,
+  type Programacao as ProgramacaoType,
+} from "@/services/programacaoService";
 
 export default function Programacao() {
+  const [programacao, setProgramacao] = useState<ProgramacaoType[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const carregarProgramacao = async () => {
+      try {
+        const data = await getProgramacaoAtiva();
+        setProgramacao(data);
+      } catch (error) {
+        console.error("Erro ao carregar programação:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    carregarProgramacao();
+  }, []);
+
+  // Agrupar programação por dia
+  const diasSemana = DIAS_SEMANA.map((dia) => ({
+    dia: dia.nome,
+    atividades: programacao
+      .filter((p) => p.dia_semana === dia.valor)
+      .map((p) => ({
+        titulo: p.titulo,
+        horario: p.horario,
+        local: p.local || "",
+      })),
+  }));
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <p className="text-center text-muted-foreground">Carregando programação...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
