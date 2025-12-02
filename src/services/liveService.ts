@@ -118,7 +118,7 @@ export async function ligarLive(
       titulo,
       descricao,
     },
-    { useApiKey: true }
+    { useAdminPassword: true }
   );
 }
 
@@ -126,7 +126,7 @@ export async function ligarLive(
  * Desliga a transmissão (ativa = false) - Para automação
  */
 export async function desligarLive(): Promise<LiveConfig> {
-  return api.post<LiveConfig>("/live/parar", undefined, { useApiKey: true });
+  return api.post<LiveConfig>("/live/parar", undefined, { useAdminPassword: true });
 }
 
 // =====================================================
@@ -135,16 +135,22 @@ export async function desligarLive(): Promise<LiveConfig> {
 
 /**
  * Gera um ID de sessão único para o navegador
+ * Protegido contra falhas do localStorage (modo privado/incógnito)
  */
 export function gerarSessionId(): string {
-  let sessionId = localStorage.getItem("live_session_id");
+  try {
+    let sessionId = localStorage.getItem("live_session_id");
 
-  if (!sessionId) {
-    sessionId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    localStorage.setItem("live_session_id", sessionId);
+    if (!sessionId) {
+      sessionId = `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+      localStorage.setItem("live_session_id", sessionId);
+    }
+
+    return sessionId;
+  } catch {
+    // Fallback para modo privado/incógnito onde localStorage pode falhar
+    return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
   }
-
-  return sessionId;
 }
 
 /**

@@ -6,6 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/sonner";
 import { Loader2, Radio, Users, User } from "lucide-react";
 import LiveChat from "@/components/LiveChat";
 import {
@@ -46,6 +47,13 @@ export default function Live() {
   // Detectar se está em HTTPS e stream é HTTP (mixed content)
   const isHttps = window.location.protocol === "https:";
   const isStreamHttp = streamUrl.startsWith("http:");
+
+  // Ativar warning de mixed content automaticamente
+  useEffect(() => {
+    if (isHttps && isStreamHttp && streamUrl) {
+      setShowMixedContentWarning(true);
+    }
+  }, [isHttps, isStreamHttp, streamUrl]);
 
   // Carregar configuração do backend
   useEffect(() => {
@@ -276,37 +284,41 @@ export default function Live() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
       {/* Layout com Chat quando ao vivo */}
       {isLive && isRegistered ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
           {/* Coluna principal - Player */}
           <div className="lg:col-span-2">
             <Card>
-              <CardHeader>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div>
-                    <CardTitle className="text-2xl md:text-3xl">
-                      {config?.titulo || "Transmissão ao Vivo"}
+              <CardHeader className="pb-3">
+                <div className="flex flex-col gap-3">
+                  {/* Título e descrição */}
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-xl sm:text-2xl md:text-3xl truncate">
+                      {config?.titulo || "Transmissão ao Vivo - Igreja AvivaNações"}
                     </CardTitle>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {config?.descricao || "Assista aos cultos e eventos da Igreja Aviva"}
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-1">
+                      {config?.descricao || "Assista aos cultos e eventos ao vivo"}
                     </p>
                   </div>
-                  <div className="flex items-center gap-3">
+
+                  {/* Badges em linha separada */}
+                  <div className="flex flex-wrap items-center gap-2">
                     {config?.mostrar_contador_viewers && (
-                      <Badge variant="secondary" className="gap-1.5">
+                      <Badge variant="secondary" className="gap-1 text-xs shrink-0">
                         <Users className="h-3 w-3" />
-                        {viewers} assistindo
+                        {viewers}
+                        <span className="hidden sm:inline"> assistindo</span>
                       </Badge>
                     )}
-                    <Badge variant="outline" className="gap-1.5">
-                      <User className="h-3 w-3" />
-                      {nome}
+                    <Badge variant="outline" className="gap-1 text-xs shrink-0 max-w-[120px] sm:max-w-[150px]">
+                      <User className="h-3 w-3 shrink-0" />
+                      <span className="truncate">{nome}</span>
                     </Badge>
                     <Badge
                       variant="destructive"
-                      className="animate-pulse gap-1.5"
+                      className="animate-pulse gap-1 text-xs shrink-0 whitespace-nowrap"
                       style={{ backgroundColor: config?.cor_badge || "#ef4444" }}
                     >
                       <Radio className="h-3 w-3" />
@@ -372,7 +384,7 @@ export default function Live() {
           </div>
 
           {/* Coluna lateral - Chat */}
-          <div className="lg:col-span-1 h-[600px]">
+          <div className="lg:col-span-1 h-[400px] sm:h-[500px] lg:h-[600px]">
             <LiveChat
               sessionId={sessionId}
               nome={nome}
@@ -497,7 +509,7 @@ export default function Live() {
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(window.location.href);
-                        alert("Link copiado!");
+                        toast.success("Link copiado!");
                       }}
                       className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4"
                     >

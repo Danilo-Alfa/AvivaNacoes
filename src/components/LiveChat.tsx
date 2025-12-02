@@ -105,6 +105,10 @@ export default function LiveChat({
 
     return () => {
       clearTimeout(checkConnection);
+      // Limpar timeout de digitação para evitar memory leak
+      if (digitandoTimeoutRef.current) {
+        clearTimeout(digitandoTimeoutRef.current);
+      }
       chatClient.off("mensagem", handleMensagem);
       chatClient.off("mensagens_anteriores", handleMensagensAnteriores);
       chatClient.off("users_online", handleUsersOnline);
