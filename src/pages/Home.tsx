@@ -6,12 +6,47 @@ import { Link } from "react-router-dom";
 import { versiculoService } from "@/services/versiculoService";
 import { Versiculo } from "@/lib/supabase";
 
+const cultos = [
+  { dia: 0, nome: "Domingo", horario: "19:00", horaNum: 19, minutoNum: 0, local: "Igreja Sede e Online" },
+  { dia: 1, nome: "Segunda", horario: "19:30", horaNum: 19, minutoNum: 30, local: "Igreja Sede e Online" },
+  { dia: 2, nome: "Terça", horario: "20:00", horaNum: 20, minutoNum: 0, local: "Online" },
+  { dia: 3, nome: "Quarta", horario: "19:45", horaNum: 19, minutoNum: 45, local: "Igreja Sede e Online" },
+  { dia: 4, nome: "Quinta", horario: "20:00", horaNum: 20, minutoNum: 0, local: "Online" },
+  { dia: 5, nome: "Sexta", horario: "20:00", horaNum: 20, minutoNum: 0, local: "Igreja Sede e Online" },
+  { dia: 6, nome: "Sábado", horario: "20:00", horaNum: 20, minutoNum: 0, local: "Igreja Sede e Online" },
+];
+
+const getProximoCulto = () => {
+  const agora = new Date();
+  const diaAtual = agora.getDay();
+  const horaAtual = agora.getHours();
+  const minutoAtual = agora.getMinutes();
+
+  // Verifica se o culto de hoje ainda não começou
+  const cultoHoje = cultos[diaAtual];
+  if (horaAtual < cultoHoje.horaNum || (horaAtual === cultoHoje.horaNum && minutoAtual < cultoHoje.minutoNum)) {
+    return { ...cultoHoje, nome: "Hoje" };
+  }
+
+  // Se o culto de hoje já passou, pega o próximo dia
+  const proximoDia = (diaAtual + 1) % 7;
+  return cultos[proximoDia];
+};
+
 export default function Home() {
   const [versiculoDoDia, setVersiculoDoDia] = useState<Versiculo | null>(null);
   const [loadingVersiculo, setLoadingVersiculo] = useState(true);
+  const [proximoCulto, setProximoCulto] = useState(getProximoCulto());
 
   useEffect(() => {
     carregarVersiculoDoDia();
+
+    // Atualiza o próximo culto a cada minuto
+    const interval = setInterval(() => {
+      setProximoCulto(getProximoCulto());
+    }, 60000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const carregarVersiculoDoDia = async () => {
@@ -20,10 +55,21 @@ export default function Home() {
     setVersiculoDoDia(versiculo);
     setLoadingVersiculo(false);
   };
+
+  const getTituloVersiculo = (versiculo: Versiculo) => {
+    if (versiculo.titulo) return versiculo.titulo;
+    const dataObj = new Date(versiculo.data + 'T00:00:00');
+    const dia = dataObj.getDate();
+    const mes = dataObj.toLocaleDateString("pt-BR", { month: "long" });
+    return `Versículo do dia ${dia} de ${mes}`;
+  };
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative bg-gradient-hero text-primary-foreground py-24 md:py-32">
+      <section
+        className="relative text-primary-foreground py-24 md:py-32 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/AvivaNacoes/hero-bg.jpg')" }}
+      >
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 pb-2 animate-fade-in">
@@ -35,12 +81,12 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
               <Link to="/quem-somos">
-                <button className="px-8 py-4 bg-accent text-accent-foreground font-semibold rounded-lg hover:bg-accent/90 transition-all hover:-translate-y-0.5 shadow-soft">
+                <button className="px-8 py-4 bg-blue-900/80 text-white font-semibold rounded-lg hover:bg-blue-900/90 transition-all hover:-translate-y-0.5 shadow-lg backdrop-blur-sm">
                   Conheça Nossa História
                 </button>
               </Link>
               <Link to="/programacao">
-                <button className="px-8 py-4 bg-primary-foreground/10 text-primary-foreground font-semibold rounded-lg hover:bg-primary-foreground/20 transition-all hover:-translate-y-0.5 border-2 border-primary-foreground/20">
+                <button className="px-8 py-4 bg-white/20 text-white font-semibold rounded-lg hover:bg-white/30 transition-all hover:-translate-y-0.5 border-2 border-white/30 backdrop-blur-sm">
                   Ver Programação
                 </button>
               </Link>
@@ -58,15 +104,15 @@ export default function Home() {
                 <p className="text-sm text-muted-foreground mb-1">
                   Próximo Culto
                 </p>
-                <p className="text-2xl font-bold">Domingo</p>
+                <p className="text-2xl font-bold">{proximoCulto.nome}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Horários</p>
-                <p className="text-2xl font-bold">09h e 19h</p>
+                <p className="text-sm text-muted-foreground mb-1">Horário</p>
+                <p className="text-2xl font-bold">{proximoCulto.horario}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Local</p>
-                <p className="text-2xl font-bold">Todas as Sedes</p>
+                <p className="text-2xl font-bold">{proximoCulto.local}</p>
               </div>
             </div>
           </CardContent>
@@ -169,50 +215,62 @@ export default function Home() {
 
       {/* Versículo do Dia */}
       <section className="container mx-auto px-4 py-20">
+        <div className="flex items-center justify-center gap-2 mb-8">
+          <BookOpen className="w-6 h-6 text-primary" />
+          <h2 className="text-2xl md:text-3xl font-bold text-center">
+            Versículo do Dia
+          </h2>
+        </div>
+
         {loadingVersiculo ? (
-          <Card className="shadow-medium max-w-3xl mx-auto">
+          <Card className="shadow-medium max-w-xl mx-auto">
             <CardContent className="p-12 text-center">
               <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
             </CardContent>
           </Card>
         ) : versiculoDoDia ? (
-          <Card className="shadow-medium max-w-3xl mx-auto bg-gradient-hero text-primary-foreground">
-            <CardContent className="p-8 md:p-12">
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <BookOpen className="w-5 h-5 text-primary-foreground/80" />
-                <p className="text-sm font-semibold text-primary-foreground/80">
-                  VERSÍCULO DO DIA
-                </p>
-              </div>
-
-              {versiculoDoDia.titulo && (
-                <h3 className="text-xl md:text-2xl font-bold mb-4 text-center text-primary-foreground">
-                  {versiculoDoDia.titulo}
-                </h3>
-              )}
-
-              {/* Preview compacto do post */}
-              <div className="bg-background/10 rounded-lg p-6 mb-6">
-                <p className="text-primary-foreground/90 text-center text-sm">
-                  Venha conferir a mensagem do dia 📖
-                </p>
-              </div>
-
-              <div className="flex justify-center gap-4">
-                <Link to="/versiculo-do-dia">
-                  <button className="px-6 py-3 bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all hover:-translate-y-0.5">
-                    Ver Mensagem Completa
-                  </button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="max-w-xl mx-auto">
+            {versiculoDoDia.url_imagem ? (
+              <Link to="/versiculo-do-dia" className="block">
+                <Card className="shadow-medium hover:shadow-lg transition-all hover:-translate-y-1 overflow-hidden">
+                  <CardContent className="p-0">
+                    <img
+                      src={versiculoDoDia.url_imagem}
+                      alt={versiculoDoDia.titulo || "Versículo do dia"}
+                      className="w-full"
+                    />
+                    <div className="p-4 text-center">
+                      <p className="font-semibold text-primary mb-2">
+                        {getTituloVersiculo(versiculoDoDia)}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Clique para ver mais versículos
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ) : (
+              <Card className="shadow-medium max-w-xl mx-auto bg-gradient-hero text-primary-foreground">
+                <CardContent className="p-8 text-center">
+                  <h3 className="text-xl font-bold mb-4 text-primary-foreground">
+                    {getTituloVersiculo(versiculoDoDia)}
+                  </h3>
+                  <p className="text-primary-foreground/90 mb-6">
+                    Venha conferir a mensagem do dia
+                  </p>
+                  <Link to="/versiculo-do-dia">
+                    <button className="px-6 py-3 bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all hover:-translate-y-0.5">
+                      Ver Mensagem Completa
+                    </button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )}
+          </div>
         ) : (
-          <Card className="shadow-medium max-w-3xl mx-auto bg-gradient-hero text-primary-foreground">
+          <Card className="shadow-medium max-w-xl mx-auto bg-gradient-hero text-primary-foreground">
             <CardContent className="p-12 text-center">
-              <p className="text-sm font-semibold mb-4 text-primary-foreground/80">
-                VERSÍCULO DO DIA
-              </p>
               <p className="text-lg text-primary-foreground/90 mb-6">
                 Em breve teremos uma nova mensagem para você!
               </p>

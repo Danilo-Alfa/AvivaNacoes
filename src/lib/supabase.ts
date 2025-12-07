@@ -13,6 +13,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export interface Versiculo {
   id: string;
   url_post: string;
+  url_imagem: string | null;
   titulo: string | null;
   data: string;
   ativo: boolean;

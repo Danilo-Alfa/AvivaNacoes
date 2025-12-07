@@ -141,7 +141,7 @@ export default function Videos() {
                       src={video.url_video}
                       width="100%"
                       height="100%"
-                      controls={false}
+                      controls
                       light={video.thumbnail_url || true}
                       playing={false}
                     />
@@ -181,42 +181,42 @@ export default function Videos() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
             {playlists.map((playlist) => (
-              <Card
+              <a
                 key={playlist.id}
-                className="shadow-soft hover:shadow-medium transition-all"
+                href={playlist.url_playlist}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block group"
               >
-                <CardContent className="p-0">
-                  <div className="flex sm:grid sm:grid-cols-3 gap-0">
-                    <div className="w-20 sm:w-auto sm:col-span-1 bg-gradient-hero flex items-center justify-center p-3 sm:p-4 flex-shrink-0">
-                      <div className="text-center text-primary-foreground">
-                        <div className="text-xl sm:text-2xl md:text-3xl font-bold mb-0.5 sm:mb-1">
-                          {playlist.quantidade_videos}
+                <Card className="shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden h-full">
+                  <CardContent className="p-0 h-full">
+                    <div className="flex h-full">
+                      <div className="w-24 sm:w-32 bg-gradient-hero flex items-center justify-center p-4 flex-shrink-0 transition-all duration-300 group-hover:w-28 sm:group-hover:w-36">
+                        <div className="text-center text-primary-foreground">
+                          <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 transition-transform duration-300 group-hover:scale-110">
+                            {playlist.quantidade_videos}
+                          </div>
+                          <div className="text-[10px] sm:text-xs opacity-90">vídeos</div>
                         </div>
-                        <div className="text-[10px] sm:text-xs">vídeos</div>
+                      </div>
+                      <div className="flex-1 p-4 sm:p-5 md:p-6 flex flex-col justify-center min-w-0">
+                        <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1.5 sm:mb-2 truncate group-hover:text-primary transition-colors duration-300">
+                          {playlist.nome}
+                        </h3>
+                        {playlist.descricao && (
+                          <p className="text-[11px] sm:text-xs md:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2">
+                            {playlist.descricao}
+                          </p>
+                        )}
+                        <div className="text-[11px] sm:text-xs md:text-sm font-semibold text-primary flex items-center gap-1 w-fit transition-all duration-300 group-hover:gap-2">
+                          Ver Playlist
+                          <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        </div>
                       </div>
                     </div>
-                    <div className="flex-1 sm:col-span-2 p-3 sm:p-4 md:p-6 flex flex-col justify-center min-w-0">
-                      <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1.5 sm:mb-2 truncate">
-                        {playlist.nome}
-                      </h3>
-                      {playlist.descricao && (
-                        <p className="text-[11px] sm:text-xs md:text-sm text-muted-foreground mb-2 sm:mb-3 md:mb-4 line-clamp-2">
-                          {playlist.descricao}
-                        </p>
-                      )}
-                      <a
-                        href={playlist.url_playlist}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] sm:text-xs md:text-sm font-semibold text-primary hover:text-primary/80 transition-colors flex items-center gap-1 w-fit"
-                      >
-                        Ver Playlist
-                        <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
-                      </a>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </a>
             ))}
           </div>
         </section>
