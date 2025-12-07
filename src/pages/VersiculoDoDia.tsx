@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, Calendar, Share2, Loader2 } from "lucide-react";
+import { BookOpen, Calendar, Share2, Loader2, X, Maximize2 } from "lucide-react";
 import { versiculoService } from "@/services/versiculoService";
 import { Versiculo } from "@/lib/supabase";
 
@@ -8,6 +8,7 @@ export default function VersiculoDoDia() {
   const [versiculoDoDia, setVersiculoDoDia] = useState<Versiculo | null>(null);
   const [versiculosAnteriores, setVersiculosAnteriores] = useState<Versiculo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [imagemTelaCheia, setImagemTelaCheia] = useState<string | null>(null);
 
   useEffect(() => {
     carregarVersiculos();
@@ -25,10 +26,15 @@ export default function VersiculoDoDia() {
     setLoading(false);
   };
 
-  // Função para extrair URL do embed do Facebook
-  const getFacebookEmbedUrl = (url: string) => {
-    const encodedUrl = encodeURIComponent(url);
-    return `https://www.facebook.com/plugins/post.php?href=${encodedUrl}&show_text=true&width=500`;
+  const formatarTituloPadrao = (data: string) => {
+    const dataObj = new Date(data + 'T00:00:00');
+    const dia = dataObj.getDate();
+    const mes = dataObj.toLocaleDateString("pt-BR", { month: "long" });
+    return `Versículo do dia ${dia} de ${mes}`;
+  };
+
+  const getTitulo = (versiculo: Versiculo) => {
+    return versiculo.titulo || formatarTituloPadrao(versiculo.data);
   };
 
   const handleCompartilhar = async () => {
@@ -92,24 +98,44 @@ export default function VersiculoDoDia() {
                 </span>
               </div>
 
-              {versiculoDoDia.titulo && (
-                <h2 className="text-xl font-semibold mb-4 text-center">
-                  {versiculoDoDia.titulo}
-                </h2>
-              )}
+              <h2 className="text-xl font-semibold mb-4 text-center">
+                {getTitulo(versiculoDoDia)}
+              </h2>
 
-              {/* Facebook Post Embed */}
+              {/* Imagem do Versículo */}
               <div className="flex justify-center">
-                <div className="w-full max-w-xl">
-                  <iframe
-                    src={getFacebookEmbedUrl(versiculoDoDia.url_post)}
-                    width="100%"
-                    height="530"
-                    style={{ border: "none", overflow: "hidden" }}
-                    allowFullScreen={true}
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                    className="rounded-lg"
-                  ></iframe>
+                <div className="w-full max-w-xl relative group">
+                  {versiculoDoDia.url_imagem ? (
+                    <>
+                      <img
+                        src={versiculoDoDia.url_imagem}
+                        alt={versiculoDoDia.titulo || "Versículo do dia"}
+                        className="w-full rounded-lg cursor-pointer transition-transform hover:scale-[1.02]"
+                        onClick={() => setImagemTelaCheia(versiculoDoDia.url_imagem)}
+                      />
+                      <button
+                        onClick={() => setImagemTelaCheia(versiculoDoDia.url_imagem)}
+                        className="absolute bottom-3 right-3 bg-black/60 hover:bg-black/80 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                        title="Ver em tela cheia"
+                      >
+                        <Maximize2 className="w-5 h-5" />
+                      </button>
+                    </>
+                  ) : (
+                    <div className="bg-muted rounded-lg p-8 text-center">
+                      <p className="text-muted-foreground">
+                        Imagem não disponível.{" "}
+                        <a
+                          href={versiculoDoDia.url_post}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline"
+                        >
+                          Ver no Facebook
+                        </a>
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -146,23 +172,27 @@ export default function VersiculoDoDia() {
             {versiculosAnteriores.map((versiculo) => (
               <Card
                 key={versiculo.id}
-                className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer"
-                onClick={() => window.open(versiculo.url_post, "_blank")}
+                className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer overflow-hidden"
+                onClick={() => versiculo.url_imagem ? setImagemTelaCheia(versiculo.url_imagem) : window.open(versiculo.url_post, "_blank")}
               >
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
+                {versiculo.url_imagem && (
+                  <div className="aspect-square overflow-hidden">
+                    <img
+                      src={versiculo.url_imagem}
+                      alt={versiculo.titulo || "Versículo"}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                     <Calendar className="w-3 h-3" />
                     <span>
                       {new Date(versiculo.data + 'T00:00:00').toLocaleDateString("pt-BR")}
                     </span>
                   </div>
-                  {versiculo.titulo && (
-                    <p className="text-sm font-semibold text-primary line-clamp-3">
-                      {versiculo.titulo}
-                    </p>
-                  )}
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Clique para ver no Facebook
+                  <p className="text-sm font-semibold text-primary line-clamp-2">
+                    {getTitulo(versiculo)}
                   </p>
                 </CardContent>
               </Card>
@@ -219,6 +249,28 @@ export default function VersiculoDoDia() {
           </p>
         </div>
       </section>
+
+      {/* Modal Tela Cheia */}
+      {imagemTelaCheia && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setImagemTelaCheia(null)}
+        >
+          <button
+            onClick={() => setImagemTelaCheia(null)}
+            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
+            title="Fechar"
+          >
+            <X className="w-8 h-8" />
+          </button>
+          <img
+            src={imagemTelaCheia}
+            alt="Versículo em tela cheia"
+            className="max-w-full max-h-full object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 }

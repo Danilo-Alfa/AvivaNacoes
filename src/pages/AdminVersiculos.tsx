@@ -11,7 +11,8 @@ import {
   EyeOff,
   Loader2,
   Calendar,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Image as ImageIcon
 } from "lucide-react";
 import { versiculoService } from "@/services/versiculoService";
 import { Versiculo } from "@/lib/supabase";
@@ -26,6 +27,7 @@ function AdminVersiculosContent() {
   // Form state
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [urlPost, setUrlPost] = useState("");
+  const [urlImagem, setUrlImagem] = useState("");
   const [titulo, setTitulo] = useState("");
   const [data, setData] = useState("");
 
@@ -43,6 +45,7 @@ function AdminVersiculosContent() {
   const limparForm = () => {
     setEditandoId(null);
     setUrlPost("");
+    setUrlImagem("");
     setTitulo("");
     setData("");
   };
@@ -50,9 +53,9 @@ function AdminVersiculosContent() {
   const handleSalvar = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!urlPost || !data) {
-      toast.error("Campos obrigatórios faltando", {
-        description: "URL do post e data são obrigatórios!"
+    if (!data) {
+      toast.error("Campo obrigatório faltando", {
+        description: "A data é obrigatória!"
       });
       return;
     }
@@ -60,8 +63,8 @@ function AdminVersiculosContent() {
     setSalvando(true);
 
     const resultado = editandoId
-      ? await versiculoService.atualizarVersiculo(editandoId, urlPost, titulo, data)
-      : await versiculoService.criarVersiculo(urlPost, titulo, data);
+      ? await versiculoService.atualizarVersiculo(editandoId, urlPost, urlImagem, titulo, data)
+      : await versiculoService.criarVersiculo(urlPost, urlImagem, titulo, data);
 
     if (resultado.success) {
       toast.success(editandoId ? "Versículo atualizado!" : "Versículo criado!", {
@@ -83,6 +86,7 @@ function AdminVersiculosContent() {
   const handleEditar = (versiculo: Versiculo) => {
     setEditandoId(versiculo.id);
     setUrlPost(versiculo.url_post);
+    setUrlImagem(versiculo.url_imagem || "");
     setTitulo(versiculo.titulo || "");
     setData(versiculo.data);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -147,7 +151,25 @@ function AdminVersiculosContent() {
           <CardContent>
             <form onSubmit={handleSalvar} className="space-y-4">
               <div>
-                <Label htmlFor="urlPost">URL do Post do Facebook *</Label>
+                <Label htmlFor="urlImagem">URL da Imagem *</Label>
+                <div className="flex gap-2">
+                  <ImageIcon className="w-5 h-5 text-muted-foreground mt-2" />
+                  <Input
+                    id="urlImagem"
+                    type="url"
+                    placeholder="https://..."
+                    value={urlImagem}
+                    onChange={(e) => setUrlImagem(e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Cole a URL direta da imagem do versículo
+                </p>
+              </div>
+
+              <div>
+                <Label htmlFor="urlPost">URL do Post do Facebook (opcional)</Label>
                 <div className="flex gap-2">
                   <LinkIcon className="w-5 h-5 text-muted-foreground mt-2" />
                   <Input
@@ -156,12 +178,11 @@ function AdminVersiculosContent() {
                     placeholder="https://www.facebook.com/..."
                     value={urlPost}
                     onChange={(e) => setUrlPost(e.target.value)}
-                    required
                     className="flex-1"
                   />
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Cole a URL completa do post do Facebook
+                  Link para o post original no Facebook (para compartilhamento)
                 </p>
               </div>
 
@@ -236,6 +257,17 @@ function AdminVersiculosContent() {
                     }`}
                   >
                     <div className="flex justify-between items-start gap-4">
+                      {/* Miniatura da imagem */}
+                      {versiculo.url_imagem && (
+                        <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
+                          <img
+                            src={versiculo.url_imagem}
+                            alt={versiculo.titulo || "Versículo"}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <Calendar className="w-4 h-4 text-muted-foreground" />
@@ -253,14 +285,16 @@ function AdminVersiculosContent() {
                           <h3 className="font-semibold mb-2">{versiculo.titulo}</h3>
                         )}
 
-                        <a
-                          href={versiculo.url_post}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-primary hover:underline break-all"
-                        >
-                          {versiculo.url_post}
-                        </a>
+                        {versiculo.url_post && (
+                          <a
+                            href={versiculo.url_post}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-primary hover:underline break-all"
+                          >
+                            Ver no Facebook
+                          </a>
+                        )}
                       </div>
 
                       <div className="flex gap-2">
@@ -304,13 +338,16 @@ function AdminVersiculosContent() {
         {/* Instruções */}
         <Card className="mt-8 bg-muted/50">
           <CardContent className="p-6">
-            <h3 className="font-semibold mb-2">Como obter a URL do post:</h3>
+            <h3 className="font-semibold mb-2">Como obter a URL da imagem:</h3>
             <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
-              <li>Abra o post no Facebook</li>
-              <li>Clique nos 3 pontinhos (...) no canto superior direito do post</li>
-              <li>Selecione "Copiar link"</li>
-              <li>Cole a URL aqui no formulário</li>
+              <li>Abra a imagem do versículo no Facebook</li>
+              <li>Clique com o botão direito na imagem</li>
+              <li>Selecione "Copiar endereço da imagem"</li>
+              <li>Cole a URL no campo "URL da Imagem"</li>
             </ol>
+            <p className="text-xs text-muted-foreground mt-3">
+              Dica: Você também pode usar qualquer URL de imagem válida (ex: Imgur, Google Drive público, etc.)
+            </p>
           </CardContent>
         </Card>
       </div>

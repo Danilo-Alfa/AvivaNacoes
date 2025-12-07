@@ -149,68 +149,76 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="flex pt-16">
         {/* Sidebar - Desktop apenas - Fixed */}
         <aside
-          className={`hidden md:block fixed left-0 top-16 h-screen border-r-2 border-border bg-background/95 backdrop-blur transition-all duration-300 overflow-y-auto ${
+          className={`hidden md:flex flex-col fixed left-0 top-16 h-[calc(100vh-4rem)] border-r-2 border-border bg-background/95 backdrop-blur transition-all duration-300 z-30 ${
             sidebarOpen ? "w-60" : "w-16"
           }`}
         >
-          <div className="flex flex-col">
-            {/* Toggle Button */}
-            <div className="p-3 border-b-2 border-border flex justify-end">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="rounded-full"
-              >
-                {sidebarOpen ? (
-                  <ChevronLeft className="h-5 w-5" />
-                ) : (
-                  <ChevronRight className="h-5 w-5" />
-                )}
-              </Button>
-            </div>
+          {/* Toggle Button - Na borda da sidebar */}
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="absolute -right-4 top-8 z-[60] h-6 w-6 rounded-full shadow-lg bg-white hover:bg-gray-100 border border-gray-300"
+          >
+            {sidebarOpen ? (
+              <ChevronLeft className="h-3 w-3 text-gray-700" />
+            ) : (
+              <ChevronRight className="h-3 w-3 text-gray-700" />
+            )}
+          </Button>
 
-            {/* Navigation Items */}
-            <nav className="p-3 space-y-2 pb-6">
-              <Link
-                to="/"
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
-                  !sidebarOpen && "justify-center"
-                } ${
-                  location.pathname === "/"
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
-              >
-                <Home className="h-5 w-5 flex-shrink-0" />
-                {sidebarOpen && (
-                  <span className="text-sm font-medium">HOME</span>
-                )}
-              </Link>
+          {/* Navigation Items */}
+          <nav className={`flex-1 p-3 pt-6 space-y-1 overflow-hidden ${!sidebarOpen && "px-2"}`}>
+            <Link
+              to="/"
+              className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+                !sidebarOpen && "justify-center px-0"
+              } ${
+                location.pathname === "/"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
+            >
+              <Home className="h-5 w-5 flex-shrink-0" />
+              {sidebarOpen && (
+                <span className="text-sm font-medium">HOME</span>
+              )}
+              {/* Tooltip quando colapsado */}
+              {!sidebarOpen && (
+                <div className="absolute left-full ml-2 px-2 py-1 bg-foreground text-background text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50">
+                  HOME
+                </div>
+              )}
+            </Link>
 
-              {secondaryNavigation.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
-                      !sidebarOpen && "justify-center"
-                    } ${
-                      location.pathname === item.href
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5 flex-shrink-0" />
-                    {sidebarOpen && (
-                      <span className="text-sm font-medium">{item.name}</span>
-                    )}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
+            {secondaryNavigation.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+                    !sidebarOpen && "justify-center px-0"
+                  } ${
+                    location.pathname === item.href
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                >
+                  <Icon className="h-5 w-5 flex-shrink-0" />
+                  {sidebarOpen && (
+                    <span className="text-sm font-medium">{item.name}</span>
+                  )}
+                  {/* Tooltip quando colapsado */}
+                  {!sidebarOpen && (
+                    <div className="absolute left-full ml-2 px-2 py-1 bg-foreground text-background text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50">
+                      {item.name}
+                    </div>
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
         </aside>
 
         {/* Main Content - Com margin-left para compensar a sidebar fixa */}

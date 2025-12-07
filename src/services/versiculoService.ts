@@ -54,13 +54,15 @@ export const versiculoService = {
   // Criar novo versículo
   async criarVersiculo(
     url_post: string,
+    url_imagem: string,
     titulo: string,
     data: string
   ): Promise<{ success: boolean; error?: string }> {
     const { error } = await supabase.from('versiculos').insert([
       {
-        url_post,
-        titulo,
+        url_post: url_post || null,
+        url_imagem: url_imagem || null,
+        titulo: titulo || null,
         data,
         ativo: true,
       },
@@ -78,12 +80,18 @@ export const versiculoService = {
   async atualizarVersiculo(
     id: string,
     url_post: string,
+    url_imagem: string,
     titulo: string,
     data: string
   ): Promise<{ success: boolean; error?: string }> {
     const { error } = await supabase
       .from('versiculos')
-      .update({ url_post, titulo, data })
+      .update({
+        url_post: url_post || null,
+        url_imagem: url_imagem || null,
+        titulo: titulo || null,
+        data
+      })
       .eq('id', id);
 
     if (error) {

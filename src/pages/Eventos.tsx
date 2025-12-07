@@ -100,30 +100,17 @@ export default function Eventos() {
 
   const formatarHorario = (inicio: string, fim: string | null) => {
     const dataInicio = new Date(inicio);
-    const horaInicioStr = dataInicio.toTimeString().slice(0, 5);
+    const horaInicio = formatarHora(inicio);
 
-    // Se for evento de dia inteiro (12:00), retorna texto especial
-    if (horaInicioStr === "12:00") {
-      if (fim) {
-        const dataFim = new Date(fim);
-        const horaFimStr = dataFim.toTimeString().slice(0, 5);
+    // Verificar se é dia inteiro:
+    // 1. Hora é 12:00 (marcador usado pelo admin para dia inteiro)
+    // 2. Hora início e fim são iguais
+    // 3. Não tem hora de fim e início é meio-dia
 
-        // Se fim também é 12:00, é dia inteiro
-        if (horaFimStr === "12:00") {
-          return "Dia inteiro";
-        }
-      } else {
-        // Se não tem fim e início é 12:00, também é dia inteiro
-        return "Dia inteiro";
-      }
-    }
-
-    // Se não é dia inteiro, mostra os horários normalmente
     if (fim) {
-      const horaInicio = formatarHora(inicio);
       const horaFim = formatarHora(fim);
 
-      // Se os horários forem iguais, é evento de dia inteiro
+      // Se horários são iguais, é dia inteiro
       if (horaInicio === horaFim) {
         return "Dia inteiro";
       }
@@ -131,7 +118,14 @@ export default function Eventos() {
       return `${horaInicio} às ${horaFim}`;
     }
 
-    const horaInicio = formatarHora(inicio);
+    // Se não tem fim, verifica se é o marcador de dia inteiro (12:00)
+    // Considera uma janela de tolerância por causa de timezone
+    const hora = dataInicio.getHours();
+    const minuto = dataInicio.getMinutes();
+    if ((hora === 12 || hora === 11 || hora === 9) && minuto === 0) {
+      return "Dia inteiro";
+    }
+
     return horaInicio;
   };
 

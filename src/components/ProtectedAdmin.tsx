@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,20 +9,10 @@ interface ProtectedAdminProps {
   children: React.ReactNode;
 }
 
-const ADMIN_SESSION_KEY = "admin_authenticated";
-
 export default function ProtectedAdmin({ children }: ProtectedAdminProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Verificar se já está autenticado (sessionStorage)
-    const isAuth = sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
-    setIsAuthenticated(isAuth);
-    setLoading(false);
-  }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +26,6 @@ export default function ProtectedAdmin({ children }: ProtectedAdminProps) {
     }
 
     if (password === adminPassword) {
-      sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
       setIsAuthenticated(true);
       setPassword("");
     } else {
@@ -46,19 +35,10 @@ export default function ProtectedAdmin({ children }: ProtectedAdminProps) {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem(ADMIN_SESSION_KEY);
     setIsAuthenticated(false);
     setPassword("");
     setError("");
   };
-
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-12 flex justify-center items-center min-h-[400px]">
-        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
 
   if (!isAuthenticated) {
     return (

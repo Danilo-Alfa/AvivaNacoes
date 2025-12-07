@@ -12,8 +12,7 @@ import {
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 
 export default function FaleConosco() {
-  // IMPORTANTE: Usar a mesma API Key
-  const GOOGLE_MAPS_API_KEY = "AIzaSyCkN8txAwSMXcQUYln22XKt1kDP9P8RDuY";
+  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
   // Localização da sede principal - SUBSTITUA com as coordenadas reais
   const mainChurchLocation = { lat: -23.5505, lng: -46.6333 };
