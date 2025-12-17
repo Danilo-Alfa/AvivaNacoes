@@ -71,9 +71,9 @@ function AdminEventosContent() {
       return;
     }
 
-    // Se for dia inteiro, usa 12:00 para evitar problemas de timezone
-    const horaInicioFinal = diaInteiro ? "12:00" : horaInicio;
-    const horaFimFinal = diaInteiro ? "12:00" : horaFim;
+    // Se for dia inteiro, usa 01:23 como marcador (horário improvável)
+    const horaInicioFinal = diaInteiro ? "01:23" : horaInicio;
+    const horaFimFinal = diaInteiro ? "01:23" : horaFim;
 
     const dataInicioCompleta = `${dataInicio}T${horaInicioFinal}:00`;
     const dataFimCompleta = dataFim && horaFimFinal ? `${dataFim}T${horaFimFinal}:00` : null;
@@ -144,19 +144,33 @@ function AdminEventosContent() {
     setTitulo(evento.titulo);
     setDescricao(evento.descricao || "");
 
-    const dataInicioObj = new Date(evento.data_inicio);
-    setDataInicio(dataInicioObj.toISOString().split("T")[0]);
-    const horaInicioStr = dataInicioObj.toTimeString().slice(0, 5);
+    // Extrair data e hora diretamente da string ISO para evitar problemas de timezone
+    const matchDataInicio = evento.data_inicio.match(/^(\d{4}-\d{2}-\d{2})/);
+    const matchHoraInicio = evento.data_inicio.match(/T(\d{2}:\d{2})/);
+
+    setDataInicio(matchDataInicio ? matchDataInicio[1] : "");
+    const horaInicioStr = matchHoraInicio ? matchHoraInicio[1] : "19:00";
     setHoraInicio(horaInicioStr);
 
-    // Detectar se é dia inteiro (usa 12:00 como marcador)
-    const isDiaInteiro = horaInicioStr === "12:00" && evento.data_fim && new Date(evento.data_fim).toTimeString().slice(0, 5) === "12:00";
+    // Detectar se é dia inteiro (usa 01:23 como marcador)
+    let isDiaInteiro = false;
+    if (evento.data_fim) {
+      const matchHoraFim = evento.data_fim.match(/T(\d{2}:\d{2})/);
+      const horaFimStr = matchHoraFim ? matchHoraFim[1] : "";
+      isDiaInteiro = horaInicioStr === "01:23" && horaFimStr === "01:23";
+    } else {
+      isDiaInteiro = horaInicioStr === "01:23";
+    }
     setDiaInteiro(isDiaInteiro);
 
     if (evento.data_fim) {
-      const dataFimObj = new Date(evento.data_fim);
-      setDataFim(dataFimObj.toISOString().split("T")[0]);
-      setHoraFim(dataFimObj.toTimeString().slice(0, 5));
+      const matchDataFim = evento.data_fim.match(/^(\d{4}-\d{2}-\d{2})/);
+      const matchHoraFim = evento.data_fim.match(/T(\d{2}:\d{2})/);
+      setDataFim(matchDataFim ? matchDataFim[1] : "");
+      setHoraFim(matchHoraFim ? matchHoraFim[1] : "");
+    } else {
+      setDataFim("");
+      setHoraFim("");
     }
 
     setLocal(evento.local || "");
@@ -186,51 +200,53 @@ function AdminEventosContent() {
     }
   };
 
+  // Função auxiliar para extrair data e hora de uma string ISO sem problemas de timezone
+  const extrairDataHoraISO = (dataStr: string) => {
+    // Formato esperado: "2025-12-14T09:00:00" ou "2025-12-14T09:00:00.000Z"
+    const matchData = dataStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    const matchHora = dataStr.match(/T(\d{2}):(\d{2})/);
+
+    return {
+      ano: matchData ? matchData[1] : '',
+      mes: matchData ? matchData[2] : '',
+      dia: matchData ? matchData[3] : '',
+      hora: matchHora ? matchHora[1] : '00',
+      minuto: matchHora ? matchHora[2] : '00',
+      dataFormatada: matchData ? `${matchData[3]}/${matchData[2]}/${matchData[1]}` : '',
+      horaFormatada: matchHora ? `${matchHora[1]}:${matchHora[2]}` : '00:00'
+    };
+  };
+
   const formatarDataHora = (dataStr: string) => {
-    const data = new Date(dataStr);
-    return data.toLocaleString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const { dataFormatada, horaFormatada } = extrairDataHoraISO(dataStr);
+    return `${dataFormatada}, ${horaFormatada}`;
   };
 
   const formatarDataHoraEvento = (inicio: string, fim: string | null) => {
-    const dataInicio = new Date(inicio);
-    const horaInicioStr = dataInicio.toTimeString().slice(0, 5);
-
-    const dataFormatada = dataInicio.toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
+    const inicioInfo = extrairDataHoraISO(inicio);
+    const horaInicioStr = inicioInfo.horaFormatada;
+    const dataFormatada = inicioInfo.dataFormatada;
 
     // Verificar se é evento de dia inteiro
     let isDiaInteiro = false;
 
     if (fim) {
-      const dataFim = new Date(fim);
-      const horaFimStr = dataFim.toTimeString().slice(0, 5);
+      const fimInfo = extrairDataHoraISO(fim);
+      const horaFimStr = fimInfo.horaFormatada;
 
-      // Se os horários são iguais OU ambos são 12:00, é evento de dia inteiro
-      if (horaInicioStr === horaFimStr || (horaInicioStr === "12:00" && horaFimStr === "12:00")) {
+      // Se os horários são iguais OU ambos são 01:23, é evento de dia inteiro
+      if (horaInicioStr === horaFimStr || (horaInicioStr === "01:23" && horaFimStr === "01:23")) {
         isDiaInteiro = true;
       }
-    } else if (horaInicioStr === "12:00") {
-      // Se não tem fim e início é 12:00, é dia inteiro
+    } else if (horaInicioStr === "01:23") {
+      // Se não tem fim e início é 01:23, é dia inteiro
       isDiaInteiro = true;
     }
 
     if (isDiaInteiro) {
       if (fim) {
-        const dataFim = new Date(fim);
-        const dataFimFormatada = dataFim.toLocaleDateString("pt-BR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        });
+        const fimInfo = extrairDataHoraISO(fim);
+        const dataFimFormatada = fimInfo.dataFormatada;
 
         // Se as datas são diferentes, mostra o período
         if (dataFormatada !== dataFimFormatada) {

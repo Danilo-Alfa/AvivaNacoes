@@ -37,6 +37,10 @@ export async function getEventosFuturos(): Promise<Evento[]> {
 
 /**
  * Busca eventos de um mês específico
+ * Inclui eventos que:
+ * - Começam no mês
+ * - Terminam no mês (mas começaram antes)
+ * - Se estendem pelo mês (começam antes e terminam depois)
  */
 export async function getEventosDoMes(ano: number, mes: number): Promise<Evento[]> {
   const inicioMes = new Date(ano, mes, 1).toISOString();
@@ -45,8 +49,7 @@ export async function getEventosDoMes(ano: number, mes: number): Promise<Evento[
   const { data, error } = await supabase
     .from("eventos")
     .select("*")
-    .gte("data_inicio", inicioMes)
-    .lte("data_inicio", fimMes)
+    .or(`and(data_inicio.gte.${inicioMes},data_inicio.lte.${fimMes}),and(data_fim.gte.${inicioMes},data_fim.lte.${fimMes}),and(data_inicio.lte.${inicioMes},data_fim.gte.${fimMes})`)
     .order("data_inicio", { ascending: true });
 
   if (error) {

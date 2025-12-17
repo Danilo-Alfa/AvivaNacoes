@@ -83,7 +83,7 @@ export default function RedesSociais() {
       bgColor: "bg-purple-600",
     },
     {
-      name: "SPOTIFY",
+      name: "Spotify",
       icon: Music,
       url: "https://open.spotify.com/show/6UxigeE1ZivVsJxRdVokSJ",
       description:
