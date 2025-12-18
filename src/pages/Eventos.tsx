@@ -52,6 +52,20 @@ export default function Eventos() {
   };
 
   const formatarData = (dataStr: string) => {
+    // Extrair data diretamente da string ISO para evitar problemas de timezone
+    const match = dataStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) {
+      const ano = parseInt(match[1]);
+      const mes = parseInt(match[2]) - 1;
+      const dia = parseInt(match[3]);
+      const data = new Date(ano, mes, dia);
+      return data.toLocaleDateString("pt-BR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    }
+    // Fallback
     const data = new Date(dataStr);
     return data.toLocaleDateString("pt-BR", {
       day: "numeric",
@@ -84,25 +98,40 @@ export default function Eventos() {
   };
 
   const formatarPeriodo = (inicio: string, fim: string | null) => {
-    const dataInicio = new Date(inicio);
-    const dataFim = fim ? new Date(fim) : null;
+    // Extrair datas diretamente da string ISO para evitar problemas de timezone
+    const extrairPartes = (dataStr: string) => {
+      const match = dataStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (match) {
+        return {
+          ano: parseInt(match[1]),
+          mes: parseInt(match[2]) - 1,
+          dia: parseInt(match[3])
+        };
+      }
+      const d = new Date(dataStr);
+      return { ano: d.getFullYear(), mes: d.getMonth(), dia: d.getDate() };
+    };
+
+    const inicioPartes = extrairPartes(inicio);
+    const fimPartes = fim ? extrairPartes(fim) : null;
 
     // Se não tem data fim, ou é o mesmo dia
-    if (!dataFim ||
-        (dataInicio.getDate() === dataFim.getDate() &&
-         dataInicio.getMonth() === dataFim.getMonth() &&
-         dataInicio.getFullYear() === dataFim.getFullYear())) {
+    if (!fimPartes ||
+        (inicioPartes.dia === fimPartes.dia &&
+         inicioPartes.mes === fimPartes.mes &&
+         inicioPartes.ano === fimPartes.ano)) {
       return formatarData(inicio);
     }
 
     // Se é mês e ano diferentes
-    if (dataInicio.getMonth() !== dataFim.getMonth() ||
-        dataInicio.getFullYear() !== dataFim.getFullYear()) {
+    if (inicioPartes.mes !== fimPartes.mes ||
+        inicioPartes.ano !== fimPartes.ano) {
       return `${formatarData(inicio)} até ${formatarData(fim)}`;
     }
 
     // Se é o mesmo mês, mostra formato compacto
-    return `${dataInicio.getDate()} a ${dataFim.getDate()} de ${dataInicio.toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}`;
+    const dataRef = new Date(inicioPartes.ano, inicioPartes.mes, inicioPartes.dia);
+    return `${inicioPartes.dia} a ${fimPartes.dia} de ${dataRef.toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}`;
   };
 
   const formatarHorario = (inicio: string, fim: string | null) => {
@@ -236,12 +265,12 @@ export default function Eventos() {
                     <CardContent className="p-0">
                       <div className="grid md:grid-cols-3 gap-0">
                         {/* Imagem do Evento */}
-                        <div className="aspect-video md:aspect-auto">
+                        <div className="aspect-video md:aspect-auto md:max-h-80">
                           {evento.imagem_url ? (
                             <img
                               src={evento.imagem_url}
                               alt={evento.titulo}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover max-h-80"
                             />
                           ) : (
                             <div className="h-full bg-gradient-accent flex items-center justify-center">
