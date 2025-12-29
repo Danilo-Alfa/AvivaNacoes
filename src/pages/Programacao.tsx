@@ -157,47 +157,6 @@ export default function Programacao() {
         </Card>
       </section>
 
-      {/* Eventos Especiais */}
-      <section className="mt-12">
-        <Card className="shadow-soft">
-          <CardContent className="p-8">
-            <h2 className="text-2xl font-bold mb-6">
-              Eventos Especiais do Mês
-            </h2>
-            <div className="space-y-4">
-              {[1, 2, 3].map((evento) => (
-                <div
-                  key={evento}
-                  className="flex items-start gap-4 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
-                >
-                  <div className="bg-gradient-accent text-accent-foreground rounded-lg p-3 text-center min-w-[70px]">
-                    <div className="text-2xl font-bold">15</div>
-                    <div className="text-xs">DEZ</div>
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold mb-1">
-                      Nome do Evento Especial
-                    </h3>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Descrição breve do evento especial que acontecerá
-                    </p>
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        19h30
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        Sede Principal
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </section>
     </div>
   );
 }

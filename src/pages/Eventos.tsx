@@ -52,6 +52,20 @@ export default function Eventos() {
   };
 
   const formatarData = (dataStr: string) => {
+    // Extrair data diretamente da string ISO para evitar problemas de timezone
+    const match = dataStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) {
+      const ano = parseInt(match[1]);
+      const mes = parseInt(match[2]) - 1;
+      const dia = parseInt(match[3]);
+      const data = new Date(ano, mes, dia);
+      return data.toLocaleDateString("pt-BR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    }
+    // Fallback
     const data = new Date(dataStr);
     return data.toLocaleDateString("pt-BR", {
       day: "numeric",
@@ -69,6 +83,13 @@ export default function Eventos() {
   };
 
   const formatarHora = (dataStr: string) => {
+    // Extrair hora diretamente da string ISO para evitar problemas de timezone
+    // Formato esperado: "2025-12-14T09:00:00" ou "2025-12-14T09:00:00.000Z"
+    const match = dataStr.match(/T(\d{2}):(\d{2})/);
+    if (match) {
+      return `${match[1]}:${match[2]}`;
+    }
+    // Fallback para o método antigo se não conseguir extrair
     const data = new Date(dataStr);
     return data.toLocaleTimeString("pt-BR", {
       hour: "2-digit",
@@ -77,52 +98,68 @@ export default function Eventos() {
   };
 
   const formatarPeriodo = (inicio: string, fim: string | null) => {
-    const dataInicio = new Date(inicio);
-    const dataFim = fim ? new Date(fim) : null;
+    // Extrair datas diretamente da string ISO para evitar problemas de timezone
+    const extrairPartes = (dataStr: string) => {
+      const match = dataStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (match) {
+        return {
+          ano: parseInt(match[1]),
+          mes: parseInt(match[2]) - 1,
+          dia: parseInt(match[3])
+        };
+      }
+      const d = new Date(dataStr);
+      return { ano: d.getFullYear(), mes: d.getMonth(), dia: d.getDate() };
+    };
+
+    const inicioPartes = extrairPartes(inicio);
+    const fimPartes = fim ? extrairPartes(fim) : null;
 
     // Se não tem data fim, ou é o mesmo dia
-    if (!dataFim ||
-        (dataInicio.getDate() === dataFim.getDate() &&
-         dataInicio.getMonth() === dataFim.getMonth() &&
-         dataInicio.getFullYear() === dataFim.getFullYear())) {
+    if (!fimPartes ||
+        (inicioPartes.dia === fimPartes.dia &&
+         inicioPartes.mes === fimPartes.mes &&
+         inicioPartes.ano === fimPartes.ano)) {
       return formatarData(inicio);
     }
 
     // Se é mês e ano diferentes
-    if (dataInicio.getMonth() !== dataFim.getMonth() ||
-        dataInicio.getFullYear() !== dataFim.getFullYear()) {
+    if (inicioPartes.mes !== fimPartes.mes ||
+        inicioPartes.ano !== fimPartes.ano) {
       return `${formatarData(inicio)} até ${formatarData(fim)}`;
     }
 
     // Se é o mesmo mês, mostra formato compacto
-    return `${dataInicio.getDate()} a ${dataFim.getDate()} de ${dataInicio.toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}`;
+    const dataRef = new Date(inicioPartes.ano, inicioPartes.mes, inicioPartes.dia);
+    return `${inicioPartes.dia} a ${fimPartes.dia} de ${dataRef.toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}`;
   };
 
   const formatarHorario = (inicio: string, fim: string | null) => {
-    const dataInicio = new Date(inicio);
     const horaInicio = formatarHora(inicio);
 
+    // Extrair hora e minuto diretamente da string para evitar problemas de timezone
+    const matchInicio = inicio.match(/T(\d{2}):(\d{2})/);
+    const horaInicioNum = matchInicio ? parseInt(matchInicio[1]) : 0;
+    const minutoInicioNum = matchInicio ? parseInt(matchInicio[2]) : 0;
+
     // Verificar se é dia inteiro:
-    // 1. Hora é 12:00 (marcador usado pelo admin para dia inteiro)
+    // 1. Hora é 01:23 (marcador usado pelo admin para dia inteiro)
     // 2. Hora início e fim são iguais
-    // 3. Não tem hora de fim e início é meio-dia
+    // 3. Não tem hora de fim e início é 01:23
 
     if (fim) {
       const horaFim = formatarHora(fim);
 
-      // Se horários são iguais, é dia inteiro
-      if (horaInicio === horaFim) {
+      // Se horários são iguais ou ambos são 01:23, é dia inteiro
+      if (horaInicio === horaFim || (horaInicio === "01:23" && horaFim === "01:23")) {
         return "Dia inteiro";
       }
 
       return `${horaInicio} às ${horaFim}`;
     }
 
-    // Se não tem fim, verifica se é o marcador de dia inteiro (12:00)
-    // Considera uma janela de tolerância por causa de timezone
-    const hora = dataInicio.getHours();
-    const minuto = dataInicio.getMinutes();
-    if ((hora === 12 || hora === 11 || hora === 9) && minuto === 0) {
+    // Se não tem fim, verifica se é o marcador de dia inteiro (01:23)
+    if (horaInicioNum === 1 && minutoInicioNum === 23) {
       return "Dia inteiro";
     }
 
@@ -149,19 +186,41 @@ export default function Eventos() {
     return dias;
   };
 
+  // Função auxiliar para extrair ano, mês e dia de uma string ISO sem problemas de timezone
+  const extrairDataISO = (dataStr: string) => {
+    // Formato esperado: "2025-12-14T09:00:00" ou "2025-12-14T09:00:00.000Z"
+    const match = dataStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) {
+      return {
+        ano: parseInt(match[1]),
+        mes: parseInt(match[2]) - 1, // Mês em JavaScript é 0-indexed
+        dia: parseInt(match[3])
+      };
+    }
+    // Fallback
+    const data = new Date(dataStr);
+    return {
+      ano: data.getFullYear(),
+      mes: data.getMonth(),
+      dia: data.getDate()
+    };
+  };
+
   const getEventosDoDia = (dia: number) => {
-    const dataAlvo = new Date(mesAtual.getFullYear(), mesAtual.getMonth(), dia, 12, 0, 0);
+    const anoAlvo = mesAtual.getFullYear();
+    const mesAlvo = mesAtual.getMonth();
 
     return eventosDoMes.filter((evento) => {
-      const dataInicio = new Date(evento.data_inicio);
-      const dataFim = evento.data_fim ? new Date(evento.data_fim) : dataInicio;
+      const inicio = extrairDataISO(evento.data_inicio);
+      const fim = evento.data_fim ? extrairDataISO(evento.data_fim) : inicio;
 
-      // Normalizar datas para meio-dia para evitar problemas de timezone
-      const inicioNormalizado = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate(), 12, 0, 0);
-      const fimNormalizado = new Date(dataFim.getFullYear(), dataFim.getMonth(), dataFim.getDate(), 12, 0, 0);
+      // Criar datas normalizadas para comparação (usando apenas ano/mês/dia)
+      const dataAlvo = new Date(anoAlvo, mesAlvo, dia);
+      const dataInicio = new Date(inicio.ano, inicio.mes, inicio.dia);
+      const dataFim = new Date(fim.ano, fim.mes, fim.dia);
 
       // Verificar se a data alvo está entre início e fim (inclusive)
-      return dataAlvo >= inicioNormalizado && dataAlvo <= fimNormalizado;
+      return dataAlvo >= dataInicio && dataAlvo <= dataFim;
     });
   };
 
@@ -206,12 +265,12 @@ export default function Eventos() {
                     <CardContent className="p-0">
                       <div className="grid md:grid-cols-3 gap-0">
                         {/* Imagem do Evento */}
-                        <div className="aspect-video md:aspect-auto">
+                        <div className="aspect-video md:aspect-auto md:max-h-80">
                           {evento.imagem_url ? (
                             <img
                               src={evento.imagem_url}
                               alt={evento.titulo}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover max-h-80"
                             />
                           ) : (
                             <div className="h-full bg-gradient-accent flex items-center justify-center">
@@ -361,6 +420,12 @@ export default function Eventos() {
                     const temEvento = eventosNoDia.length > 0;
                     const corEvento = temEvento && eventosNoDia[0].cor ? eventosNoDia[0].cor : "#3b82f6";
 
+                    // Verificar se é o dia atual
+                    const hoje = new Date();
+                    const isHoje = dia === hoje.getDate() &&
+                                   mesAtual.getMonth() === hoje.getMonth() &&
+                                   mesAtual.getFullYear() === hoje.getFullYear();
+
                     return (
                       <div
                         key={index}
@@ -368,27 +433,72 @@ export default function Eventos() {
                           temEvento
                             ? "font-semibold hover:opacity-90 cursor-pointer"
                             : "hover:bg-accent cursor-pointer"
-                        }`}
+                        } ${isHoje && !temEvento ? "ring-2 ring-primary ring-offset-2 font-bold text-primary" : ""}`}
                         style={temEvento ? {
                           backgroundColor: corEvento,
-                          color: '#ffffff'
+                          color: '#ffffff',
+                          ...(isHoje ? { boxShadow: '0 0 0 2px white, 0 0 0 4px currentColor' } : {})
                         } : {}}
                         title={temEvento ? eventosNoDia.map(e => e.titulo).join(', ') : ''}
                       >
                         {dia}
                         {temEvento && eventosNoDia.length > 0 && (
                           <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-[100] w-max max-w-[90vw] sm:max-w-xs pointer-events-none">
-                            <div className="bg-popover text-popover-foreground p-2 sm:p-3 rounded-lg shadow-lg border">
-                              <div className="space-y-1">
-                                {eventosNoDia.map((evento) => (
-                                  <div key={evento.id} className="text-[10px] sm:text-xs">
-                                    <div className="font-semibold truncate">{evento.titulo}</div>
-                                    {evento.tipo && (
-                                      <div className="text-muted-foreground truncate">{evento.tipo}</div>
-                                    )}
+                            <div className="bg-popover text-popover-foreground p-3 sm:p-4 rounded-xl shadow-xl border">
+                              {/* Header do dia */}
+                              <div className="text-xs font-medium text-muted-foreground mb-3 pb-2 border-b flex items-center gap-2">
+                                <Calendar className="w-3 h-3" />
+                                <span>{dia} de {mesAtual.toLocaleDateString("pt-BR", { month: "long" })}</span>
+                              </div>
+
+                              {/* Lista de eventos */}
+                              <div className="space-y-0 divide-y divide-border">
+                                {eventosNoDia.map((evento, idx) => (
+                                  <div
+                                    key={evento.id}
+                                    className={`py-2.5 ${idx === 0 ? 'pt-0' : ''} ${idx === eventosNoDia.length - 1 ? 'pb-0' : ''}`}
+                                  >
+                                    {/* Título do evento */}
+                                    <div className="font-semibold text-sm truncate mb-1">
+                                      {evento.titulo}
+                                    </div>
+
+                                    {/* Detalhes do evento */}
+                                    <div className="space-y-1">
+                                      {evento.tipo && (
+                                        <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                                          <span
+                                            className="w-2 h-2 rounded-full flex-shrink-0"
+                                            style={{ backgroundColor: evento.cor || '#3b82f6' }}
+                                          />
+                                          <span className="truncate">{evento.tipo}</span>
+                                        </div>
+                                      )}
+
+                                      {/* Horário */}
+                                      <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                                        <Clock className="w-3 h-3 flex-shrink-0" />
+                                        <span>{formatarHorario(evento.data_inicio, evento.data_fim)}</span>
+                                      </div>
+
+                                      {/* Local */}
+                                      {evento.local && (
+                                        <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                                          <MapPin className="w-3 h-3 flex-shrink-0" />
+                                          <span className="truncate">{evento.local}</span>
+                                        </div>
+                                      )}
+                                    </div>
                                   </div>
                                 ))}
                               </div>
+
+                              {/* Quantidade de eventos */}
+                              {eventosNoDia.length > 1 && (
+                                <div className="mt-2 pt-2 border-t text-[10px] text-center text-muted-foreground">
+                                  {eventosNoDia.length} eventos neste dia
+                                </div>
+                              )}
                             </div>
                           </div>
                         )}
@@ -447,7 +557,7 @@ export default function Eventos() {
             <div className="text-center py-20">
               <Calendar className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
               <p className="text-lg text-muted-foreground">
-                Nenhum evento agendado no momento
+                Nenhum evento futuro agendado no momento
               </p>
             </div>
           )}
