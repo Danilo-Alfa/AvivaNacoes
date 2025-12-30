@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "hero-bg.jpg"],
+      includeAssets: ["favicon.ico", "hero-bg.jpg", "apple-touch-icon.png"],
       manifest: {
         name: "Igreja Aviva Nações",
         short_name: "Aviva Nações",
@@ -29,6 +29,26 @@ export default defineConfig(({ mode }) => ({
         scope: "/AvivaNacoes/",
         start_url: "/AvivaNacoes/",
         icons: [
+          {
+            src: "pwa-48x48.png",
+            sizes: "48x48",
+            type: "image/png",
+          },
+          {
+            src: "pwa-72x72.png",
+            sizes: "72x72",
+            type: "image/png",
+          },
+          {
+            src: "pwa-96x96.png",
+            sizes: "96x96",
+            type: "image/png",
+          },
+          {
+            src: "pwa-144x144.png",
+            sizes: "144x144",
+            type: "image/png",
+          },
           {
             src: "pwa-192x192.png",
             sizes: "192x192",
@@ -43,7 +63,7 @@ export default defineConfig(({ mode }) => ({
             src: "pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
-            purpose: "any maskable",
+            purpose: "maskable",
           },
         ],
       },
