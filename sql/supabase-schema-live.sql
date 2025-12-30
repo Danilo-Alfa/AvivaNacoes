@@ -51,7 +51,7 @@ VALUES (
   'c0000000-0000-0000-0000-000000000001'::uuid,
   false,
   'https://seu-servidor.com/live/stream.m3u8',
-  'Transmissão ao Vivo - Igreja AvivaNações',
+  'Transmissão ao Vivo - Aviva NaçõesNações',
   'Assista aos cultos e eventos ao vivo',
   'Nenhuma transmissão ao vivo no momento. Fique atento aos nossos horários de culto e eventos especiais!',
   'Culto de Domingo',

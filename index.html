@@ -1,86 +1,78 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-    <title>Igreja Aviva - Fé, Esperança e Amor</title>
 
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#1e3a5f" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Aviva Nações" />
-    <link rel="apple-touch-icon" href="/AvivaNacoes/apple-touch-icon.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/AvivaNacoes/apple-touch-icon-152x152.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/AvivaNacoes/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="48x48" href="/AvivaNacoes/pwa-48x48.png" />
-    <link rel="icon" type="image/png" sizes="72x72" href="/AvivaNacoes/pwa-72x72.png" />
-    <link rel="icon" type="image/png" sizes="96x96" href="/AvivaNacoes/pwa-96x96.png" />
-    <link rel="icon" type="image/png" sizes="144x144" href="/AvivaNacoes/pwa-144x144.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/AvivaNacoes/pwa-192x192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="/AvivaNacoes/pwa-512x512.png" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <title>Aviva Nações - Fé, Esperança e Amor</title>
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFDT1ZXHB2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-ZFDT1ZXHB2');
-    </script>
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#1e3a5f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Aviva Nações" />
+  <link rel="apple-touch-icon" href="/AvivaNacoes/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/AvivaNacoes/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/AvivaNacoes/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/AvivaNacoes/pwa-48x48.png" />
+  <link rel="icon" type="image/png" sizes="72x72" href="/AvivaNacoes/pwa-72x72.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/AvivaNacoes/pwa-96x96.png" />
+  <link rel="icon" type="image/png" sizes="144x144" href="/AvivaNacoes/pwa-144x144.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/AvivaNacoes/pwa-192x192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/AvivaNacoes/pwa-512x512.png" />
 
-    <!-- Start Single Page Apps for GitHub Pages -->
-    <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      // MIT License
-      // https://github.com/rafgraph/spa-github-pages
-      // This script checks to see if a redirect is present in the query string,
-      // converts it back into the correct url and adds it to the
-      // browser's history using window.history.replaceState(...),
-      // which won't cause the browser to attempt to load the new url.
-      // When the single page app is loaded further down in this file,
-      // the correct url will be waiting in the browser's history for
-      // the single page app to route accordingly.
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) {
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
-        }
-      }(window.location))
-    </script>
-    <!-- End Single Page Apps for GitHub Pages -->
-    <meta
-      name="description"
-      content="Igreja Aviva - Uma comunidade de fé comprometida em levar o amor de Cristo através da palavra, louvor e comunhão."
-    />
-    <meta name="author" content="Igreja Aviva" />
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFDT1ZXHB2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-ZFDT1ZXHB2');
+  </script>
 
-    <meta property="og:title" content="Igreja Aviva - Fé, Esperança e Amor" />
-    <meta
-      property="og:description"
-      content="Igreja Aviva - Uma comunidade de fé comprometida em levar o amor de Cristo através da palavra, louvor e comunhão."
-    />
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:image"
-      content="https://lovable.dev/opengraph-image-p98pqg.png"
-    />
+  <!-- Start Single Page Apps for GitHub Pages -->
+  <script type="text/javascript">
+    // Single Page Apps for GitHub Pages
+    // MIT License
+    // https://github.com/rafgraph/spa-github-pages
+    // This script checks to see if a redirect is present in the query string,
+    // converts it back into the correct url and adds it to the
+    // browser's history using window.history.replaceState(...),
+    // which won't cause the browser to attempt to load the new url.
+    // When the single page app is loaded further down in this file,
+    // the correct url will be waiting in the browser's history for
+    // the single page app to route accordingly.
+    (function (l) {
+      if (l.search[1] === '/') {
+        var decoded = l.search.slice(1).split('&').map(function (s) {
+          return s.replace(/~and~/g, '&')
+        }).join('?');
+        window.history.replaceState(null, null,
+          l.pathname.slice(0, -1) + decoded + l.hash
+        );
+      }
+    }(window.location))
+  </script>
+  <!-- End Single Page Apps for GitHub Pages -->
+  <meta name="description"
+    content="Aviva Nações - Uma comunidade de fé comprometida em levar o amor de Cristo através da palavra, louvor e comunhão." />
+  <meta name="author" content="Aviva Nações" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lovable" />
-    <meta
-      name="twitter:image"
-      content="https://lovable.dev/opengraph-image-p98pqg.png"
-    />
-  </head>
+  <meta property="og:title" content="Aviva Nações - Fé, Esperança e Amor" />
+  <meta property="og:description"
+    content="Aviva Nações - Uma comunidade de fé comprometida em levar o amor de Cristo através da palavra, louvor e comunhão." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Lovable" />
+  <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
