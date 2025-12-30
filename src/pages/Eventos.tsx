@@ -21,6 +21,7 @@ export default function Eventos() {
 
   useEffect(() => {
     carregarEventosDoMes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mesAtual]);
 
   const carregarEventos = async () => {
