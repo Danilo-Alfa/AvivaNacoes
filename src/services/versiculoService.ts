@@ -60,8 +60,8 @@ export const versiculoService = {
   ): Promise<{ success: boolean; error?: string }> {
     const { error } = await supabase.from('versiculos').insert([
       {
-        url_post: url_post || null,
-        url_imagem: url_imagem || null,
+        url_post: url_post || '',
+        url_imagem,
         titulo: titulo || null,
         data,
         ativo: true,
@@ -87,8 +87,8 @@ export const versiculoService = {
     const { error } = await supabase
       .from('versiculos')
       .update({
-        url_post: url_post || null,
-        url_imagem: url_imagem || null,
+        url_post: url_post || '',
+        url_imagem,
         titulo: titulo || null,
         data
       })

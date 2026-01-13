@@ -21,6 +21,7 @@ export default function Eventos() {
 
   useEffect(() => {
     carregarEventosDoMes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mesAtual]);
 
   const carregarEventos = async () => {
@@ -52,6 +53,20 @@ export default function Eventos() {
   };
 
   const formatarData = (dataStr: string) => {
+    // Extrair data diretamente da string ISO para evitar problemas de timezone
+    const match = dataStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) {
+      const ano = parseInt(match[1]);
+      const mes = parseInt(match[2]) - 1;
+      const dia = parseInt(match[3]);
+      const data = new Date(ano, mes, dia);
+      return data.toLocaleDateString("pt-BR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    }
+    // Fallback
     const data = new Date(dataStr);
     return data.toLocaleDateString("pt-BR", {
       day: "numeric",
@@ -69,6 +84,13 @@ export default function Eventos() {
   };
 
   const formatarHora = (dataStr: string) => {
+    // Extrair hora diretamente da string ISO para evitar problemas de timezone
+    // Formato esperado: "2025-12-14T09:00:00" ou "2025-12-14T09:00:00.000Z"
+    const match = dataStr.match(/T(\d{2}):(\d{2})/);
+    if (match) {
+      return `${match[1]}:${match[2]}`;
+    }
+    // Fallback para o método antigo se não conseguir extrair
     const data = new Date(dataStr);
     // Usar UTC para evitar problemas de fuso horário
     const horas = data.getUTCHours().toString().padStart(2, '0');
@@ -77,51 +99,68 @@ export default function Eventos() {
   };
 
   const formatarPeriodo = (inicio: string, fim: string | null) => {
-    const dataInicio = new Date(inicio);
-    const dataFim = fim ? new Date(fim) : null;
+    // Extrair datas diretamente da string ISO para evitar problemas de timezone
+    const extrairPartes = (dataStr: string) => {
+      const match = dataStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (match) {
+        return {
+          ano: parseInt(match[1]),
+          mes: parseInt(match[2]) - 1,
+          dia: parseInt(match[3])
+        };
+      }
+      const d = new Date(dataStr);
+      return { ano: d.getFullYear(), mes: d.getMonth(), dia: d.getDate() };
+    };
+
+    const inicioPartes = extrairPartes(inicio);
+    const fimPartes = fim ? extrairPartes(fim) : null;
 
     // Se não tem data fim, ou é o mesmo dia
-    if (!dataFim ||
-        (dataInicio.getDate() === dataFim.getDate() &&
-         dataInicio.getMonth() === dataFim.getMonth() &&
-         dataInicio.getFullYear() === dataFim.getFullYear())) {
+    if (!fimPartes ||
+        (inicioPartes.dia === fimPartes.dia &&
+         inicioPartes.mes === fimPartes.mes &&
+         inicioPartes.ano === fimPartes.ano)) {
       return formatarData(inicio);
     }
 
     // Se é mês e ano diferentes
-    if (dataInicio.getMonth() !== dataFim.getMonth() ||
-        dataInicio.getFullYear() !== dataFim.getFullYear()) {
+    if (inicioPartes.mes !== fimPartes.mes ||
+        inicioPartes.ano !== fimPartes.ano) {
       return `${formatarData(inicio)} até ${formatarData(fim)}`;
     }
 
     // Se é o mesmo mês, mostra formato compacto
-    return `${dataInicio.getDate()} a ${dataFim.getDate()} de ${dataInicio.toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}`;
+    const dataRef = new Date(inicioPartes.ano, inicioPartes.mes, inicioPartes.dia);
+    return `${inicioPartes.dia} a ${fimPartes.dia} de ${dataRef.toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}`;
   };
 
   const formatarHorario = (inicio: string, fim: string | null) => {
-    const dataInicio = new Date(inicio);
     const horaInicio = formatarHora(inicio);
 
+    // Extrair hora e minuto diretamente da string para evitar problemas de timezone
+    const matchInicio = inicio.match(/T(\d{2}):(\d{2})/);
+    const horaInicioNum = matchInicio ? parseInt(matchInicio[1]) : 0;
+    const minutoInicioNum = matchInicio ? parseInt(matchInicio[2]) : 0;
+
     // Verificar se é dia inteiro:
-    // 1. Hora é 12:00 (marcador usado pelo admin para dia inteiro)
+    // 1. Hora é 01:23 (marcador usado pelo admin para dia inteiro)
     // 2. Hora início e fim são iguais
-    // 3. Não tem hora de fim e início é meio-dia
+    // 3. Não tem hora de fim e início é 01:23
 
     if (fim) {
       const horaFim = formatarHora(fim);
 
-      // Se horários são iguais, é dia inteiro
-      if (horaInicio === horaFim) {
+      // Se horários são iguais ou ambos são 01:23, é dia inteiro
+      if (horaInicio === horaFim || (horaInicio === "01:23" && horaFim === "01:23")) {
         return "Dia inteiro";
       }
 
       return `${horaInicio} às ${horaFim}`;
     }
 
-    // Se não tem fim, verifica se é o marcador de dia inteiro (12:00 UTC)
-    const hora = dataInicio.getUTCHours();
-    const minuto = dataInicio.getUTCMinutes();
-    if (hora === 12 && minuto === 0) {
+    // Se não tem fim, verifica se é o marcador de dia inteiro (01:23)
+    if (horaInicioNum === 1 && minutoInicioNum === 23) {
       return "Dia inteiro";
     }
 
@@ -148,19 +187,41 @@ export default function Eventos() {
     return dias;
   };
 
+  // Função auxiliar para extrair ano, mês e dia de uma string ISO sem problemas de timezone
+  const extrairDataISO = (dataStr: string) => {
+    // Formato esperado: "2025-12-14T09:00:00" ou "2025-12-14T09:00:00.000Z"
+    const match = dataStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) {
+      return {
+        ano: parseInt(match[1]),
+        mes: parseInt(match[2]) - 1, // Mês em JavaScript é 0-indexed
+        dia: parseInt(match[3])
+      };
+    }
+    // Fallback
+    const data = new Date(dataStr);
+    return {
+      ano: data.getFullYear(),
+      mes: data.getMonth(),
+      dia: data.getDate()
+    };
+  };
+
   const getEventosDoDia = (dia: number) => {
-    const dataAlvo = new Date(mesAtual.getFullYear(), mesAtual.getMonth(), dia, 12, 0, 0);
+    const anoAlvo = mesAtual.getFullYear();
+    const mesAlvo = mesAtual.getMonth();
 
     return eventosDoMes.filter((evento) => {
-      const dataInicio = new Date(evento.data_inicio);
-      const dataFim = evento.data_fim ? new Date(evento.data_fim) : dataInicio;
+      const inicio = extrairDataISO(evento.data_inicio);
+      const fim = evento.data_fim ? extrairDataISO(evento.data_fim) : inicio;
 
-      // Normalizar datas para meio-dia para evitar problemas de timezone
-      const inicioNormalizado = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate(), 12, 0, 0);
-      const fimNormalizado = new Date(dataFim.getFullYear(), dataFim.getMonth(), dataFim.getDate(), 12, 0, 0);
+      // Criar datas normalizadas para comparação (usando apenas ano/mês/dia)
+      const dataAlvo = new Date(anoAlvo, mesAlvo, dia);
+      const dataInicio = new Date(inicio.ano, inicio.mes, inicio.dia);
+      const dataFim = new Date(fim.ano, fim.mes, fim.dia);
 
       // Verificar se a data alvo está entre início e fim (inclusive)
-      return dataAlvo >= inicioNormalizado && dataAlvo <= fimNormalizado;
+      return dataAlvo >= dataInicio && dataAlvo <= dataFim;
     });
   };
 
@@ -205,12 +266,12 @@ export default function Eventos() {
                     <CardContent className="p-0">
                       <div className="grid md:grid-cols-3 gap-0">
                         {/* Imagem do Evento */}
-                        <div className="aspect-video md:aspect-auto">
+                        <div className="aspect-video md:aspect-auto md:max-h-80">
                           {evento.imagem_url ? (
                             <img
                               src={evento.imagem_url}
                               alt={evento.titulo}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover max-h-80"
                             />
                           ) : (
                             <div className="h-full bg-gradient-accent flex items-center justify-center">
@@ -361,169 +422,52 @@ export default function Eventos() {
                 )}
               </div>
 
-              {/* Dias do mês */}
-              <div className="grid grid-cols-7">
-                {gerarCalendario().map((dia, index) => {
-                  const isToday = dia &&
-                    new Date().getDate() === dia &&
-                    new Date().getMonth() === mesAtual.getMonth() &&
-                    new Date().getFullYear() === mesAtual.getFullYear();
+                {/* Dias do mês */}
+                <div className="grid grid-cols-7 gap-1 sm:gap-2">
+                  {gerarCalendario().map((dia, index) => {
+                    if (!dia) return <div key={index} />;
 
-                  // Função para criar gradiente suave a partir de uma cor
-                  const criarGradiente = (cor: string) => {
-                    // Converter hex para RGB e criar versão mais clara
-                    const hex = cor.replace('#', '');
-                    const r = parseInt(hex.substring(0, 2), 16);
-                    const g = parseInt(hex.substring(2, 4), 16);
-                    const b = parseInt(hex.substring(4, 6), 16);
-                    // Versão mais clara (misturar com branco)
-                    const lighterR = Math.min(255, r + 40);
-                    const lighterG = Math.min(255, g + 40);
-                    const lighterB = Math.min(255, b + 40);
-                    return `linear-gradient(135deg, rgba(${lighterR},${lighterG},${lighterB},0.9) 0%, rgba(${r},${g},${b},0.85) 100%)`;
-                  };
+                    const eventosNoDia = getEventosDoDia(dia);
+                    const temEvento = eventosNoDia.length > 0;
+                    const corEvento = temEvento && eventosNoDia[0].cor ? eventosNoDia[0].cor : "#3b82f6";
 
-                  if (!dia) {
                     return (
                       <div
                         key={index}
-                        className="aspect-square border-b border-r border-gray-100 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30"
-                      />
-                    );
-                  }
-
-                  const eventosNoDia = getEventosDoDia(dia);
-                  const temEvento = eventosNoDia.length > 0;
-                  const eventosVisiveis = eventosNoDia.slice(0, 3);
-                  const eventosExtras = Math.max(0, eventosNoDia.length - 3);
-
-                  // Calcular posição do dia na semana (0-6) para ajustar tooltip
-                  const posicaoNaSemana = index % 7;
-                  const linhaNoCalendario = Math.floor(index / 7);
-                  const isLeftEdge = posicaoNaSemana <= 1; // DOM ou SEG
-                  const isRightEdge = posicaoNaSemana >= 5; // SEX ou SAB
-                  const isTopRows = linhaNoCalendario <= 1; // Primeiras 2 linhas - tooltip aparece abaixo
-
-                  return (
-                    <div
-                      key={index}
-                      className={`aspect-square p-1.5 sm:p-2 border-b border-r border-gray-100 dark:border-gray-800 relative group transition-all hover:bg-gray-50/50 dark:hover:bg-gray-800/30 flex flex-col ${
-                        isToday ? "ring-2 ring-inset ring-indigo-400 bg-indigo-50/20 dark:bg-indigo-900/10" : ""
-                      }`}
-                    >
-                      {/* Número do dia e badge de extras */}
-                      <div className="flex items-start justify-between mb-1">
-                        <span className={`text-xs sm:text-sm font-medium ${
-                          isToday
-                            ? "w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center bg-indigo-500 text-white rounded-full text-xs"
-                            : "text-gray-600 dark:text-gray-400"
-                        }`}>
-                          {dia}
-                        </span>
-                        {eventosExtras > 0 && (
-                          <span className="text-[8px] sm:text-[10px] font-medium bg-indigo-50 dark:bg-indigo-900/50 text-indigo-500 dark:text-indigo-400 px-1 sm:px-1.5 py-0.5 rounded-full">
-                            +{eventosExtras}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Eventos visíveis */}
-                      <div className="flex-1 space-y-0.5 overflow-hidden">
-                        {eventosVisiveis.map((evento) => {
-                          const cor = evento.cor || "#3b82f6";
-                          return (
-                            <div
-                              key={evento.id}
-                              className="text-[8px] sm:text-[10px] font-medium px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md truncate cursor-pointer hover:shadow-md transition-all"
-                              style={{
-                                background: criarGradiente(cor),
-                                color: '#ffffff',
-                                textShadow: '0 1px 2px rgba(0,0,0,0.1)'
-                              }}
-                              title={evento.titulo}
-                            >
-                              {evento.titulo}
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      {/* Indicadores de cor dos eventos */}
-                      {temEvento && (
-                        <div className="flex items-center justify-center gap-0.5 sm:gap-1 mt-1">
-                          {eventosNoDia.slice(0, 3).map((evento, i) => (
-                            <div
-                              key={i}
-                              className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full opacity-70"
-                              style={{ backgroundColor: evento.cor || "#3b82f6" }}
-                            />
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Tooltip com todos os eventos */}
-                      {temEvento && (
-                        <div className={`absolute hidden group-hover:block z-[100] w-64 sm:w-72 pointer-events-none ${
-                          isTopRows
-                            ? isRightEdge
-                              ? "top-0 right-full mr-2"
-                              : "top-0 left-full ml-2"
-                            : isLeftEdge
-                              ? "bottom-full mb-2 left-0"
-                              : isRightEdge
-                                ? "bottom-full mb-2 right-0"
-                                : "bottom-full mb-2 left-1/2 -translate-x-1/2"
-                        }`}>
-                          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-                            {/* Header do tooltip */}
-                            <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 flex items-center gap-3">
-                              <div className="w-9 h-9 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl flex items-center justify-center">
-                                <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                              </div>
-                              <div>
-                                <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
-                                  {dia} de {mesAtual.toLocaleDateString("pt-BR", { month: "long" })}
-                                </div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400">
-                                  {eventosNoDia.length} {eventosNoDia.length === 1 ? "evento" : "eventos"}
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Lista de eventos */}
-                            <div className="p-3 space-y-2">
-                              {eventosNoDia.map((evento) => (
-                                <div
-                                  key={evento.id}
-                                  className="p-3 rounded-xl border-l-4"
-                                  style={{
-                                    borderLeftColor: evento.cor || "#3b82f6",
-                                    backgroundColor: `${evento.cor || "#3b82f6"}10`
-                                  }}
-                                >
-                                  <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
-                                    {evento.titulo}
+                        className={`aspect-square flex items-center justify-center rounded-md sm:rounded-lg text-xs sm:text-sm md:text-base relative group ${
+                          temEvento
+                            ? "font-semibold hover:opacity-90 cursor-pointer"
+                            : "hover:bg-accent cursor-pointer"
+                        }`}
+                        style={temEvento ? {
+                          backgroundColor: corEvento,
+                          color: '#ffffff'
+                        } : {}}
+                        title={temEvento ? eventosNoDia.map(e => e.titulo).join(', ') : ''}
+                      >
+                        {dia}
+                        {temEvento && eventosNoDia.length > 0 && (
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-[100] w-max max-w-[90vw] sm:max-w-xs pointer-events-none">
+                            <div className="bg-popover text-popover-foreground p-2 sm:p-3 rounded-lg shadow-lg border">
+                              <div className="space-y-1">
+                                {eventosNoDia.map((evento) => (
+                                  <div key={evento.id} className="text-[10px] sm:text-xs">
+                                    <div className="font-semibold truncate">{evento.titulo}</div>
+                                    {evento.tipo && (
+                                      <div className="text-muted-foreground truncate">{evento.tipo}</div>
+                                    )}
                                   </div>
-                                  {evento.descricao && (
-                                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
-                                      {evento.descricao}
-                                    </div>
-                                  )}
-                                  <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                                    <Clock className="w-3.5 h-3.5" />
-                                    <span>{formatarHorario(evento.data_inicio, evento.data_fim)}</span>
-                                  </div>
-                                </div>
-                              ))}
+                                ))}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
           </section>
 
           {/* Próximos Eventos */}
@@ -573,7 +517,7 @@ export default function Eventos() {
             <div className="text-center py-20">
               <Calendar className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
               <p className="text-lg text-muted-foreground">
-                Nenhum evento agendado no momento
+                Nenhum evento futuro agendado no momento
               </p>
             </div>
           )}
