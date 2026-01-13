@@ -6,7 +6,8 @@
       "Bash(npm run build:*)",
       "Bash(unzip:*)",
       "Bash(npx tsc:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []
