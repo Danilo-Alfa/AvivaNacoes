@@ -70,10 +70,10 @@ export default function Eventos() {
 
   const formatarHora = (dataStr: string) => {
     const data = new Date(dataStr);
-    return data.toLocaleTimeString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    // Usar UTC para evitar problemas de fuso horário
+    const horas = data.getUTCHours().toString().padStart(2, '0');
+    const minutos = data.getUTCMinutes().toString().padStart(2, '0');
+    return `${horas}:${minutos}`;
   };
 
   const formatarPeriodo = (inicio: string, fim: string | null) => {
@@ -118,11 +118,10 @@ export default function Eventos() {
       return `${horaInicio} às ${horaFim}`;
     }
 
-    // Se não tem fim, verifica se é o marcador de dia inteiro (12:00)
-    // Considera uma janela de tolerância por causa de timezone
-    const hora = dataInicio.getHours();
-    const minuto = dataInicio.getMinutes();
-    if ((hora === 12 || hora === 11 || hora === 9) && minuto === 0) {
+    // Se não tem fim, verifica se é o marcador de dia inteiro (12:00 UTC)
+    const hora = dataInicio.getUTCHours();
+    const minuto = dataInicio.getUTCMinutes();
+    if (hora === 12 && minuto === 0) {
       return "Dia inteiro";
     }
 
@@ -310,17 +309,27 @@ export default function Eventos() {
 
           {/* Calendário do Mês */}
           <section className="mb-16">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-3">
-              <h2 className="text-2xl sm:text-3xl font-bold">Calendário</h2>
-              <div className="flex items-center gap-2 sm:gap-4">
+            {/* Header do Calendário */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                  Calendário
+                </h2>
+              </div>
+
+              {/* Navegação do Mês */}
+              <div className="flex items-center gap-2 bg-white dark:bg-gray-800 rounded-full px-2 py-1 shadow-sm border border-gray-200 dark:border-gray-700">
                 <button
                   onClick={() => mudarMes(-1)}
-                  className="min-w-[44px] min-h-[44px] p-2 hover:bg-accent rounded-lg transition-colors text-xl sm:text-2xl flex items-center justify-center"
+                  className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                   aria-label="Mês anterior"
                 >
-                  ‹
+                  <span className="text-gray-600 dark:text-gray-400">‹</span>
                 </button>
-                <span className="font-semibold text-sm sm:text-base min-w-[140px] sm:min-w-[160px] text-center">
+                <span className="font-semibold text-sm sm:text-base min-w-[140px] text-center capitalize">
                   {mesAtual.toLocaleDateString("pt-BR", {
                     month: "long",
                     year: "numeric",
@@ -328,76 +337,193 @@ export default function Eventos() {
                 </span>
                 <button
                   onClick={() => mudarMes(1)}
-                  className="min-w-[44px] min-h-[44px] p-2 hover:bg-accent rounded-lg transition-colors text-xl sm:text-2xl flex items-center justify-center"
+                  className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                   aria-label="Próximo mês"
                 >
-                  ›
+                  <span className="text-gray-600 dark:text-gray-400">›</span>
                 </button>
               </div>
             </div>
 
-            <Card>
-              <CardContent className="p-3 sm:p-4 md:p-6">
-                {/* Dias da semana */}
-                <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2 sm:mb-4">
-                  {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(
-                    (dia) => (
-                      <div
-                        key={dia}
-                        className="text-center font-semibold text-xs sm:text-sm text-muted-foreground"
-                      >
-                        {dia}
-                      </div>
-                    )
-                  )}
-                </div>
+            {/* Grade do Calendário */}
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800">
+              {/* Dias da semana */}
+              <div className="grid grid-cols-7 bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
+                {["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"].map(
+                  (dia) => (
+                    <div
+                      key={dia}
+                      className="py-4 text-center font-semibold text-xs tracking-wider text-gray-500 dark:text-gray-400"
+                    >
+                      {dia}
+                    </div>
+                  )
+                )}
+              </div>
 
-                {/* Dias do mês */}
-                <div className="grid grid-cols-7 gap-1 sm:gap-2">
-                  {gerarCalendario().map((dia, index) => {
-                    if (!dia) return <div key={index} />;
+              {/* Dias do mês */}
+              <div className="grid grid-cols-7">
+                {gerarCalendario().map((dia, index) => {
+                  const isToday = dia &&
+                    new Date().getDate() === dia &&
+                    new Date().getMonth() === mesAtual.getMonth() &&
+                    new Date().getFullYear() === mesAtual.getFullYear();
 
-                    const eventosNoDia = getEventosDoDia(dia);
-                    const temEvento = eventosNoDia.length > 0;
-                    const corEvento = temEvento && eventosNoDia[0].cor ? eventosNoDia[0].cor : "#3b82f6";
+                  // Função para criar gradiente suave a partir de uma cor
+                  const criarGradiente = (cor: string) => {
+                    // Converter hex para RGB e criar versão mais clara
+                    const hex = cor.replace('#', '');
+                    const r = parseInt(hex.substring(0, 2), 16);
+                    const g = parseInt(hex.substring(2, 4), 16);
+                    const b = parseInt(hex.substring(4, 6), 16);
+                    // Versão mais clara (misturar com branco)
+                    const lighterR = Math.min(255, r + 40);
+                    const lighterG = Math.min(255, g + 40);
+                    const lighterB = Math.min(255, b + 40);
+                    return `linear-gradient(135deg, rgba(${lighterR},${lighterG},${lighterB},0.9) 0%, rgba(${r},${g},${b},0.85) 100%)`;
+                  };
 
+                  if (!dia) {
                     return (
                       <div
                         key={index}
-                        className={`aspect-square flex items-center justify-center rounded-md sm:rounded-lg text-xs sm:text-sm md:text-base relative group ${
-                          temEvento
-                            ? "font-semibold hover:opacity-90 cursor-pointer"
-                            : "hover:bg-accent cursor-pointer"
-                        }`}
-                        style={temEvento ? {
-                          backgroundColor: corEvento,
-                          color: '#ffffff'
-                        } : {}}
-                        title={temEvento ? eventosNoDia.map(e => e.titulo).join(', ') : ''}
-                      >
-                        {dia}
-                        {temEvento && eventosNoDia.length > 0 && (
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-[100] w-max max-w-[90vw] sm:max-w-xs pointer-events-none">
-                            <div className="bg-popover text-popover-foreground p-2 sm:p-3 rounded-lg shadow-lg border">
-                              <div className="space-y-1">
-                                {eventosNoDia.map((evento) => (
-                                  <div key={evento.id} className="text-[10px] sm:text-xs">
-                                    <div className="font-semibold truncate">{evento.titulo}</div>
-                                    {evento.tipo && (
-                                      <div className="text-muted-foreground truncate">{evento.tipo}</div>
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
+                        className="aspect-square border-b border-r border-gray-100 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/30"
+                      />
+                    );
+                  }
+
+                  const eventosNoDia = getEventosDoDia(dia);
+                  const temEvento = eventosNoDia.length > 0;
+                  const eventosVisiveis = eventosNoDia.slice(0, 3);
+                  const eventosExtras = Math.max(0, eventosNoDia.length - 3);
+
+                  // Calcular posição do dia na semana (0-6) para ajustar tooltip
+                  const posicaoNaSemana = index % 7;
+                  const linhaNoCalendario = Math.floor(index / 7);
+                  const isLeftEdge = posicaoNaSemana <= 1; // DOM ou SEG
+                  const isRightEdge = posicaoNaSemana >= 5; // SEX ou SAB
+                  const isTopRows = linhaNoCalendario <= 1; // Primeiras 2 linhas - tooltip aparece abaixo
+
+                  return (
+                    <div
+                      key={index}
+                      className={`aspect-square p-1.5 sm:p-2 border-b border-r border-gray-100 dark:border-gray-800 relative group transition-all hover:bg-gray-50/50 dark:hover:bg-gray-800/30 flex flex-col ${
+                        isToday ? "ring-2 ring-inset ring-indigo-400 bg-indigo-50/20 dark:bg-indigo-900/10" : ""
+                      }`}
+                    >
+                      {/* Número do dia e badge de extras */}
+                      <div className="flex items-start justify-between mb-1">
+                        <span className={`text-xs sm:text-sm font-medium ${
+                          isToday
+                            ? "w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center bg-indigo-500 text-white rounded-full text-xs"
+                            : "text-gray-600 dark:text-gray-400"
+                        }`}>
+                          {dia}
+                        </span>
+                        {eventosExtras > 0 && (
+                          <span className="text-[8px] sm:text-[10px] font-medium bg-indigo-50 dark:bg-indigo-900/50 text-indigo-500 dark:text-indigo-400 px-1 sm:px-1.5 py-0.5 rounded-full">
+                            +{eventosExtras}
+                          </span>
                         )}
                       </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
+
+                      {/* Eventos visíveis */}
+                      <div className="flex-1 space-y-0.5 overflow-hidden">
+                        {eventosVisiveis.map((evento) => {
+                          const cor = evento.cor || "#3b82f6";
+                          return (
+                            <div
+                              key={evento.id}
+                              className="text-[8px] sm:text-[10px] font-medium px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md truncate cursor-pointer hover:shadow-md transition-all"
+                              style={{
+                                background: criarGradiente(cor),
+                                color: '#ffffff',
+                                textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+                              }}
+                              title={evento.titulo}
+                            >
+                              {evento.titulo}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Indicadores de cor dos eventos */}
+                      {temEvento && (
+                        <div className="flex items-center justify-center gap-0.5 sm:gap-1 mt-1">
+                          {eventosNoDia.slice(0, 3).map((evento, i) => (
+                            <div
+                              key={i}
+                              className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full opacity-70"
+                              style={{ backgroundColor: evento.cor || "#3b82f6" }}
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Tooltip com todos os eventos */}
+                      {temEvento && (
+                        <div className={`absolute hidden group-hover:block z-[100] w-64 sm:w-72 pointer-events-none ${
+                          isTopRows
+                            ? isRightEdge
+                              ? "top-0 right-full mr-2"
+                              : "top-0 left-full ml-2"
+                            : isLeftEdge
+                              ? "bottom-full mb-2 left-0"
+                              : isRightEdge
+                                ? "bottom-full mb-2 right-0"
+                                : "bottom-full mb-2 left-1/2 -translate-x-1/2"
+                        }`}>
+                          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                            {/* Header do tooltip */}
+                            <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 flex items-center gap-3">
+                              <div className="w-9 h-9 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl flex items-center justify-center">
+                                <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                              </div>
+                              <div>
+                                <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
+                                  {dia} de {mesAtual.toLocaleDateString("pt-BR", { month: "long" })}
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  {eventosNoDia.length} {eventosNoDia.length === 1 ? "evento" : "eventos"}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Lista de eventos */}
+                            <div className="p-3 space-y-2">
+                              {eventosNoDia.map((evento) => (
+                                <div
+                                  key={evento.id}
+                                  className="p-3 rounded-xl border-l-4"
+                                  style={{
+                                    borderLeftColor: evento.cor || "#3b82f6",
+                                    backgroundColor: `${evento.cor || "#3b82f6"}10`
+                                  }}
+                                >
+                                  <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
+                                    {evento.titulo}
+                                  </div>
+                                  {evento.descricao && (
+                                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+                                      {evento.descricao}
+                                    </div>
+                                  )}
+                                  <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    <span>{formatarHorario(evento.data_inicio, evento.data_fim)}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </section>
 
           {/* Próximos Eventos */}

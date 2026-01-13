@@ -67,36 +67,28 @@ export default function Home() {
     <div>
       {/* Hero Section */}
       <section
-        className="relative text-primary-foreground py-24 md:py-32 bg-cover bg-center bg-no-repeat"
+        className="relative min-h-[450px] md:min-h-[550px] bg-cover bg-center bg-no-repeat flex items-end"
         style={{ backgroundImage: "url('/AvivaNacoes/hero-bg.jpg')" }}
       >
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 pb-2 animate-fade-in">
-              Bem-vindo à Igreja Aviva
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-primary-foreground/90 animate-fade-in">
-              Uma comunidade de fé, esperança e amor transformando vidas através
-              da palavra de Deus
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
-              <Link to="/quem-somos">
-                <button className="px-8 py-4 bg-blue-900/80 text-white font-semibold rounded-lg hover:bg-blue-900/90 transition-all hover:-translate-y-0.5 shadow-lg backdrop-blur-sm">
-                  Conheça Nossa História
-                </button>
-              </Link>
-              <Link to="/programacao">
-                <button className="px-8 py-4 bg-white/20 text-white font-semibold rounded-lg hover:bg-white/30 transition-all hover:-translate-y-0.5 border-2 border-white/30 backdrop-blur-sm">
-                  Ver Programação
-                </button>
-              </Link>
-            </div>
+        {/* Botões posicionados na parte inferior do banner */}
+        <div className="container mx-auto px-4 pb-28 md:pb-36">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
+            <Link to="/quem-somos">
+              <button className="px-8 py-4 bg-blue-900/90 text-white font-semibold rounded-lg hover:bg-blue-900 transition-all hover:-translate-y-0.5 shadow-lg backdrop-blur-sm">
+                Conheça Nossa História
+              </button>
+            </Link>
+            <Link to="/programacao">
+              <button className="px-8 py-4 bg-white/80 text-blue-900 font-semibold rounded-lg hover:bg-white transition-all hover:-translate-y-0.5 border-2 border-blue-900/20 backdrop-blur-sm shadow-lg">
+                Ver Programação
+              </button>
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Próximo Culto */}
-      <section className="container mx-auto px-4 -mt-12 relative z-10">
+      <section className="container mx-auto px-4 -mt-4 relative z-10">
         <Card className="shadow-medium max-w-4xl mx-auto">
           <CardContent className="p-8">
             <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
