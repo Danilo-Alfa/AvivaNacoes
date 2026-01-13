@@ -4,7 +4,8 @@
       "Bash(npm install)",
       "Bash(npm install:*)",
       "Bash(npm run build:*)",
-      "Bash(unzip:*)"
+      "Bash(unzip:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

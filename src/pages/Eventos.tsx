@@ -407,14 +407,15 @@ export default function Eventos() {
             </div>
 
             {/* Grade do Calendário */}
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
               {/* Dias da semana */}
-              <div className="grid grid-cols-7 bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
-                {["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"].map(
+              <div className="grid grid-cols-7 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800 border-b border-gray-200 dark:border-gray-700 rounded-t-2xl">
+                {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(
                   (dia) => (
                     <div
                       key={dia}
-                      className="py-4 text-center font-semibold text-xs tracking-wider text-gray-500 dark:text-gray-400"
+                      className="py-4 text-center font-medium text-sm tracking-wide text-indigo-600/80 dark:text-indigo-400"
+                      style={{ fontFamily: "'Space Grotesk', system-ui, sans-serif" }}
                     >
                       {dia}
                     </div>
@@ -422,52 +423,156 @@ export default function Eventos() {
                 )}
               </div>
 
-                {/* Dias do mês */}
-                <div className="grid grid-cols-7 gap-1 sm:gap-2">
-                  {gerarCalendario().map((dia, index) => {
-                    if (!dia) return <div key={index} />;
+              {/* Dias do mês */}
+              <div className="grid grid-cols-7 gap-2 p-3">
+                {gerarCalendario().map((dia, index) => {
+                  const isToday = dia &&
+                    new Date().getDate() === dia &&
+                    new Date().getMonth() === mesAtual.getMonth() &&
+                    new Date().getFullYear() === mesAtual.getFullYear();
 
-                    const eventosNoDia = getEventosDoDia(dia);
-                    const temEvento = eventosNoDia.length > 0;
-                    const corEvento = temEvento && eventosNoDia[0].cor ? eventosNoDia[0].cor : "#3b82f6";
-
+                  if (!dia) {
                     return (
                       <div
                         key={index}
-                        className={`aspect-square flex items-center justify-center rounded-md sm:rounded-lg text-xs sm:text-sm md:text-base relative group ${
-                          temEvento
-                            ? "font-semibold hover:opacity-90 cursor-pointer"
-                            : "hover:bg-accent cursor-pointer"
+                        className="aspect-square rounded-2xl bg-gray-100/50 dark:bg-gray-800/30 border border-gray-100 dark:border-gray-800"
+                      />
+                    );
+                  }
+
+                  const eventosNoDia = getEventosDoDia(dia);
+                  const temEvento = eventosNoDia.length > 0;
+                  const eventosVisiveis = eventosNoDia.slice(0, 3);
+                  const eventosExtras = Math.max(0, eventosNoDia.length - 3);
+
+                  // Calcular posição do dia na semana (0-6) para ajustar tooltip
+                  const posicaoNaSemana = index % 7;
+                  const linhaNoCalendario = Math.floor(index / 7);
+                  const isLeftEdge = posicaoNaSemana <= 1;
+                  const isRightEdge = posicaoNaSemana >= 5;
+                  const isTopRows = linhaNoCalendario <= 1;
+
+                  return (
+                    <div
+                      key={index}
+                      className={`aspect-square p-2 sm:p-2.5 rounded-2xl relative group transition-all duration-200 ease-out flex flex-col cursor-pointer border
+                        hover:bg-white hover:shadow-xl hover:scale-[1.03] hover:-translate-y-1 hover:z-10 dark:hover:bg-gray-800
+                        ${isToday
+                          ? "ring-2 ring-indigo-400 bg-indigo-50/60 dark:bg-indigo-900/30 shadow-md border-indigo-200 dark:border-indigo-700"
+                          : "bg-white dark:bg-gray-800/50 shadow-sm hover:shadow-lg border-gray-200 dark:border-gray-700"
                         }`}
-                        style={temEvento ? {
-                          backgroundColor: corEvento,
-                          color: '#ffffff'
-                        } : {}}
-                        title={temEvento ? eventosNoDia.map(e => e.titulo).join(', ') : ''}
-                      >
-                        {dia}
-                        {temEvento && eventosNoDia.length > 0 && (
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-[100] w-max max-w-[90vw] sm:max-w-xs pointer-events-none">
-                            <div className="bg-popover text-popover-foreground p-2 sm:p-3 rounded-lg shadow-lg border">
-                              <div className="space-y-1">
-                                {eventosNoDia.map((evento) => (
-                                  <div key={evento.id} className="text-[10px] sm:text-xs">
-                                    <div className="font-semibold truncate">{evento.titulo}</div>
-                                    {evento.tipo && (
-                                      <div className="text-muted-foreground truncate">{evento.tipo}</div>
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
+                    >
+                      {/* Número do dia e badge de extras */}
+                      <div className="flex items-start justify-between mb-1">
+                        <span className={`text-xs sm:text-sm font-medium ${
+                          isToday
+                            ? "w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center bg-indigo-500 text-white rounded-full text-xs"
+                            : "text-gray-600 dark:text-gray-400"
+                        }`}>
+                          {dia}
+                        </span>
+                        {eventosExtras > 0 && (
+                          <span className="text-[8px] sm:text-[10px] font-medium bg-indigo-50 dark:bg-indigo-900/50 text-indigo-500 dark:text-indigo-400 px-1 sm:px-1.5 py-0.5 rounded-full">
+                            +{eventosExtras}
+                          </span>
                         )}
                       </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
+
+                      {/* Eventos visíveis */}
+                      <div className="flex-1 space-y-1 overflow-hidden">
+                        {eventosVisiveis.map((evento) => {
+                          const cor = evento.cor || "#6366f1";
+                          return (
+                            <div
+                              key={evento.id}
+                              className="text-[8px] sm:text-[10px] font-medium pl-2 sm:pl-2.5 pr-1.5 py-1 sm:py-1.5 rounded-r-md truncate cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-all bg-gray-50/80 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 border-l-[3px]"
+                              style={{
+                                borderLeftColor: cor
+                              }}
+                              title={evento.titulo}
+                            >
+                              {evento.titulo}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Indicadores de cor dos eventos */}
+                      {temEvento && (
+                        <div className="flex items-center justify-center gap-0.5 sm:gap-1 mt-1">
+                          {eventosNoDia.slice(0, 3).map((evento, i) => (
+                            <div
+                              key={i}
+                              className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full opacity-70"
+                              style={{ backgroundColor: evento.cor || "#3b82f6" }}
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Tooltip com todos os eventos */}
+                      {temEvento && (
+                        <div className={`absolute hidden group-hover:block z-[100] w-64 sm:w-72 pointer-events-none ${
+                          isTopRows
+                            ? isRightEdge
+                              ? "top-0 right-full mr-2"
+                              : "top-0 left-full ml-2"
+                            : isLeftEdge
+                              ? "bottom-full mb-2 left-0"
+                              : isRightEdge
+                                ? "bottom-full mb-2 right-0"
+                                : "bottom-full mb-2 left-1/2 -translate-x-1/2"
+                        }`}>
+                          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                            {/* Header do tooltip */}
+                            <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 flex items-center gap-3">
+                              <div className="w-9 h-9 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl flex items-center justify-center">
+                                <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                              </div>
+                              <div>
+                                <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
+                                  {dia} de {mesAtual.toLocaleDateString("pt-BR", { month: "long" })}
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  {eventosNoDia.length} {eventosNoDia.length === 1 ? "evento" : "eventos"}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Lista de eventos */}
+                            <div className="p-3 space-y-2">
+                              {eventosNoDia.map((evento) => (
+                                <div
+                                  key={evento.id}
+                                  className="p-3 rounded-xl border-l-4"
+                                  style={{
+                                    borderLeftColor: evento.cor || "#3b82f6",
+                                    backgroundColor: `${evento.cor || "#3b82f6"}10`
+                                  }}
+                                >
+                                  <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
+                                    {evento.titulo}
+                                  </div>
+                                  {evento.descricao && (
+                                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+                                      {evento.descricao}
+                                    </div>
+                                  )}
+                                  <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    <span>{formatarHorario(evento.data_inicio, evento.data_fim)}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </section>
 
           {/* Próximos Eventos */}
