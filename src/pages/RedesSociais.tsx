@@ -1,8 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  ExternalLink,
   Facebook,
   Heart,
   Instagram,
+  MessageCircle,
   Music,
   Newspaper,
   Radio,
@@ -19,7 +21,6 @@ export default function RedesSociais() {
       description:
         "Acompanhe nossas postagens diárias, eventos e transmissões ao vivo dos cultos.",
       followers: "Seguidores ativos",
-      color: "from-blue-600 to-blue-400",
       bgColor: "bg-blue-600",
     },
     {
@@ -29,8 +30,7 @@ export default function RedesSociais() {
       description:
         "Versículos inspiradores, stories dos eventos e momentos da nossa comunidade.",
       followers: "Comunidade engajada",
-      color: "from-pink-600 via-purple-600 to-orange-500",
-      bgColor: "bg-gradient-to-r from-pink-600 via-purple-600 to-orange-500",
+      bgColor: "bg-gradient-to-br from-pink-500 via-purple-500 to-orange-400",
     },
     {
       name: "Canal Aviva Nações",
@@ -39,7 +39,6 @@ export default function RedesSociais() {
       description:
         "Assista aos cultos completos, pregações, louvores e testemunhos.",
       followers: "Inscritos no canal",
-      color: "from-red-600 to-red-400",
       bgColor: "bg-red-600",
     },
     {
@@ -49,8 +48,7 @@ export default function RedesSociais() {
       description:
         "Ouça nossa programação 24 horas com louvores, pregações e conteúdo edificante.",
       followers: "Ouvintes online",
-      color: "from-gray-700 to-gray-500",
-      bgColor: "bg-gray-700",
+      bgColor: "bg-purple-600",
     },
     {
       name: "Associação Benificiente EL Roi",
@@ -59,7 +57,6 @@ export default function RedesSociais() {
       description:
         "Conheça nossos projetos sociais e ações de amor ao próximo na comunidade.",
       followers: "Vidas impactadas",
-      color: "from-pink-500 to-pink-300",
       bgColor: "bg-pink-500",
     },
     {
@@ -69,7 +66,6 @@ export default function RedesSociais() {
       description:
         "Notícias, artigos e conteúdo informativo sobre fé, família e sociedade.",
       followers: "Leitores",
-      color: "from-blue-500 to-blue-300",
       bgColor: "bg-blue-500",
     },
     {
@@ -79,7 +75,6 @@ export default function RedesSociais() {
       description:
         "Ministério voltado para jovens com eventos, encontros e conteúdo relevante.",
       followers: "Jovens conectados",
-      color: "from-purple-600 to-purple-400",
       bgColor: "bg-purple-600",
     },
     {
@@ -89,24 +84,58 @@ export default function RedesSociais() {
       description:
         "Ouça nossas playlists, pregações e louvores na maior plataforma de streaming.",
       followers: "Ouvintes mensais",
-      color: "from-green-500 to-green-400",
       bgColor: "bg-green-500",
     },
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative bg-gradient-hero py-20">
-        <div className="container mx-auto px-4">
+      <section className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 py-20 overflow-hidden">
+        {/* Elementos decorativos */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Círculo grande esquerda */}
+          <div className="absolute -left-20 top-1/2 -translate-y-1/2 w-72 h-72 bg-blue-500/20 rounded-full blur-sm" />
+          {/* Círculo grande direita */}
+          <div className="absolute -right-20 -top-20 w-96 h-96 bg-indigo-400/10 rounded-full" />
+          {/* Estrelas/pontos decorativos */}
+          <div className="absolute top-10 left-1/4 w-1 h-1 bg-white/40 rounded-full" />
+          <div className="absolute top-20 left-1/3 w-1.5 h-1.5 bg-white/30 rounded-full" />
+          <div className="absolute top-16 right-1/4 w-1 h-1 bg-white/50 rounded-full" />
+          <div className="absolute top-32 right-1/3 w-1 h-1 bg-white/40 rounded-full" />
+          <div className="absolute bottom-20 left-1/2 w-1.5 h-1.5 bg-white/30 rounded-full" />
+          <div className="absolute top-1/3 left-[15%] w-1 h-1 bg-white/50 rounded-full" />
+          <div className="absolute top-1/2 right-[20%] w-1 h-1 bg-white/40 rounded-full" />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 pb-2">
+            {/* Ícones decorativos no topo */}
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20">
+                <Heart className="w-5 h-5 text-white/80" />
+              </div>
+              <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20">
+                <Users className="w-5 h-5 text-white/80" />
+              </div>
+              <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20">
+                <MessageCircle className="w-5 h-5 text-white/80" />
+              </div>
+            </div>
+
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Nossas Redes Sociais
             </h1>
-            <p className="text-lg text-slate-300">
+            <p className="text-lg text-blue-100/80">
               Conecte-se conosco e faça parte da nossa comunidade digital.
+              <br />
               Acompanhe conteúdos inspiradores, eventos e muito mais!
             </p>
+
+            {/* Linha decorativa */}
+            <div className="mt-8 flex justify-center">
+              <div className="w-20 h-1 bg-white/30 rounded-full" />
+            </div>
           </div>
         </div>
       </section>
@@ -114,35 +143,50 @@ export default function RedesSociais() {
       {/* Social Networks Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {socialNetworks.map((network) => (
               <Card
                 key={network.name}
-                className="group hover:shadow-xl transition-all duration-300 border-2"
+                className="group hover:shadow-lg transition-all duration-300 border border-border/50"
               >
-                <CardContent className="p-8">
+                <CardContent className="p-6">
+                  {/* Ícone quadrado arredondado */}
                   <div
-                    className={`w-16 h-16 rounded-full bg-gradient-to-r ${network.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}
+                    className={`w-12 h-12 ${network.bgColor} rounded-xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-md`}
                   >
-                    <network.icon className="w-8 h-8 text-white" />
+                    <network.icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-3 text-foreground">
+
+                  {/* Nome */}
+                  <h3 className="text-xl font-bold mb-2 text-foreground">
                     {network.name}
                   </h3>
-                  <p className="text-muted-foreground mb-4">
+
+                  {/* Descrição */}
+                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
                     {network.description}
                   </p>
-                  <p className="text-sm font-semibold text-primary mb-4">
-                    {network.followers}
-                  </p>
-                  <a
-                    href={network.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                  >
-                    Seguir
-                  </a>
+
+                  {/* Badge de seguidores */}
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary/5 border border-primary/20 rounded-full mb-4">
+                    <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    <span className="text-xs font-medium text-primary">
+                      {network.followers}
+                    </span>
+                  </div>
+
+                  {/* Botão Seguir */}
+                  <div>
+                    <a
+                      href={network.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+                    >
+                      Seguir
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -154,12 +198,12 @@ export default function RedesSociais() {
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12 text-foreground pb-2">
+            <h2 className="text-3xl font-bold text-center mb-12 text-foreground">
               O Que Você Encontra
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">📖</span>
                 </div>
                 <h3 className="font-bold mb-2 text-foreground">
@@ -170,7 +214,7 @@ export default function RedesSociais() {
                 </p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🎥</span>
                 </div>
                 <h3 className="font-bold mb-2 text-foreground">
@@ -181,7 +225,7 @@ export default function RedesSociais() {
                 </p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">📅</span>
                 </div>
                 <h3 className="font-bold mb-2 text-foreground">

@@ -137,9 +137,9 @@ export default function Programacao() {
                 <div className="w-16 h-16 bg-accent/10 rounded-full mx-auto mb-4 flex items-center justify-center">
                   <MapPin className="w-8 h-8 text-accent" />
                 </div>
-                <h3 className="font-semibold mb-2">Todas as Sedes</h3>
+                <h3 className="font-semibold mb-2">Igreja Sede</h3>
                 <p className="text-sm text-muted-foreground">
-                  Confira os horários específicos de cada sede
+                  Confira os horários específicos da igreja Sede
                 </p>
               </div>
 

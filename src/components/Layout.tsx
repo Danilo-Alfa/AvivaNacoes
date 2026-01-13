@@ -58,6 +58,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     } else {
       root.classList.remove("dark");
     }
+
+    // Atualiza a meta tag theme-color para o modo dark
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (isDark) {
+      if (!metaThemeColor) {
+        metaThemeColor = document.createElement('meta');
+        metaThemeColor.setAttribute('name', 'theme-color');
+        document.head.appendChild(metaThemeColor);
+      }
+      metaThemeColor.setAttribute('content', '#0e1219');
+    } else {
+      // Remove a meta tag no modo claro (usa o padrão do navegador)
+      if (metaThemeColor) {
+        metaThemeColor.remove();
+      }
+    }
   }, [isDark]);
 
   return (

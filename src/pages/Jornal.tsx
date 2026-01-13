@@ -3,6 +3,50 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Download, FileText } from "lucide-react";
 import { getUltimosJornais, type Jornal } from "@/services/jornalService";
 
+// Componente para thumbnail do jornal com fallback
+function JornalThumbnail({
+  src,
+  titulo,
+}: {
+  src: string;
+  titulo: string;
+}) {
+  const [erro, setErro] = useState(false);
+  const [carregando, setCarregando] = useState(true);
+
+  // Timeout para considerar erro se demorar muito (Canva pode bloquear silenciosamente)
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (carregando) {
+        setErro(true);
+      }
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, [carregando]);
+
+  if (erro) {
+    return (
+      <div className="w-full h-full bg-gradient-hero rounded-lg flex items-center justify-center">
+        <FileText className="w-12 h-12 text-primary-foreground" />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <iframe
+        src={src}
+        title={titulo}
+        className="w-full h-full border-none pointer-events-none"
+        loading="lazy"
+        onLoad={() => setCarregando(false)}
+        onError={() => setErro(true)}
+      />
+      <div className="absolute inset-0" />
+    </>
+  );
+}
+
 export default function Jornal() {
   const [jornais, setJornais] = useState<Jornal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,11 +69,18 @@ export default function Jornal() {
 
   // Converte automaticamente links do Canva para formato embed
   const converterParaEmbed = (url: string): string => {
-    // Canva: converte /view para /view?embed
+    // Canva Design: converte /view para /view?embed
     if (url.includes("canva.com/design/") && url.includes("/view")) {
       // Remove parâmetros existentes e adiciona ?embed
       const urlBase = url.split("?")[0];
       return `${urlBase}?embed`;
+    }
+
+    // Canva Site (.my.canva.site): tenta carregar como iframe direto
+    if (url.includes(".my.canva.site")) {
+      // Remove parâmetros de tracking (fbclid, etc) para URL mais limpa
+      const urlObj = new URL(url);
+      return `${urlObj.origin}${urlObj.pathname}`;
     }
 
     // Issuu: converte para embed
@@ -135,8 +186,11 @@ export default function Jornal() {
                   >
                     <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer group">
                       <CardContent className="p-4">
-                        <div className="aspect-[3/4] bg-gradient-hero rounded-lg mb-3 flex items-center justify-center group-hover:scale-105 transition-transform">
-                          <FileText className="w-12 h-12 text-primary-foreground" />
+                        <div className="aspect-[3/4] bg-muted rounded-lg mb-3 overflow-hidden group-hover:scale-105 transition-transform relative">
+                          <JornalThumbnail
+                            src={converterParaEmbed(jornal.url_pdf)}
+                            titulo={jornal.titulo || "Jornal"}
+                          />
                         </div>
                         <p className="text-sm font-semibold text-center mb-1 line-clamp-2">
                           {jornal.titulo || "Jornal"}
