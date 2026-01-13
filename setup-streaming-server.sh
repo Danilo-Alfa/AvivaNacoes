@@ -190,7 +190,7 @@ cat > /var/www/html/index.html << 'EOF'
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Servidor de Streaming - Igreja Aviva</title>
+    <title>Servidor de Streaming - Aviva Nações</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -230,7 +230,7 @@ cat > /var/www/html/index.html << 'EOF'
 </head>
 <body>
     <div class="card">
-        <h1>🎥 Servidor de Streaming - Igreja Aviva</h1>
+        <h1>🎥 Servidor de Streaming - Aviva Nações</h1>
         <div class="status">✅ Servidor Online e Funcionando!</div>
 
         <h2>Informações do Servidor</h2>

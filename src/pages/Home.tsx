@@ -1,19 +1,75 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Users2Icon, BookOpen, Calendar, Heart, Users, } from "lucide-react";
+import {
+  ArrowRight,
+  Users2Icon,
+  BookOpen,
+  Calendar,
+  Heart,
+  Users,
+} from "lucide-react";
 import ReactPlayer from "react-player";
 import { Link } from "react-router-dom";
 import { versiculoService } from "@/services/versiculoService";
 import { Versiculo } from "@/lib/supabase";
 
 const cultos = [
-  { dia: 0, nome: "Domingo", horario: "19:00", horaNum: 19, minutoNum: 0, local: "Igreja Sede e Online" },
-  { dia: 1, nome: "Segunda", horario: "19:30", horaNum: 19, minutoNum: 30, local: "Igreja Sede e Online" },
-  { dia: 2, nome: "Terça", horario: "20:00", horaNum: 20, minutoNum: 0, local: "Online" },
-  { dia: 3, nome: "Quarta", horario: "19:45", horaNum: 19, minutoNum: 45, local: "Igreja Sede e Online" },
-  { dia: 4, nome: "Quinta", horario: "20:00", horaNum: 20, minutoNum: 0, local: "Online" },
-  { dia: 5, nome: "Sexta", horario: "20:00", horaNum: 20, minutoNum: 0, local: "Igreja Sede e Online" },
-  { dia: 6, nome: "Sábado", horario: "20:00", horaNum: 20, minutoNum: 0, local: "Igreja Sede e Online" },
+  {
+    dia: 0,
+    nome: "Domingo",
+    horario: "19:00",
+    horaNum: 19,
+    minutoNum: 0,
+    local: "Igreja Sede e Online",
+  },
+  {
+    dia: 1,
+    nome: "Segunda",
+    horario: "19:30",
+    horaNum: 19,
+    minutoNum: 30,
+    local: "Igreja Sede e Online",
+  },
+  {
+    dia: 2,
+    nome: "Terça",
+    horario: "20:00",
+    horaNum: 20,
+    minutoNum: 0,
+    local: "Online",
+  },
+  {
+    dia: 3,
+    nome: "Quarta",
+    horario: "19:45",
+    horaNum: 19,
+    minutoNum: 45,
+    local: "Igreja Sede e Online",
+  },
+  {
+    dia: 4,
+    nome: "Quinta",
+    horario: "20:00",
+    horaNum: 20,
+    minutoNum: 0,
+    local: "Online",
+  },
+  {
+    dia: 5,
+    nome: "Sexta",
+    horario: "20:00",
+    horaNum: 20,
+    minutoNum: 0,
+    local: "Igreja Sede e Online",
+  },
+  {
+    dia: 6,
+    nome: "Sábado",
+    horario: "20:00",
+    horaNum: 20,
+    minutoNum: 0,
+    local: "Igreja Sede e Online",
+  },
 ];
 
 const getProximoCulto = () => {
@@ -24,7 +80,10 @@ const getProximoCulto = () => {
 
   // Verifica se o culto de hoje ainda não começou
   const cultoHoje = cultos[diaAtual];
-  if (horaAtual < cultoHoje.horaNum || (horaAtual === cultoHoje.horaNum && minutoAtual < cultoHoje.minutoNum)) {
+  if (
+    horaAtual < cultoHoje.horaNum ||
+    (horaAtual === cultoHoje.horaNum && minutoAtual < cultoHoje.minutoNum)
+  ) {
     return { ...cultoHoje, nome: "Hoje" };
   }
 
@@ -58,7 +117,7 @@ export default function Home() {
 
   const getTituloVersiculo = (versiculo: Versiculo) => {
     if (versiculo.titulo) return versiculo.titulo;
-    const dataObj = new Date(versiculo.data + 'T00:00:00');
+    const dataObj = new Date(versiculo.data + "T00:00:00");
     const dia = dataObj.getDate();
     const mes = dataObj.toLocaleDateString("pt-BR", { month: "long" });
     return `Versículo do dia ${dia} de ${mes}`;
@@ -187,7 +246,7 @@ export default function Home() {
                 title: "Projetos",
                 desc: "Conheça nossos projetos sociais",
                 link: "/projetos",
-              }
+              },
             ].map((item) => (
               <Link key={item.title} to={item.link}>
                 <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 h-full">

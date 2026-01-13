@@ -1,7 +1,7 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import path from "path";
 import { componentTagger } from "lovable-tagger";
+import path from "path";
+import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
@@ -18,10 +18,10 @@ export default defineConfig(({ mode }) => ({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "hero-bg.jpg", "apple-touch-icon.png"],
       manifest: {
-        name: "Igreja Aviva Nações",
+        name: "Aviva Nações Nações",
         short_name: "Aviva Nações",
         description:
-          "Igreja Aviva - Uma comunidade de fé comprometida em levar o amor de Cristo através da palavra, louvor e comunhão.",
+          "Aviva Nações - Uma comunidade de fé comprometida em levar o amor de Cristo através da palavra, louvor e comunhão.",
         theme_color: "#1e3a5f",
         background_color: "#ffffff",
         display: "standalone",

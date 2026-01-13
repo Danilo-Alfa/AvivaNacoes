@@ -1,21 +1,3 @@
-import { Link, useLocation } from "react-router-dom";
-import {
-  Moon,
-  Sun,
-  Menu,
-  ChevronLeft,
-  ChevronRight,
-  Home,
-  FolderKanban,
-  Image,
-  Calendar,
-  Video,
-  MessageSquare,
-  Newspaper,
-  BookOpen,
-  Radio,
-} from "lucide-react";
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -24,6 +6,24 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  BookOpen,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  FolderKanban,
+  Home,
+  Image,
+  Menu,
+  MessageSquare,
+  Moon,
+  Newspaper,
+  Radio,
+  Sun,
+  Video,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 // Links principais - exibidos na barra superior
 const primaryNavigation = [
@@ -67,10 +67,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <nav className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="text-xl md:text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                IGREJA AVIVA
-              </div>
+            <Link to="/" className="flex items-center gap-2">
+              <img
+                src="/AvivaNacoes/logoheader.png"
+                alt="Logo Aviva Nações"
+                className="h-20 w-20 md:h-14 md:w-14"
+              />
+              <span className="text-lg md:text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Aviva Nações
+              </span>
             </Link>
 
             {/* Primary Navigation - Desktop */}
@@ -168,7 +173,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Button>
 
           {/* Navigation Items */}
-          <nav className={`flex-1 p-3 pt-6 space-y-1 overflow-hidden ${!sidebarOpen && "px-2"}`}>
+          <nav
+            className={`flex-1 p-3 pt-6 space-y-1 overflow-hidden ${
+              !sidebarOpen && "px-2"
+            }`}
+          >
             <Link
               to="/"
               className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
@@ -180,9 +189,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               }`}
             >
               <Home className="h-5 w-5 flex-shrink-0" />
-              {sidebarOpen && (
-                <span className="text-sm font-medium">HOME</span>
-              )}
+              {sidebarOpen && <span className="text-sm font-medium">HOME</span>}
               {/* Tooltip quando colapsado */}
               {!sidebarOpen && (
                 <div className="absolute left-full ml-2 px-2 py-1 bg-foreground text-background text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50">
@@ -232,14 +239,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Footer - Fora da div principal para ocupar 100% da largura */}
-      <footer className={`mt-20 border-t-2 border-border bg-muted/30 transition-all duration-300 ${
-        sidebarOpen ? "md:ml-60" : "md:ml-16"
-      }`}>
+      <footer
+        className={`mt-20 border-t-2 border-border bg-muted/30 transition-all duration-300 ${
+          sidebarOpen ? "md:ml-60" : "md:ml-16"
+        }`}
+      >
         <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-bold mb-4 text-foreground">
-                Igreja Aviva
+                Aviva Nações
               </h3>
               <p className="text-sm text-muted-foreground">
                 Levando esperança e transformação através da palavra de Deus.
@@ -257,7 +266,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
         <div className="border-t-2 border-border">
           <div className="container mx-auto px-4 py-8 text-center text-sm text-muted-foreground">
-            © 2025 Igreja Aviva. Todos os direitos reservados.
+            © 2025 Aviva Nações. Todos os direitos reservados.
           </div>
         </div>
       </footer>

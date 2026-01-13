@@ -1,12 +1,13 @@
-# Igreja Aviva - Website Oficial
+# Aviva Nações - Website Oficial
 
-Site institucional da Igreja Aviva com sistema de transmissão ao vivo integrado.
+Site institucional da Aviva Nações com sistema de transmissão ao vivo integrado.
 
 ## 🎥 Sistema de Live Streaming (NOVO!)
 
 Este projeto agora inclui um **sistema completo de transmissão ao vivo** profissional!
 
 ### 📚 Documentação do Sistema de Live:
+
 - **[🚀 INÍCIO RÁPIDO](INICIO-RAPIDO.md)** - Comece aqui! (5 min de leitura)
 - **[📘 Guia Contabo VPS](GUIA-CONTABO.md)** - Configure o servidor (R$ 27/mês)
 - **[🎬 Guia OBS Studio](GUIA-OBS-STUDIO.md)** - Configure a transmissão
@@ -15,6 +16,7 @@ Este projeto agora inclui um **sistema completo de transmissão ao vivo** profis
 - **[✅ Implementação](IMPLEMENTACAO-COMPLETA.md)** - Visão técnica completa
 
 ### ✨ Características:
+
 - ✅ **Custo:** R$ 27/mês (Contabo VPS - Melhor custo-benefício)
 - ✅ **Capacidade:** 100+ viewers simultâneos
 - ✅ **Qualidade:** Full HD (1080p)
