@@ -7,7 +7,9 @@
       "Bash(unzip:*)",
       "Bash(npx tsc:*)",
       "Bash(git add:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(ssh root@66.94.98.143:*)",
+      "Bash(ssh -o ConnectTimeout=10 root@66.94.98.143 \"which git && which node && node -v\")"
     ],
     "deny": [],
     "ask": []
