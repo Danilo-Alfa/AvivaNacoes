@@ -123,9 +123,9 @@ export default function VersiculoDoDia() {
       {/* Versículo Destaque */}
       <section className="py-16 container mx-auto px-4">
         {versiculoDoDia ? (
-          <div className="max-w-4xl mx-auto bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl shadow-medium overflow-hidden relative border border-slate-200">
+          <div className="max-w-4xl mx-auto bg-gradient-to-br from-card to-muted rounded-2xl shadow-medium overflow-hidden relative border border-border">
             {/* Aspas decorativas - mais afastadas no mobile */}
-            <div className="absolute top-3 right-6 sm:top-0 sm:right-8 text-slate-200 pointer-events-none">
+            <div className="absolute top-3 right-6 sm:top-0 sm:right-8 text-muted-foreground/20 pointer-events-none">
               <svg className="w-12 h-12 sm:w-20 sm:h-20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
               </svg>
@@ -136,7 +136,7 @@ export default function VersiculoDoDia() {
                 <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                   <BookOpen className="w-4 h-4 text-primary" />
                 </div>
-                <span className="text-slate-600 text-sm font-medium uppercase tracking-wide">
+                <span className="text-muted-foreground text-sm font-medium uppercase tracking-wide">
                   Versículo do Dia
                 </span>
               </div>
@@ -159,7 +159,7 @@ export default function VersiculoDoDia() {
                   </button>
                 </div>
               ) : (
-                <p className="text-lg md:text-xl text-slate-800 font-medium mb-4">
+                <p className="text-lg md:text-xl text-foreground font-medium mb-4">
                   {getTitulo(versiculoDoDia)}
                 </p>
               )}
@@ -170,13 +170,13 @@ export default function VersiculoDoDia() {
                   href={versiculoDoDia.url_post}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-slate-500 hover:text-primary transition-colors text-sm"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
                   — {getTitulo(versiculoDoDia)}
                 </a>
                 <button
                   onClick={handleCompartilhar}
-                  className="flex items-center gap-2 text-slate-500 hover:text-primary transition-colors text-sm"
+                  className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
                   <Share2 className="w-4 h-4" />
                   Compartilhar
