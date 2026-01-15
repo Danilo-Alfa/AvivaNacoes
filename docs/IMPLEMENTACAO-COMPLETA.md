@@ -671,4 +671,4 @@ Para dúvidas ou problemas:
 ---
 
 _Desenvolvido com ❤️ para Igreja Aviva_
-_Data: 2025-01-13_
+_Data: 2026-01-13_

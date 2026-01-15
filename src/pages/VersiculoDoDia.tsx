@@ -124,9 +124,9 @@ export default function VersiculoDoDia() {
       <section className="py-16 container mx-auto px-4">
         {versiculoDoDia ? (
           <div className="max-w-4xl mx-auto bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl shadow-medium overflow-hidden relative border border-slate-200">
-            {/* Aspas decorativas */}
-            <div className="absolute top-0 right-8 text-slate-200 pointer-events-none">
-              <svg className="w-20 h-20" viewBox="0 0 24 24" fill="currentColor">
+            {/* Aspas decorativas - mais afastadas no mobile */}
+            <div className="absolute top-3 right-6 sm:top-0 sm:right-8 text-slate-200 pointer-events-none">
+              <svg className="w-12 h-12 sm:w-20 sm:h-20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
               </svg>
             </div>
@@ -152,7 +152,7 @@ export default function VersiculoDoDia() {
                   />
                   <button
                     onClick={() => setImagemTelaCheia(versiculoDoDia.url_imagem)}
-                    className="absolute bottom-3 right-3 bg-black/60 hover:bg-black/80 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute bottom-3 right-6 bg-black/60 hover:bg-black/80 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
                     title="Ver em tela cheia"
                   >
                     <Maximize2 className="w-5 h-5" />
@@ -209,16 +209,16 @@ export default function VersiculoDoDia() {
                 onClick={() => versiculo.url_imagem ? setImagemTelaCheia(versiculo.url_imagem) : window.open(versiculo.url_post, "_blank")}
               >
                 {/* Aspas decorativas */}
-                <div className="absolute top-4 right-4 text-primary/10">
-                  <svg className="w-16 h-16" viewBox="0 0 24 24" fill="currentColor">
+                <div className="absolute -top-1 -right-1 sm:top-2 sm:right-7 text-primary/10 pointer-events-none">
+                  <svg className="w-14 h-14 sm:w-16 sm:h-16" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
                   </svg>
                 </div>
 
                 {/* Badge com Data */}
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="w-7 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <BookOpen className="w-3.5 h-3.5 text-primary" />
+                  <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <BookOpen className="w-4 h-4 text-primary" />
                   </div>
                   <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
                     {new Date(versiculo.data + 'T00:00:00').toLocaleDateString("pt-BR", {

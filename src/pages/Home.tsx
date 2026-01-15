@@ -124,46 +124,49 @@ export default function Home() {
   };
   return (
     <div>
-      {/* Hero Section */}
+      {/* Hero Section - Banner */}
       <section
-        className="relative min-h-[450px] md:min-h-[550px] bg-cover bg-center bg-no-repeat flex items-end"
+        className="relative min-h-[275px] md:min-h-[600px] bg-cover bg-no-repeat bg-[60%_top] md:bg-center"
         style={{ backgroundImage: "url('/AvivaNacoes/hero-bg.jpg')" }}
-      >
-        {/* Botões posicionados na parte inferior do banner */}
-        <div className="container mx-auto px-4 pb-28 md:pb-36">
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
-            <Link to="/quem-somos">
-              <button className="px-8 py-4 bg-blue-900/90 text-white font-semibold rounded-lg hover:bg-blue-900 transition-all hover:-translate-y-0.5 shadow-lg backdrop-blur-sm">
-                Conheça Nossa História
-              </button>
-            </Link>
-            <Link to="/programacao">
-              <button className="px-8 py-4 bg-white/80 text-blue-900 font-semibold rounded-lg hover:bg-white transition-all hover:-translate-y-0.5 border-2 border-blue-900/20 backdrop-blur-sm shadow-lg">
-                Ver Programação
-              </button>
-            </Link>
-          </div>
+      />
+
+      {/* Botões - metade sobre o banner, metade abaixo */}
+      <div className="container mx-auto px-4 -mt-4 md:-mt-5 relative z-10">
+        <div className="flex flex-row gap-3 md:gap-4 justify-center max-w-md mx-auto">
+          <Link to="/quem-somos" className="flex-1">
+            <button className="w-full px-4 py-3 md:px-8 md:py-4 text-sm md:text-base bg-background text-foreground font-semibold rounded-lg hover:bg-muted transition-all border-2 border-border shadow-lg">
+              Nossa História
+            </button>
+          </Link>
+          <Link to="/programacao" className="flex-1">
+            <button className="w-full px-4 py-3 md:px-8 md:py-4 text-sm md:text-base bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg">
+              Programação
+            </button>
+          </Link>
         </div>
-      </section>
+      </div>
+
+      {/* Espaçamento após os botões */}
+      <div className="h-6 md:h-8"></div>
 
       {/* Próximo Culto */}
-      <section className="container mx-auto px-4 -mt-4 relative z-10">
+      <section className="container mx-auto px-4 pt-2 md:pt-0 md:-mt-4 relative z-10">
         <Card className="shadow-medium max-w-4xl mx-auto">
-          <CardContent className="p-8">
-            <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
+          <CardContent className="p-4 md:p-8">
+            <div className="flex flex-row justify-around md:grid md:grid-cols-3 md:gap-6 text-center">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">
+                <p className="text-xs md:text-sm text-muted-foreground mb-0.5 md:mb-1">
                   Próximo Culto
                 </p>
-                <p className="text-2xl font-bold">{proximoCulto.nome}</p>
+                <p className="text-lg md:text-2xl font-bold">{proximoCulto.nome}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Horário</p>
-                <p className="text-2xl font-bold">{proximoCulto.horario}</p>
+                <p className="text-xs md:text-sm text-muted-foreground mb-0.5 md:mb-1">Horário</p>
+                <p className="text-lg md:text-2xl font-bold">{proximoCulto.horario}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Local</p>
-                <p className="text-2xl font-bold">{proximoCulto.local}</p>
+                <p className="text-xs md:text-sm text-muted-foreground mb-0.5 md:mb-1">Local</p>
+                <p className="text-lg md:text-2xl font-bold">{proximoCulto.local}</p>
               </div>
             </div>
           </CardContent>
@@ -171,18 +174,18 @@ export default function Home() {
       </section>
 
       {/* Sobre Nós */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <section className="container mx-auto px-4 py-12 md:py-20">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6">
               Uma Igreja que Transforma Vidas
             </h2>
-            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+            <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
               Somos uma comunidade de fé comprometida em levar o amor de Cristo
               a todas as pessoas. Através da palavra, do louvor e da comunhão,
               buscamos fazer a diferença na vida de cada pessoa.
             </p>
-            <div className="space-y-4 mb-8">
+            <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
               {[
                 "Cultos dinâmicos e relevantes",
                 "Ministérios para todas as idades",
@@ -216,12 +219,12 @@ export default function Home() {
       </section>
 
       {/* Cards de Navegação */}
-      <section className="bg-muted/30 py-20">
+      <section className="bg-muted/30 py-12 md:py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
+          <h2 className="text-2xl md:text-4xl font-bold mb-8 md:mb-12 text-center">
             Explore Nossa Igreja
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {[
               {
                 icon: Users2Icon,
@@ -250,12 +253,12 @@ export default function Home() {
             ].map((item) => (
               <Link key={item.title} to={item.link}>
                 <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 h-full">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full mx-auto mb-4 flex items-center justify-center">
-                      <item.icon className="w-8 h-8 text-primary" />
+                  <CardContent className="p-4 md:p-6 text-center">
+                    <div className="w-12 h-12 md:w-16 md:h-16 bg-primary/10 rounded-full mx-auto mb-3 md:mb-4 flex items-center justify-center">
+                      <item.icon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
                     </div>
-                    <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">{item.desc}</p>
+                    <h3 className="text-base md:text-xl font-bold mb-1 md:mb-2">{item.title}</h3>
+                    <p className="text-xs md:text-sm text-muted-foreground">{item.desc}</p>
                   </CardContent>
                 </Card>
               </Link>
@@ -265,10 +268,10 @@ export default function Home() {
       </section>
 
       {/* Versículo do Dia */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <BookOpen className="w-6 h-6 text-primary" />
-          <h2 className="text-2xl md:text-3xl font-bold text-center">
+      <section className="container mx-auto px-4 py-12 md:py-20">
+        <div className="flex items-center justify-center gap-2 mb-6 md:mb-8">
+          <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+          <h2 className="text-xl md:text-3xl font-bold text-center">
             Versículo do Dia
           </h2>
         </div>
@@ -336,18 +339,18 @@ export default function Home() {
       </section>
 
       {/* CTA Final */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-4 py-12 md:py-20">
         <Card className="shadow-medium bg-gradient-accent">
-          <CardContent className="p-12 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-accent-foreground">
+          <CardContent className="p-6 md:p-12 text-center">
+            <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4 text-accent-foreground">
               Faça Parte da Nossa Família
             </h2>
-            <p className="text-lg text-accent-foreground/90 mb-8 max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-accent-foreground/90 mb-6 md:mb-8 max-w-2xl mx-auto">
               Venha nos visitar e experimente uma comunidade que te acolhe com
               amor e verdade
             </p>
             <Link to="/fale-conosco">
-              <button className="px-8 py-4 bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all hover:-translate-y-0.5 shadow-soft">
+              <button className="px-6 py-3 md:px-8 md:py-4 text-sm md:text-base bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all hover:-translate-y-0.5 shadow-soft">
                 Entre em Contato
               </button>
             </Link>

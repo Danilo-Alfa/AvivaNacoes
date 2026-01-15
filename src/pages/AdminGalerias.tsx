@@ -161,7 +161,7 @@ function AdminGaleriasContent() {
               <Input
                 id="titulo"
                 type="text"
-                placeholder="Ex: Culto de Ação de Graças 2025"
+                placeholder="Ex: Culto de Ação de Graças 2026"
                 value={titulo}
                 onChange={(e) => setTitulo(e.target.value)}
                 required

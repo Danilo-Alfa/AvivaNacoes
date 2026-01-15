@@ -198,4 +198,4 @@ Se você quiser **sempre ter um vídeo em destaque**, basta:
 ---
 
 **Desenvolvido para AvivaNações** 🙏
-**Data da Implementação:** 21 de Janeiro de 2025
+**Data da Implementação:** 21 de Janeiro de 2026

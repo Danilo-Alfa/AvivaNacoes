@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Trash2, Edit, FileText } from "lucide-react";
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { toast } from "@/components/ui/sonner";
 import {
-  getTodosJornais,
-  criarJornal,
   atualizarJornal,
+  criarJornal,
   deletarJornal,
+  getTodosJornais,
   type Jornal,
 } from "@/services/jornalService";
+import { Edit, FileText, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 function AdminJornaisContent() {
   const [jornais, setJornais] = useState<Jornal[]>([]);
@@ -22,9 +22,7 @@ function AdminJornaisContent() {
   // Formulário
   const [urlPdf, setUrlPdf] = useState("");
   const [titulo, setTitulo] = useState("");
-  const [data, setData] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const [data, setData] = useState(new Date().toISOString().split("T")[0]);
 
   useEffect(() => {
     carregarJornais();
@@ -38,7 +36,8 @@ function AdminJornaisContent() {
     } catch (error) {
       console.error("Erro ao carregar jornais:", error);
       toast.error("Erro ao carregar jornais", {
-        description: "Não foi possível carregar a lista de jornais. Tente novamente."
+        description:
+          "Não foi possível carregar a lista de jornais. Tente novamente.",
       });
     } finally {
       setLoading(false);
@@ -50,7 +49,7 @@ function AdminJornaisContent() {
 
     if (!urlPdf || !data) {
       toast.error("Campos obrigatórios faltando", {
-        description: "Por favor, preencha a URL do PDF e a data"
+        description: "Por favor, preencha a URL do PDF e a data",
       });
       return;
     }
@@ -59,12 +58,16 @@ function AdminJornaisContent() {
       if (editando) {
         await atualizarJornal(editando, urlPdf, titulo || null, data);
         toast.success("Jornal atualizado!", {
-          description: `O jornal${titulo ? ` "${titulo}"` : ''} foi atualizado com sucesso.`
+          description: `O jornal${
+            titulo ? ` "${titulo}"` : ""
+          } foi atualizado com sucesso.`,
         });
       } else {
         await criarJornal(urlPdf, titulo || null, data);
         toast.success("Jornal criado!", {
-          description: `O jornal${titulo ? ` "${titulo}"` : ''} foi criado com sucesso.`
+          description: `O jornal${
+            titulo ? ` "${titulo}"` : ""
+          } foi criado com sucesso.`,
         });
       }
 
@@ -79,7 +82,7 @@ function AdminJornaisContent() {
     } catch (error) {
       console.error("Erro ao salvar jornal:", error);
       toast.error("Erro ao salvar jornal", {
-        description: "Não foi possível salvar o jornal. Tente novamente."
+        description: "Não foi possível salvar o jornal. Tente novamente.",
       });
     }
   };
@@ -100,20 +103,28 @@ function AdminJornaisContent() {
   };
 
   const handleDeletar = async (id: string, titulo: string | null) => {
-    if (!confirm(`Tem certeza que deseja deletar o jornal${titulo ? ` "${titulo}"` : ''}?`)) {
+    if (
+      !confirm(
+        `Tem certeza que deseja deletar o jornal${
+          titulo ? ` "${titulo}"` : ""
+        }?`
+      )
+    ) {
       return;
     }
 
     try {
       await deletarJornal(id);
       toast.success("Jornal deletado!", {
-        description: `O jornal${titulo ? ` "${titulo}"` : ''} foi deletado com sucesso.`
+        description: `O jornal${
+          titulo ? ` "${titulo}"` : ""
+        } foi deletado com sucesso.`,
       });
       carregarJornais();
     } catch (error) {
       console.error("Erro ao deletar jornal:", error);
       toast.error("Erro ao deletar jornal", {
-        description: "Não foi possível deletar o jornal. Tente novamente."
+        description: "Não foi possível deletar o jornal. Tente novamente.",
       });
     }
   };
@@ -147,9 +158,13 @@ function AdminJornaisContent() {
                 required
               />
               <p className="text-xs text-muted-foreground mt-1">
-                📄 <strong>PDFs:</strong> Cole a URL direta do arquivo (.pdf)<br />
-                🎨 <strong>Canva:</strong> Cole qualquer link de visualização (será convertido automaticamente para embed)<br />
-                📖 <strong>Issuu:</strong> Cole o link normal (será convertido automaticamente)
+                📄 <strong>PDFs:</strong> Cole a URL direta do arquivo (.pdf)
+                <br />
+                🎨 <strong>Canva:</strong> Cole qualquer link de visualização
+                (será convertido automaticamente para embed)
+                <br />
+                📖 <strong>Issuu:</strong> Cole o link normal (será convertido
+                automaticamente)
               </p>
             </div>
 
@@ -158,7 +173,7 @@ function AdminJornaisContent() {
               <Input
                 id="titulo"
                 type="text"
-                placeholder="Ex: Jornal de Janeiro 2025"
+                placeholder="Ex: Jornal de Janeiro 2026"
                 value={titulo}
                 onChange={(e) => setTitulo(e.target.value)}
               />
@@ -180,7 +195,11 @@ function AdminJornaisContent() {
                 {editando ? "Atualizar" : "Adicionar"}
               </Button>
               {editando && (
-                <Button type="button" variant="outline" onClick={handleCancelar}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCancelar}
+                >
                   Cancelar
                 </Button>
               )}
@@ -217,7 +236,10 @@ function AdminJornaisContent() {
                       {jornal.titulo || "Sem título"}
                     </h3>
                     <p className="text-xs text-muted-foreground mb-1">
-                      Data: {new Date(jornal.data + "T00:00:00").toLocaleDateString("pt-BR")}
+                      Data:{" "}
+                      {new Date(jornal.data + "T00:00:00").toLocaleDateString(
+                        "pt-BR"
+                      )}
                     </p>
                     <a
                       href={jornal.url_pdf}

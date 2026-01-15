@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2, Edit, Calendar } from "lucide-react";
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { toast } from "@/components/ui/sonner";
+import { Textarea } from "@/components/ui/textarea";
 import {
-  getTodosEventos,
-  criarEvento,
   atualizarEvento,
+  criarEvento,
   deletarEvento,
+  getTodosEventos,
   type Evento,
 } from "@/services/eventoService";
+import { Calendar, Edit, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 function AdminEventosContent() {
   const [eventos, setEventos] = useState<Evento[]>([]);
@@ -47,7 +47,8 @@ function AdminEventosContent() {
     } catch (error) {
       console.error("Erro ao carregar eventos:", error);
       toast.error("Erro ao carregar eventos", {
-        description: "Não foi possível carregar a lista de eventos. Tente novamente."
+        description:
+          "Não foi possível carregar a lista de eventos. Tente novamente.",
       });
     } finally {
       setLoading(false);
@@ -59,14 +60,15 @@ function AdminEventosContent() {
 
     if (!titulo || !dataInicio) {
       toast.error("Campos obrigatórios faltando", {
-        description: "Por favor, preencha título e data de início"
+        description: "Por favor, preencha título e data de início",
       });
       return;
     }
 
     if (!diaInteiro && !horaInicio) {
       toast.error("Hora de início obrigatória", {
-        description: "Por favor, preencha a hora de início ou marque 'Dia Inteiro'"
+        description:
+          "Por favor, preencha a hora de início ou marque 'Dia Inteiro'",
       });
       return;
     }
@@ -76,7 +78,8 @@ function AdminEventosContent() {
     const horaFimFinal = diaInteiro ? "01:23" : horaFim;
 
     const dataInicioCompleta = `${dataInicio}T${horaInicioFinal}:00`;
-    const dataFimCompleta = dataFim && horaFimFinal ? `${dataFim}T${horaFimFinal}:00` : null;
+    const dataFimCompleta =
+      dataFim && horaFimFinal ? `${dataFim}T${horaFimFinal}:00` : null;
 
     try {
       if (editando) {
@@ -93,7 +96,7 @@ function AdminEventosContent() {
           cor || null
         );
         toast.success("Evento atualizado!", {
-          description: `O evento "${titulo}" foi atualizado com sucesso.`
+          description: `O evento "${titulo}" foi atualizado com sucesso.`,
         });
       } else {
         await criarEvento(
@@ -108,7 +111,7 @@ function AdminEventosContent() {
           cor || null
         );
         toast.success("Evento criado!", {
-          description: `O evento "${titulo}" foi criado com sucesso.`
+          description: `O evento "${titulo}" foi criado com sucesso.`,
         });
       }
 
@@ -118,7 +121,7 @@ function AdminEventosContent() {
     } catch (error) {
       console.error("Erro ao salvar evento:", error);
       toast.error("Erro ao salvar evento", {
-        description: "Não foi possível salvar o evento. Tente novamente."
+        description: "Não foi possível salvar o evento. Tente novamente.",
       });
     }
   };
@@ -189,31 +192,33 @@ function AdminEventosContent() {
     try {
       await deletarEvento(id);
       toast.success("Evento deletado!", {
-        description: `O evento "${titulo}" foi deletado com sucesso.`
+        description: `O evento "${titulo}" foi deletado com sucesso.`,
       });
       carregarEventos();
     } catch (error) {
       console.error("Erro ao deletar evento:", error);
       toast.error("Erro ao deletar evento", {
-        description: "Não foi possível deletar o evento. Tente novamente."
+        description: "Não foi possível deletar o evento. Tente novamente.",
       });
     }
   };
 
   // Função auxiliar para extrair data e hora de uma string ISO sem problemas de timezone
   const extrairDataHoraISO = (dataStr: string) => {
-    // Formato esperado: "2025-12-14T09:00:00" ou "2025-12-14T09:00:00.000Z"
+    // Formato esperado: "2026-12-14T09:00:00" ou "2026-12-14T09:00:00.000Z"
     const matchData = dataStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
     const matchHora = dataStr.match(/T(\d{2}):(\d{2})/);
 
     return {
-      ano: matchData ? matchData[1] : '',
-      mes: matchData ? matchData[2] : '',
-      dia: matchData ? matchData[3] : '',
-      hora: matchHora ? matchHora[1] : '00',
-      minuto: matchHora ? matchHora[2] : '00',
-      dataFormatada: matchData ? `${matchData[3]}/${matchData[2]}/${matchData[1]}` : '',
-      horaFormatada: matchHora ? `${matchHora[1]}:${matchHora[2]}` : '00:00'
+      ano: matchData ? matchData[1] : "",
+      mes: matchData ? matchData[2] : "",
+      dia: matchData ? matchData[3] : "",
+      hora: matchHora ? matchHora[1] : "00",
+      minuto: matchHora ? matchHora[2] : "00",
+      dataFormatada: matchData
+        ? `${matchData[3]}/${matchData[2]}/${matchData[1]}`
+        : "",
+      horaFormatada: matchHora ? `${matchHora[1]}:${matchHora[2]}` : "00:00",
     };
   };
 
@@ -235,7 +240,10 @@ function AdminEventosContent() {
       const horaFimStr = fimInfo.horaFormatada;
 
       // Se os horários são iguais OU ambos são 01:23, é evento de dia inteiro
-      if (horaInicioStr === horaFimStr || (horaInicioStr === "01:23" && horaFimStr === "01:23")) {
+      if (
+        horaInicioStr === horaFimStr ||
+        (horaInicioStr === "01:23" && horaFimStr === "01:23")
+      ) {
         isDiaInteiro = true;
       }
     } else if (horaInicioStr === "01:23") {
@@ -328,7 +336,9 @@ function AdminEventosContent() {
                 />
               </div>
               <div>
-                <Label htmlFor="horaInicio">Hora de Início {!diaInteiro && "*"}</Label>
+                <Label htmlFor="horaInicio">
+                  Hora de Início {!diaInteiro && "*"}
+                </Label>
                 <Input
                   id="horaInicio"
                   type="time"
@@ -428,7 +438,11 @@ function AdminEventosContent() {
                 {editando ? "Atualizar" : "Adicionar"}
               </Button>
               {editando && (
-                <Button type="button" variant="outline" onClick={limparFormulario}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={limparFormulario}
+                >
                   Cancelar
                 </Button>
               )}
@@ -462,9 +476,7 @@ function AdminEventosContent() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-sm">
-                        {evento.titulo}
-                      </h3>
+                      <h3 className="font-semibold text-sm">{evento.titulo}</h3>
                       {evento.destaque && (
                         <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded">
                           Destaque
@@ -477,7 +489,11 @@ function AdminEventosContent() {
                       </p>
                     )}
                     <p className="text-xs text-muted-foreground">
-                      📅 {formatarDataHoraEvento(evento.data_inicio, evento.data_fim)}
+                      📅{" "}
+                      {formatarDataHoraEvento(
+                        evento.data_inicio,
+                        evento.data_fim
+                      )}
                     </p>
                     {evento.local && (
                       <p className="text-xs text-muted-foreground">

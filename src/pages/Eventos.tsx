@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, Clock, MapPin, Star } from "lucide-react";
+import { Calendar, Clock, MapPin, Star, X } from "lucide-react";
 import {
   getEventosFuturos,
   getEventosDoMes,
@@ -14,6 +14,7 @@ export default function Eventos() {
   const [eventosDoMes, setEventosDoMes] = useState<Evento[]>([]);
   const [loading, setLoading] = useState(true);
   const [mesAtual, setMesAtual] = useState(new Date());
+  const [diaSelecionado, setDiaSelecionado] = useState<number | null>(null);
 
   useEffect(() => {
     carregarEventos();
@@ -85,7 +86,7 @@ export default function Eventos() {
 
   const formatarHora = (dataStr: string) => {
     // Extrair hora diretamente da string ISO para evitar problemas de timezone
-    // Formato esperado: "2025-12-14T09:00:00" ou "2025-12-14T09:00:00.000Z"
+    // Formato esperado: "2026-12-14T09:00:00" ou "2026-12-14T09:00:00.000Z"
     const match = dataStr.match(/T(\d{2}):(\d{2})/);
     if (match) {
       return `${match[1]}:${match[2]}`;
@@ -189,7 +190,7 @@ export default function Eventos() {
 
   // Função auxiliar para extrair ano, mês e dia de uma string ISO sem problemas de timezone
   const extrairDataISO = (dataStr: string) => {
-    // Formato esperado: "2025-12-14T09:00:00" ou "2025-12-14T09:00:00.000Z"
+    // Formato esperado: "2026-12-14T09:00:00" ou "2026-12-14T09:00:00.000Z"
     const match = dataStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
     if (match) {
       return {
@@ -371,7 +372,7 @@ export default function Eventos() {
           {/* Calendário do Mês */}
           <section className="mb-16">
             {/* Header do Calendário */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+            <div className="flex flex-col items-center mb-6 sm:mb-8 gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center">
                   <Calendar className="w-5 h-5 text-white" />
@@ -381,16 +382,16 @@ export default function Eventos() {
                 </h2>
               </div>
 
-              {/* Navegação do Mês */}
-              <div className="flex items-center gap-2 bg-white dark:bg-gray-800 rounded-full px-2 py-1 shadow-sm border border-gray-200 dark:border-gray-700">
+              {/* Navegação do Mês - Centralizado */}
+              <div className="flex items-center justify-center gap-1 bg-white dark:bg-gray-800 rounded-full px-3 py-1.5 shadow-sm border border-gray-200 dark:border-gray-700 w-fit">
                 <button
                   onClick={() => mudarMes(-1)}
                   className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                   aria-label="Mês anterior"
                 >
-                  <span className="text-gray-600 dark:text-gray-400">‹</span>
+                  <span className="text-gray-600 dark:text-gray-400 text-lg">‹</span>
                 </button>
-                <span className="font-semibold text-sm sm:text-base min-w-[140px] text-center capitalize">
+                <span className="font-semibold text-sm sm:text-base min-w-[130px] sm:min-w-[160px] text-center capitalize px-2">
                   {mesAtual.toLocaleDateString("pt-BR", {
                     month: "long",
                     year: "numeric",
@@ -401,7 +402,7 @@ export default function Eventos() {
                   className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                   aria-label="Próximo mês"
                 >
-                  <span className="text-gray-600 dark:text-gray-400">›</span>
+                  <span className="text-gray-600 dark:text-gray-400 text-lg">›</span>
                 </button>
               </div>
             </div>
@@ -461,6 +462,7 @@ export default function Eventos() {
                           ? "ring-2 ring-indigo-400 bg-indigo-50/60 dark:bg-indigo-900/30 shadow-md border-indigo-200 dark:border-indigo-700"
                           : "bg-white dark:bg-gray-800/50 shadow-sm hover:shadow-lg border-gray-200 dark:border-gray-700"
                         }`}
+                      onClick={() => temEvento && setDiaSelecionado(dia)}
                     >
                       {/* Número do dia e badge de extras */}
                       <div className="flex items-start justify-between mb-1">
@@ -510,63 +512,67 @@ export default function Eventos() {
                         </div>
                       )}
 
-                      {/* Tooltip com todos os eventos */}
+                      {/* Tooltip com todos os eventos - Mobile: posição fixa fora do grid / Desktop: posição relativa ao dia */}
                       {temEvento && (
-                        <div className={`absolute hidden group-hover:block z-[100] w-64 sm:w-72 pointer-events-none ${
-                          isTopRows
-                            ? isRightEdge
-                              ? "top-0 right-full mr-2"
-                              : "top-0 left-full ml-2"
-                            : isLeftEdge
-                              ? "bottom-full mb-2 left-0"
-                              : isRightEdge
-                                ? "bottom-full mb-2 right-0"
-                                : "bottom-full mb-2 left-1/2 -translate-x-1/2"
-                        }`}>
-                          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-                            {/* Header do tooltip */}
-                            <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 flex items-center gap-3">
-                              <div className="w-9 h-9 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl flex items-center justify-center">
-                                <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                              </div>
-                              <div>
-                                <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
-                                  {dia} de {mesAtual.toLocaleDateString("pt-BR", { month: "long" })}
+                        <>
+                          {/* Tooltip - apenas desktop (hover não funciona bem em touch) */}
+                          <div className={`absolute z-[100] w-72 pointer-events-none hidden sm:group-hover:block ${
+                            isTopRows
+                              ? isRightEdge
+                                ? "top-0 right-full mr-2"
+                                : "top-0 left-full ml-2"
+                              : isLeftEdge
+                                ? "bottom-full mb-2 left-0"
+                                : isRightEdge
+                                  ? "bottom-full mb-2 right-0"
+                                  : "bottom-full mb-2 left-1/2 -translate-x-1/2"
+                          }`}>
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                              {/* Header do tooltip */}
+                              <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 flex items-center gap-3">
+                                <div className="w-9 h-9 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl flex items-center justify-center">
+                                  <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                                 </div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400">
-                                  {eventosNoDia.length} {eventosNoDia.length === 1 ? "evento" : "eventos"}
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Lista de eventos */}
-                            <div className="p-3 space-y-2">
-                              {eventosNoDia.map((evento) => (
-                                <div
-                                  key={evento.id}
-                                  className="p-3 rounded-xl border-l-4"
-                                  style={{
-                                    borderLeftColor: evento.cor || "#3b82f6",
-                                    backgroundColor: `${evento.cor || "#3b82f6"}10`
-                                  }}
-                                >
+                                <div>
                                   <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
-                                    {evento.titulo}
+                                    {dia} de {mesAtual.toLocaleDateString("pt-BR", { month: "long" })}
                                   </div>
-                                  {evento.descricao && (
-                                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
-                                      {evento.descricao}
-                                    </div>
-                                  )}
-                                  <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                                    <Clock className="w-3.5 h-3.5" />
-                                    <span>{formatarHorario(evento.data_inicio, evento.data_fim)}</span>
+                                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                                    {eventosNoDia.length} {eventosNoDia.length === 1 ? "evento" : "eventos"}
                                   </div>
                                 </div>
-                              ))}
+                              </div>
+
+                              {/* Lista de eventos */}
+                              <div className="p-3 space-y-2">
+                                {eventosNoDia.map((evento) => (
+                                  <div
+                                    key={evento.id}
+                                    className="p-3 rounded-xl border-l-4"
+                                    style={{
+                                      borderLeftColor: evento.cor || "#3b82f6",
+                                      backgroundColor: `${evento.cor || "#3b82f6"}10`
+                                    }}
+                                  >
+                                    <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
+                                      {evento.titulo}
+                                    </div>
+                                    {evento.descricao && (
+                                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+                                        {evento.descricao}
+                                      </div>
+                                    )}
+                                    <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                      <Clock className="w-3.5 h-3.5" />
+                                      <span>{formatarHorario(evento.data_inicio, evento.data_fim)}</span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
                           </div>
-                        </div>
+
+                        </>
                       )}
                     </div>
                   );
@@ -627,6 +633,75 @@ export default function Eventos() {
             </div>
           )}
         </>
+      )}
+
+      {/* Modal de eventos do dia (mobile-friendly) */}
+      {diaSelecionado && (
+        <div
+          className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-0 sm:p-4"
+          onClick={() => setDiaSelecionado(null)}
+        >
+          <div
+            className="bg-white dark:bg-gray-800 w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl shadow-2xl max-h-[80vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <div className="font-bold text-white text-lg">
+                    {diaSelecionado} de {mesAtual.toLocaleDateString("pt-BR", { month: "long" })}
+                  </div>
+                  <div className="text-white/80 text-sm">
+                    {getEventosDoDia(diaSelecionado).length} {getEventosDoDia(diaSelecionado).length === 1 ? "evento" : "eventos"}
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => setDiaSelecionado(null)}
+                className="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+            </div>
+
+            {/* Lista de eventos */}
+            <div className="p-4 space-y-3 overflow-y-auto max-h-[60vh]">
+              {getEventosDoDia(diaSelecionado).map((evento) => (
+                <div
+                  key={evento.id}
+                  className="p-4 rounded-xl border-l-4"
+                  style={{
+                    borderLeftColor: evento.cor || "#3b82f6",
+                    backgroundColor: `${evento.cor || "#3b82f6"}10`
+                  }}
+                >
+                  <div className="font-semibold text-gray-900 dark:text-gray-100">
+                    {evento.titulo}
+                  </div>
+                  {evento.descricao && (
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      {evento.descricao}
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2 mt-3 text-sm text-gray-500 dark:text-gray-400">
+                    <Clock className="w-4 h-4" />
+                    <span>{formatarHorario(evento.data_inicio, evento.data_fim)}</span>
+                  </div>
+                  {evento.local && (
+                    <div className="flex items-center gap-2 mt-1 text-sm text-gray-500 dark:text-gray-400">
+                      <MapPin className="w-4 h-4" />
+                      <span>{evento.local}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
