@@ -9,7 +9,10 @@
       "Bash(git add:*)",
       "Bash(dir:*)",
       "Bash(ssh root@66.94.98.143:*)",
-      "Bash(ssh -o ConnectTimeout=10 root@66.94.98.143 \"which git && which node && node -v\")"
+      "Bash(ssh -o ConnectTimeout=10 root@66.94.98.143 \"which git && which node && node -v\")",
+      "Bash(gh run:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:danilo-alfa.github.io)"
     ],
     "deny": [],
     "ask": []

@@ -10,7 +10,7 @@
  *     └── assets/         (assets escola)
  */
 
-import { cpSync, rmSync, mkdirSync, existsSync, copyFileSync } from 'fs';
+import { cpSync, rmSync, mkdirSync, existsSync, copyFileSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -69,9 +69,15 @@ if (existsSync(escolaIndexHtml)) {
   copyFileSync(escolaIndexHtml, escolaNotFoundHtml);
 }
 
+// 7. Criar arquivo .nojekyll para GitHub Pages (necessario para servir subpastas)
+const nojekyllFile = join(distDir, '.nojekyll');
+console.log('Criando .nojekyll para GitHub Pages...');
+writeFileSync(nojekyllFile, '');
+
 console.log('\nBuild unificado com sucesso!');
 console.log('\nEstrutura final:');
 console.log('dist/');
+console.log('├── .nojekyll');
 console.log('├── index.html (site igreja)');
 console.log('├── 404.html');
 console.log('├── assets/');
