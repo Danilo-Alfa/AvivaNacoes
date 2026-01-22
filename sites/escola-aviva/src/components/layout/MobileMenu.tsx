@@ -4,10 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
   X,
-  Home,
   BookOpen,
   FileText,
-  Users,
   Flame,
   Shield,
   User,
@@ -25,10 +23,8 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { title: "Inicio", url: "/", icon: Home },
   { title: "Cursos", url: "/cursos", icon: BookOpen },
   { title: "Materiais", url: "/materiais", icon: FileText },
-  { title: "Sobre", url: "/sobre", icon: Users },
   { title: "Admin", url: "/admin", icon: Shield, adminOnly: true },
 ];
 

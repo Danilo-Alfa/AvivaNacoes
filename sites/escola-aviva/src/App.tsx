@@ -2,14 +2,12 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
-import Index from "./pages/Index";
 import Cursos from "./pages/Cursos";
 import CursoDetalhe from "./pages/CursoDetalhe";
 import Materiais from "./pages/Materiais";
-import Sobre from "./pages/Sobre";
 import Login from "./pages/Login";
 import EsqueciSenha from "./pages/EsqueciSenha";
 import RedefinirSenha from "./pages/RedefinirSenha";
@@ -27,31 +25,21 @@ const App = () => (
       <BrowserRouter basename="/AvivaNacoes/escolaAviva">
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/cursos" element={<Cursos />} />
-            <Route path="/cursos/:id" element={<CursoDetalhe />} />
-            <Route path="/materiais" element={<Materiais />} />
-            <Route path="/sobre" element={<Sobre />} />
+            {/* Rotas publicas - autenticacao */}
             <Route path="/login" element={<Login />} />
             <Route path="/esqueci-senha" element={<EsqueciSenha />} />
             <Route path="/redefinir-senha" element={<RedefinirSenha />} />
-            <Route
-              path="/perfil"
-              element={
-                <ProtectedRoute>
-                  <Perfil />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute requireAdmin>
-                  <Admin />
-                </ProtectedRoute>
-              }
-            />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
+            {/* Redireciona raiz para cursos */}
+            <Route path="/" element={<Navigate to="/cursos" replace />} />
+
+            {/* Rotas protegidas - requer login */}
+            <Route path="/cursos" element={<ProtectedRoute><Cursos /></ProtectedRoute>} />
+            <Route path="/cursos/:id" element={<ProtectedRoute><CursoDetalhe /></ProtectedRoute>} />
+            <Route path="/materiais" element={<ProtectedRoute><Materiais /></ProtectedRoute>} />
+            <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute requireAdmin><Admin /></ProtectedRoute>} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

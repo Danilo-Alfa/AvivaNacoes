@@ -2,10 +2,8 @@ import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Home,
   BookOpen,
   FileText,
-  Users,
   ChevronLeft,
   Flame,
   Shield
@@ -22,10 +20,8 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { title: "Inicio", url: "/", icon: Home },
   { title: "Cursos", url: "/cursos", icon: BookOpen },
   { title: "Materiais", url: "/materiais", icon: FileText },
-  { title: "Sobre", url: "/sobre", icon: Users },
   { title: "Admin", url: "/admin", icon: Shield, adminOnly: true },
 ];
 

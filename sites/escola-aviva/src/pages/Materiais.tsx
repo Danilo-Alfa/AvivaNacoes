@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { FileText, Download, Clock, BookOpen, Search } from "lucide-react";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -46,6 +47,18 @@ const materials: Material[] = [
 ];
 
 const Materiais = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredMaterials = materials.filter((material) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      material.title.toLowerCase().includes(query) ||
+      material.description.toLowerCase().includes(query) ||
+      material.course.toLowerCase().includes(query) ||
+      material.type.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <MainLayout>
       {/* Hero */}
@@ -78,13 +91,22 @@ const Materiais = () => {
             type="search"
             placeholder="Buscar materiais..."
             className="pl-10"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </motion.div>
 
       {/* Materials Grid */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        {materials.map((material, index) => (
+        {filteredMaterials.length === 0 ? (
+          <div className="col-span-full text-center py-12">
+            <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-muted-foreground">
+              Nenhum material encontrado para "{searchQuery}"
+            </p>
+          </div>
+        ) : filteredMaterials.map((material, index) => (
           <motion.div
             key={material.id}
             initial={{ opacity: 0, y: 20 }}
