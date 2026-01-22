@@ -69,6 +69,8 @@ export default defineConfig(({ mode }) => ({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp}"],
+        // Excluir escolaAviva do service worker para evitar conflitos
+        navigateFallbackDenylist: [/^\/AvivaNacoes\/escolaAviva/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

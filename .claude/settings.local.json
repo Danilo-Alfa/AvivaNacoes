@@ -12,7 +12,8 @@
       "Bash(ssh -o ConnectTimeout=10 root@66.94.98.143 \"which git && which node && node -v\")",
       "Bash(gh run:*)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:danilo-alfa.github.io)"
+      "WebFetch(domain:danilo-alfa.github.io)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
