@@ -1,28 +1,51 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, BookOpen, Clock, Users, FileText, Download } from "lucide-react";
+import { ArrowLeft, BookOpen, Clock, Users, FileText, Download, Loader2 } from "lucide-react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { VideoPlayer } from "@/components/courses/VideoPlayer";
-import { LessonList, Lesson } from "@/components/courses/LessonList";
+import { LessonList } from "@/components/courses/LessonList";
+import { LessonCompleteButton } from "@/components/courses/LessonCompleteButton";
+import { QuizModal } from "@/components/courses/QuizModal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { getCourseById } from "@/data/courses";
+import { useCourseBySlug } from "@/hooks/useCourse";
+import { useMarkLessonComplete } from "@/hooks/useProgress";
+import { toast } from "sonner";
+import type { LessonWithProgress } from "@/types/course";
 
 const CursoDetalhe = () => {
   const { id } = useParams<{ id: string }>();
-  const course = getCourseById(id || "");
-  
-  const [currentLesson, setCurrentLesson] = useState<Lesson | null>(
-    course?.lessons[0] || null
-  );
+  const { data: course, isLoading, error, refetch } = useCourseBySlug(id);
+  const markComplete = useMarkLessonComplete();
 
-  if (!course) {
+  const [currentLesson, setCurrentLesson] = useState<LessonWithProgress | null>(null);
+  const [quizModalOpen, setQuizModalOpen] = useState(false);
+
+  // Set initial lesson when course loads
+  if (course && !currentLesson && course.lessons.length > 0) {
+    // Find first unlocked lesson or default to first
+    const firstUnlocked = course.lessons.find(l => !l.is_locked) || course.lessons[0];
+    setCurrentLesson(firstUnlocked);
+  }
+
+  if (isLoading) {
+    return (
+      <MainLayout>
+        <div className="flex flex-col items-center justify-center py-20">
+          <Loader2 className="w-10 h-10 animate-spin text-aviva-blue" />
+          <p className="text-muted-foreground mt-4">Carregando curso...</p>
+        </div>
+      </MainLayout>
+    );
+  }
+
+  if (error || !course) {
     return (
       <MainLayout>
         <div className="text-center py-20">
           <h1 className="text-2xl font-bold text-foreground mb-4">
-            Curso não encontrado
+            Curso nao encontrado
           </h1>
           <Link to="/cursos">
             <Button variant="outline">
@@ -35,9 +58,54 @@ const CursoDetalhe = () => {
     );
   }
 
-  const handleSelectLesson = (lesson: Lesson) => {
-    setCurrentLesson(lesson);
+  const handleSelectLesson = (lesson: LessonWithProgress) => {
+    if (!lesson.is_locked) {
+      setCurrentLesson(lesson);
+    }
   };
+
+  const handleQuizRequired = () => {
+    setQuizModalOpen(true);
+  };
+
+  const handleQuizComplete = async (passed: boolean) => {
+    if (passed && currentLesson) {
+      try {
+        await markComplete.mutateAsync({
+          lessonId: currentLesson.id,
+          courseId: course.id,
+        });
+        toast.success("Aula concluida com sucesso!");
+        refetch(); // Refresh course data to update progress
+
+        // Auto-advance to next lesson
+        const currentIndex = course.lessons.findIndex(l => l.id === currentLesson.id);
+        if (currentIndex < course.lessons.length - 1) {
+          const nextLesson = course.lessons[currentIndex + 1];
+          setCurrentLesson({ ...nextLesson, is_locked: false });
+        }
+      } catch (error) {
+        console.error("Erro ao marcar aula:", error);
+        toast.error("Erro ao salvar progresso");
+      }
+    }
+  };
+
+  const handleLessonComplete = () => {
+    refetch();
+    // Auto-advance to next lesson
+    if (currentLesson) {
+      const currentIndex = course.lessons.findIndex(l => l.id === currentLesson.id);
+      if (currentIndex < course.lessons.length - 1) {
+        const nextLesson = course.lessons[currentIndex + 1];
+        setCurrentLesson({ ...nextLesson, is_locked: false });
+      }
+    }
+  };
+
+  const currentLessonIndex = currentLesson
+    ? course.lessons.findIndex(l => l.id === currentLesson.id)
+    : 0;
 
   return (
     <MainLayout>
@@ -59,9 +127,9 @@ const CursoDetalhe = () => {
             transition={{ duration: 0.5 }}
           >
             {currentLesson && (
-              <VideoPlayer 
-                videoId={currentLesson.videoId} 
-                title={currentLesson.title} 
+              <VideoPlayer
+                videoId={currentLesson.video_id}
+                title={currentLesson.titulo}
               />
             )}
           </motion.div>
@@ -74,17 +142,37 @@ const CursoDetalhe = () => {
           >
             <Card className="shadow-soft">
               <CardContent className="p-4 md:p-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="badge-primary">
-                    Aula {course.lessons.findIndex(l => l.id === currentLesson?.id) + 1} de {course.lessons.length}
-                  </span>
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="badge-primary">
+                        Aula {currentLessonIndex + 1} de {course.lessons_count}
+                      </span>
+                      {currentLesson?.has_quiz && (
+                        <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                          Quiz
+                        </span>
+                      )}
+                    </div>
+                    <h2 className="text-xl md:text-2xl font-display font-bold text-foreground mb-2">
+                      {currentLesson?.titulo}
+                    </h2>
+                    <p className="text-muted-foreground">
+                      Duracao: {currentLesson?.duracao}
+                    </p>
+                  </div>
+
+                  {currentLesson && (
+                    <LessonCompleteButton
+                      lessonId={currentLesson.id}
+                      courseId={course.id}
+                      hasQuiz={currentLesson.has_quiz}
+                      isCompleted={currentLesson.is_completed}
+                      onQuizRequired={handleQuizRequired}
+                      onComplete={handleLessonComplete}
+                    />
+                  )}
                 </div>
-                <h2 className="text-xl md:text-2xl font-display font-bold text-foreground mb-2">
-                  {currentLesson?.title}
-                </h2>
-                <p className="text-muted-foreground">
-                  Duração: {currentLesson?.duration}
-                </p>
               </CardContent>
             </Card>
           </motion.div>
@@ -101,7 +189,7 @@ const CursoDetalhe = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground leading-relaxed">
-                  {course.fullDescription}
+                  {course.descricao_completa}
                 </p>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border">
@@ -109,29 +197,29 @@ const CursoDetalhe = () => {
                     <div className="icon-container-sm mx-auto mb-2">
                       <Users className="w-4 h-4 text-primary" />
                     </div>
-                    <p className="text-sm font-medium text-foreground">{course.instructor}</p>
+                    <p className="text-sm font-medium text-foreground">{course.instrutor}</p>
                     <p className="text-xs text-muted-foreground">Instrutor</p>
                   </div>
                   <div className="text-center">
                     <div className="icon-container-sm mx-auto mb-2">
                       <Clock className="w-4 h-4 text-primary" />
                     </div>
-                    <p className="text-sm font-medium text-foreground">{course.duration}</p>
-                    <p className="text-xs text-muted-foreground">Duração Total</p>
+                    <p className="text-sm font-medium text-foreground">{course.duracao_total}</p>
+                    <p className="text-xs text-muted-foreground">Duracao Total</p>
                   </div>
                   <div className="text-center">
                     <div className="icon-container-sm mx-auto mb-2">
                       <BookOpen className="w-4 h-4 text-primary" />
                     </div>
-                    <p className="text-sm font-medium text-foreground">{course.lessonsCount} aulas</p>
-                    <p className="text-xs text-muted-foreground">Conteúdo</p>
+                    <p className="text-sm font-medium text-foreground">{course.lessons_count} aulas</p>
+                    <p className="text-xs text-muted-foreground">Conteudo</p>
                   </div>
                   <div className="text-center">
                     <div className="icon-container-sm mx-auto mb-2">
                       <FileText className="w-4 h-4 text-primary" />
                     </div>
-                    <p className="text-sm font-medium text-foreground">{course.level}</p>
-                    <p className="text-xs text-muted-foreground">Nível</p>
+                    <p className="text-sm font-medium text-foreground">{course.nivel}</p>
+                    <p className="text-xs text-muted-foreground">Nivel</p>
                   </div>
                 </div>
               </CardContent>
@@ -160,7 +248,7 @@ const CursoDetalhe = () => {
                       </div>
                       <div>
                         <p className="font-medium text-sm text-foreground">Apostila do Curso</p>
-                        <p className="text-xs text-muted-foreground">PDF • Em breve</p>
+                        <p className="text-xs text-muted-foreground">PDF - Em breve</p>
                       </div>
                     </div>
                     <Button variant="outline" size="sm" disabled>
@@ -170,7 +258,7 @@ const CursoDetalhe = () => {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-4 text-center">
-                  Materiais complementares serão disponibilizados em breve.
+                  Materiais complementares serao disponibilizados em breve.
                 </p>
               </CardContent>
             </Card>
@@ -191,7 +279,7 @@ const CursoDetalhe = () => {
                   Aulas do Curso
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  {course.lessons.filter(l => l.isCompleted).length} de {course.lessons.length} concluídas
+                  {course.completed_lessons_count} de {course.lessons_count} concluidas
                 </p>
               </CardHeader>
               <CardContent className="max-h-[60vh] overflow-y-auto">
@@ -205,6 +293,17 @@ const CursoDetalhe = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Quiz Modal */}
+      {currentLesson && (
+        <QuizModal
+          open={quizModalOpen}
+          onOpenChange={setQuizModalOpen}
+          lessonId={currentLesson.id}
+          lessonTitle={currentLesson.titulo}
+          onQuizComplete={handleQuizComplete}
+        />
+      )}
     </MainLayout>
   );
 };

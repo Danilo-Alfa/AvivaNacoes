@@ -117,6 +117,8 @@ export function AppSidebar() {
       <div className="p-4 border-t border-border">
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
+          aria-label={isCollapsed ? "Expandir menu lateral" : "Recolher menu lateral"}
+          aria-expanded={!isCollapsed}
           className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
         >
           <motion.div

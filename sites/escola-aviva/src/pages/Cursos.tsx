@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { CourseCard } from "@/components/courses/CourseCard";
-import { coursesData } from "@/data/courses";
+import { useCourses } from "@/hooks/useCourses";
+import { Loader2 } from "lucide-react";
 
 const Cursos = () => {
+  const { data: courses, isLoading, error } = useCourses();
+
   return (
     <MainLayout>
       {/* Hero */}
@@ -17,37 +20,71 @@ const Cursos = () => {
             Nossos Cursos
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Descubra nossos cursos de formação espiritual. Cada módulo foi 
-            preparado para edificar sua fé e aprofundar seu conhecimento bíblico.
+            Descubra nossos cursos de formacao espiritual. Cada modulo foi
+            preparado para edificar sua fe e aprofundar seu conhecimento biblico.
           </p>
         </motion.div>
       </section>
 
-      {/* Courses Grid */}
-      <section>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {coursesData.map((course, index) => (
-            <motion.div
-              key={course.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <CourseCard {...course} />
-            </motion.div>
-          ))}
+      {/* Loading State */}
+      {isLoading && (
+        <div className="flex flex-col items-center justify-center py-20">
+          <Loader2 className="w-10 h-10 animate-spin text-aviva-blue" />
+          <p className="text-muted-foreground mt-4">Carregando cursos...</p>
         </div>
-      </section>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center py-20"
+        >
+          <p className="text-red-600 mb-2">Erro ao carregar cursos.</p>
+          <p className="text-muted-foreground text-sm">
+            Verifique sua conexao e tente novamente.
+          </p>
+        </motion.div>
+      )}
+
+      {/* Courses Grid */}
+      {!isLoading && !error && courses && courses.length > 0 && (
+        <section>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {courses.map((course, index) => (
+              <motion.div
+                key={course.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <CourseCard
+                  id={course.slug}
+                  title={course.titulo}
+                  description={course.descricao || ""}
+                  thumbnail={course.thumbnail_url || "/images/default-course.jpg"}
+                  instructor={course.instrutor || "Instrutor"}
+                  duration={course.duracao_total || ""}
+                  lessonsCount={course.lessons_count}
+                  level={course.nivel || "Iniciante"}
+                  isNew={course.is_novo}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Empty State Info */}
-      {coursesData.length === 0 && (
+      {!isLoading && !error && courses && courses.length === 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="text-center py-20"
         >
           <p className="text-muted-foreground">
-            Novos cursos em breve! Estamos preparando conteúdos incríveis para você.
+            Novos cursos em breve! Estamos preparando conteudos incriveis para voce.
           </p>
         </motion.div>
       )}

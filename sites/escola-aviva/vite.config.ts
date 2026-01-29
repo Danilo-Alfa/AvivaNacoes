@@ -22,5 +22,21 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     assetsDir: "assets",
+    minify: "esbuild",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom"],
+          ui: ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu", "@radix-ui/react-tooltip"],
+          query: ["@tanstack/react-query"],
+          motion: ["framer-motion"],
+        },
+      },
+    },
+    sourcemap: false,
+    chunkSizeWarningLimit: 1000,
+  },
+  esbuild: {
+    drop: mode === "production" ? ["console", "debugger"] : [],
   },
 }));

@@ -1,6 +1,8 @@
-import { Check, Lock, Play, Clock } from "lucide-react";
+import { Check, Lock, Play, Clock, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { LessonWithProgress } from "@/types/course";
 
+// Re-export for backward compatibility
 export interface Lesson {
   id: string;
   title: string;
@@ -11,9 +13,9 @@ export interface Lesson {
 }
 
 interface LessonListProps {
-  lessons: Lesson[];
+  lessons: LessonWithProgress[];
   currentLessonId: string;
-  onSelectLesson: (lesson: Lesson) => void;
+  onSelectLesson: (lesson: LessonWithProgress) => void;
 }
 
 export function LessonList({ lessons, currentLessonId, onSelectLesson }: LessonListProps) {
@@ -21,19 +23,22 @@ export function LessonList({ lessons, currentLessonId, onSelectLesson }: LessonL
     <div className="space-y-2">
       {lessons.map((lesson, index) => {
         const isCurrent = lesson.id === currentLessonId;
-        const isCompleted = lesson.isCompleted;
-        const isLocked = lesson.isLocked;
+        const isCompleted = lesson.is_completed;
+        const isLocked = lesson.is_locked;
+        const hasQuiz = lesson.has_quiz;
 
         return (
           <button
             key={lesson.id}
             onClick={() => !isLocked && onSelectLesson(lesson)}
             disabled={isLocked}
+            aria-label={`${isLocked ? 'Bloqueada: ' : ''}${isCompleted ? 'Concluída: ' : ''}Aula ${index + 1}: ${lesson.titulo}`}
+            aria-current={isCurrent ? "true" : undefined}
             className={cn(
               "w-full flex items-center gap-3 p-3 rounded-lg transition-all text-left",
-              isCurrent 
-                ? "bg-primary text-primary-foreground" 
-                : isLocked 
+              isCurrent
+                ? "bg-primary text-primary-foreground"
+                : isLocked
                   ? "bg-muted/50 text-muted-foreground cursor-not-allowed"
                   : "bg-card hover:bg-secondary border border-border"
             )}
@@ -41,7 +46,7 @@ export function LessonList({ lessons, currentLessonId, onSelectLesson }: LessonL
             {/* Status Icon */}
             <div className={cn(
               "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold",
-              isCurrent 
+              isCurrent
                 ? "bg-primary-foreground/20 text-primary-foreground"
                 : isCompleted
                   ? "bg-green-500/20 text-green-600"
@@ -66,14 +71,27 @@ export function LessonList({ lessons, currentLessonId, onSelectLesson }: LessonL
                 "font-medium text-sm truncate",
                 isCurrent ? "text-primary-foreground" : "text-foreground"
               )}>
-                {lesson.title}
+                {lesson.titulo}
               </h4>
               <div className={cn(
-                "flex items-center gap-1 text-xs mt-0.5",
+                "flex items-center gap-2 text-xs mt-0.5",
                 isCurrent ? "text-primary-foreground/70" : "text-muted-foreground"
               )}>
-                <Clock className="w-3 h-3" />
-                <span>{lesson.duration}</span>
+                <div className="flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  <span>{lesson.duracao}</span>
+                </div>
+                {hasQuiz && (
+                  <div className={cn(
+                    "flex items-center gap-1 px-1.5 py-0.5 rounded text-xs",
+                    isCurrent
+                      ? "bg-primary-foreground/20"
+                      : "bg-amber-100 text-amber-700"
+                  )}>
+                    <BookOpen className="w-3 h-3" />
+                    <span>Quiz</span>
+                  </div>
+                )}
               </div>
             </div>
           </button>

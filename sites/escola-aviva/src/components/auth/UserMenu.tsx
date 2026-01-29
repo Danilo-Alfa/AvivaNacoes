@@ -49,7 +49,10 @@ export function UserMenu({ collapsed = false }: UserMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="group flex items-center justify-between w-full p-2 pr-3 rounded-xl hover:bg-primary/5 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50">
+        <button
+          aria-label="Menu do usuário"
+          className="group flex items-center justify-between w-full p-2 pr-3 rounded-xl hover:bg-primary/5 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        >
           {/* Avatar e informações do usuário */}
           <div className="flex items-center gap-3">
             {/* Avatar com efeito de glow */}
