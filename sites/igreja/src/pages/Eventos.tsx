@@ -445,13 +445,13 @@ export default function Eventos() {
               </div>
 
               {/* Navegação do Mês - Centralizado */}
-              <div className="flex items-center justify-center gap-1 bg-white dark:bg-gray-800 rounded-full px-3 py-1.5 shadow-sm border border-gray-200 dark:border-gray-700 w-fit">
+              <div className="flex items-center justify-center gap-1 bg-white dark:bg-gray-800 rounded-full px-2 py-1 shadow-sm border border-gray-200 dark:border-gray-700 w-fit">
                 <button
                   onClick={() => mudarMes(-1)}
-                  className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                  className="w-11 h-11 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                   aria-label="Mês anterior"
                 >
-                  <span className="text-gray-600 dark:text-gray-400 text-lg">‹</span>
+                  <span className="text-gray-600 dark:text-gray-300 text-xl">‹</span>
                 </button>
                 <span className="font-semibold text-sm sm:text-base min-w-[130px] sm:min-w-[160px] text-center capitalize px-2">
                   {mesAtual.toLocaleDateString("pt-BR", {
@@ -461,10 +461,10 @@ export default function Eventos() {
                 </span>
                 <button
                   onClick={() => mudarMes(1)}
-                  className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                  className="w-11 h-11 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                   aria-label="Próximo mês"
                 >
-                  <span className="text-gray-600 dark:text-gray-400 text-lg">›</span>
+                  <span className="text-gray-600 dark:text-gray-300 text-xl">›</span>
                 </button>
               </div>
             </div>
@@ -535,7 +535,7 @@ export default function Eventos() {
                         <span className={`text-xs sm:text-sm font-medium ${
                           isToday
                             ? "w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center bg-indigo-500 text-white rounded-full text-xs"
-                            : "text-gray-600 dark:text-gray-400"
+                            : "text-gray-600 dark:text-gray-300"
                         }`}>
                           {dia}
                         </span>
@@ -733,7 +733,7 @@ export default function Eventos() {
               <button
                 onClick={() => setDiaSelecionado(null)}
                 aria-label="Fechar modal de eventos"
-                className="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
+                className="w-11 h-11 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
               >
                 <X className="w-5 h-5 text-white" aria-hidden="true" />
               </button>

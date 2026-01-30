@@ -429,7 +429,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
               {/* Ícone decorativo */}
               <div className="absolute top-6 right-16 opacity-10">
-                <Sparkles className="w-20 h-20 text-white" />
+                <Sparkles className="w-20 h-20 text-white" aria-hidden="true" />
               </div>
 
               {/* Botão fechar */}
@@ -437,7 +437,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 onClick={() => setMobileMenuOpen(false)}
                 whileTap={{ scale: 0.9 }}
                 aria-label="Fechar menu de navegação"
-                className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm transition-colors border border-white/20"
+                className="absolute top-4 right-4 w-11 h-11 flex items-center justify-center rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm transition-colors border border-white/20"
               >
                 <X className="w-5 h-5 text-white" aria-hidden="true" />
               </motion.button>
@@ -531,7 +531,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                             <div
                               className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center shadow-md`}
                             >
-                              <Icon className="w-5 h-5 text-white" />
+                              <Icon className="w-5 h-5 text-white" aria-hidden="true" />
                             </div>
 
                             {/* Nome do item */}
@@ -589,7 +589,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
                   <div className="relative flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent to-amber-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-accent/30">
-                      <Heart className="w-6 h-6 text-white" />
+                      <Heart className="w-6 h-6 text-white" aria-hidden="true" />
                     </div>
                     <div>
                       <h4 className="font-display font-bold text-amber-900 dark:text-amber-200 text-lg">
@@ -614,9 +614,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     }`}
                   >
                     {isDark ? (
-                      <Moon className="w-5 h-5 text-primary dark:text-blue-400" />
+                      <Moon className="w-5 h-5 text-primary dark:text-blue-400" aria-hidden="true" />
                     ) : (
-                      <Sun className="w-5 h-5 text-amber-600" />
+                      <Sun className="w-5 h-5 text-amber-600" aria-hidden="true" />
                     )}
                   </div>
                   <span className="text-sm font-medium text-foreground">
@@ -735,6 +735,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                             className={`h-5 w-5 flex-shrink-0 ${
                               isActive ? "text-white" : ""
                             }`}
+                            aria-hidden="true"
                           />
                         </div>
 
@@ -793,7 +794,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               {/* Citação bíblica decorativa */}
               <div className="p-3 rounded-xl bg-secondary/30 mb-4">
                 <div className="flex items-start gap-2">
-                  <Sparkles className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                  <Sparkles className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <p className="text-[11px] italic text-muted-foreground leading-relaxed">
                     "Porque onde estiverem dois ou três reunidos em meu nome, aí
                     estou eu no meio deles"

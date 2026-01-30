@@ -125,21 +125,28 @@ export default function Home() {
   return (
     <div>
       {/* Hero Section - Banner */}
-      <section
-        className="relative min-h-[275px] md:min-h-[600px] bg-cover bg-no-repeat bg-[60%_top] md:bg-center"
-        style={{ backgroundImage: "url('/AvivaNacoes/hero-bg.jpg')" }}
-      />
+      <section className="relative min-h-[275px] md:min-h-[600px] overflow-hidden">
+        <img
+          src="/AvivaNacoes/hero-bg.jpg"
+          alt="Igreja Aviva Nações"
+          width={1920}
+          height={600}
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover object-[60%_top] md:object-center"
+        />
+      </section>
 
       {/* Botões - metade sobre o banner, metade abaixo */}
       <div className="container mx-auto px-4 -mt-4 md:-mt-5 relative z-10">
         <div className="flex flex-row gap-3 md:gap-4 justify-center max-w-md mx-auto">
           <Link to="/quem-somos" className="flex-1">
-            <button className="w-full px-4 py-3 md:px-8 md:py-4 text-sm md:text-base bg-background text-foreground font-semibold rounded-lg hover:bg-muted transition-all border-2 border-border shadow-lg">
+            <button className="w-full px-4 py-4 md:px-8 md:py-4 min-h-[48px] text-sm md:text-base bg-background text-foreground font-semibold rounded-lg hover:bg-muted transition-all border-2 border-border shadow-lg">
               Nossa História
             </button>
           </Link>
           <Link to="/programacao" className="flex-1">
-            <button className="w-full px-4 py-3 md:px-8 md:py-4 text-sm md:text-base bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg">
+            <button className="w-full px-4 py-4 md:px-8 md:py-4 min-h-[48px] text-sm md:text-base bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg">
               Programação
             </button>
           </Link>
@@ -199,9 +206,9 @@ export default function Home() {
               ))}
             </div>
             <Link to="/quem-somos">
-              <button className="flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all hover:-translate-y-0.5">
+              <button className="flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all hover:-translate-y-0.5">
                 Saiba Mais
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-5 h-5" aria-hidden="true" />
               </button>
             </Link>
           </div>
@@ -255,7 +262,7 @@ export default function Home() {
                 <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 h-full">
                   <CardContent className="p-4 md:p-6 text-center">
                     <div className="w-12 h-12 md:w-16 md:h-16 bg-primary/10 rounded-full mx-auto mb-3 md:mb-4 flex items-center justify-center">
-                      <item.icon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+                      <item.icon className="w-6 h-6 md:w-8 md:h-8 text-primary" aria-hidden="true" />
                     </div>
                     <h3 className="text-base md:text-xl font-bold mb-1 md:mb-2">{item.title}</h3>
                     <p className="text-xs md:text-sm text-muted-foreground">{item.desc}</p>
@@ -270,7 +277,7 @@ export default function Home() {
       {/* Versículo do Dia */}
       <section className="container mx-auto px-4 py-12 md:py-20">
         <div className="flex items-center justify-center gap-2 mb-6 md:mb-8">
-          <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+          <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-primary" aria-hidden="true" />
           <h2 className="text-xl md:text-3xl font-bold text-center">
             Versículo do Dia
           </h2>
@@ -278,8 +285,13 @@ export default function Home() {
 
         {loadingVersiculo ? (
           <Card className="shadow-medium max-w-xl mx-auto">
-            <CardContent className="p-12 text-center">
-              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <CardContent className="p-0">
+              {/* Skeleton com tamanho similar à imagem do versículo */}
+              <div className="w-full aspect-[4/3] bg-gray-200 dark:bg-gray-700 animate-pulse" />
+              <div className="p-4 text-center space-y-2">
+                <div className="h-5 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto" />
+                <div className="h-4 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto" />
+              </div>
             </CardContent>
           </Card>
         ) : versiculoDoDia ? (
@@ -291,7 +303,11 @@ export default function Home() {
                     <img
                       src={versiculoDoDia.url_imagem}
                       alt={versiculoDoDia.titulo || "Versículo do dia"}
-                      className="w-full"
+                      width={576}
+                      height={400}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-auto"
                     />
                     <div className="p-4 text-center">
                       <p className="font-semibold text-primary mb-2">
@@ -314,7 +330,7 @@ export default function Home() {
                     Venha conferir a mensagem do dia
                   </p>
                   <Link to="/versiculo-do-dia">
-                    <button className="px-6 py-3 bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all hover:-translate-y-0.5">
+                    <button className="px-6 py-3 min-h-[48px] bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all hover:-translate-y-0.5">
                       Ver Mensagem Completa
                     </button>
                   </Link>
@@ -329,7 +345,7 @@ export default function Home() {
                 Em breve teremos uma nova mensagem para você!
               </p>
               <Link to="/versiculo-do-dia">
-                <button className="px-6 py-3 bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all">
+                <button className="px-6 py-3 min-h-[48px] bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all">
                   Ver Versículos Anteriores
                 </button>
               </Link>
@@ -350,7 +366,7 @@ export default function Home() {
               amor e verdade
             </p>
             <Link to="/fale-conosco">
-              <button className="px-6 py-3 md:px-8 md:py-4 text-sm md:text-base bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all hover:-translate-y-0.5 shadow-soft">
+              <button className="px-6 py-3 md:px-8 md:py-4 min-h-[48px] text-sm md:text-base bg-background text-foreground font-semibold rounded-lg hover:bg-background/90 transition-all hover:-translate-y-0.5 shadow-soft">
                 Entre em Contato
               </button>
             </Link>

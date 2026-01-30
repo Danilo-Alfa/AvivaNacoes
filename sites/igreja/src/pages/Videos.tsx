@@ -53,10 +53,77 @@ export default function Videos() {
     return data.toLocaleDateString("pt-BR");
   };
 
+  // Skeleton components
+  const VideoCardSkeleton = () => (
+    <div className="bg-card rounded-lg shadow overflow-hidden">
+      <div className="aspect-video bg-gray-200 dark:bg-gray-700 animate-pulse" />
+      <div className="p-3 sm:p-4 space-y-2">
+        <div className="h-5 w-3/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        <div className="h-3 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+      </div>
+    </div>
+  );
+
+  const FeaturedVideoSkeleton = () => (
+    <div className="bg-card rounded-lg shadow overflow-hidden">
+      <div className="aspect-video bg-gray-200 dark:bg-gray-700 animate-pulse" />
+      <div className="p-3 sm:p-4 md:p-6 space-y-3">
+        <div className="h-7 w-2/3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        <div className="h-3 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+      </div>
+    </div>
+  );
+
+  const PlaylistSkeleton = () => (
+    <div className="bg-card rounded-lg shadow overflow-hidden h-full">
+      <div className="flex h-full">
+        <div className="w-24 sm:w-32 bg-gray-200 dark:bg-gray-700 animate-pulse flex-shrink-0" />
+        <div className="flex-1 p-4 sm:p-5 md:p-6 space-y-3">
+          <div className="h-6 w-3/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+          <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+          <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        </div>
+      </div>
+    </div>
+  );
+
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-12">
-        <p className="text-center text-muted-foreground">Carregando vídeos...</p>
+      <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12">
+        {/* Hero Section Skeleton */}
+        <div className="mb-6 sm:mb-8 md:mb-16 text-center">
+          <div className="h-10 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto mb-3" />
+          <div className="h-5 w-80 max-w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto" />
+        </div>
+
+        {/* Featured Video Skeleton */}
+        <section className="mb-6 sm:mb-8 md:mb-16">
+          <FeaturedVideoSkeleton />
+        </section>
+
+        {/* Video Grid Skeleton */}
+        <section className="mb-6 sm:mb-8 md:mb-16">
+          <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4 sm:mb-6 md:mb-8" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+            <VideoCardSkeleton />
+            <VideoCardSkeleton />
+            <VideoCardSkeleton />
+            <VideoCardSkeleton />
+            <VideoCardSkeleton />
+            <VideoCardSkeleton />
+          </div>
+        </section>
+
+        {/* Playlist Skeleton */}
+        <section>
+          <div className="h-8 w-56 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4 sm:mb-6 md:mb-8" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+            <PlaylistSkeleton />
+            <PlaylistSkeleton />
+          </div>
+        </section>
       </div>
     );
   }
@@ -100,7 +167,7 @@ export default function Videos() {
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 text-[10px] sm:text-xs md:text-sm text-muted-foreground">
                   {videoDestaque.duracao && (
                     <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+                      <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" aria-hidden="true" />
                       {videoDestaque.duracao}
                     </span>
                   )}
@@ -210,7 +277,7 @@ export default function Videos() {
                         )}
                         <div className="text-[11px] sm:text-xs md:text-sm font-semibold text-primary flex items-center gap-1 w-fit transition-all duration-300 group-hover:gap-2">
                           Ver Playlist
-                          <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                          <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
                         </div>
                       </div>
                     </div>

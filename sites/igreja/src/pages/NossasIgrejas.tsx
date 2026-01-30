@@ -4,6 +4,34 @@ import { MapPin, Phone, Clock } from "lucide-react";
 import { APIProvider, Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { getIgrejasAtivas, type Igreja } from "@/services/igrejaService";
 
+// Skeleton para card de igreja
+function IgrejaCardSkeleton() {
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+      <div className="aspect-video bg-gray-200 dark:bg-gray-700 animate-pulse" />
+      <div className="p-6 space-y-4">
+        <div className="h-6 w-3/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        <div className="space-y-3">
+          <div className="flex items-start gap-3">
+            <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse flex-shrink-0" />
+            <div className="flex-1 space-y-1">
+              <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse flex-shrink-0" />
+            <div className="flex-1 space-y-1">
+              <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              <div className="h-3 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function NossasIgrejas() {
   const [igrejas, setIgrejas] = useState<Igreja[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,14 +73,6 @@ export default function NossasIgrejas() {
         }
       : { lat: -23.574401, lng: -46.758482 }; // Default: Jardim Esther, SP
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <p className="text-center text-muted-foreground">Carregando igrejas...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
@@ -65,8 +85,25 @@ export default function NossasIgrejas() {
         </p>
       </div>
 
-      {/* Mapa Interativo */}
-      <section className="mb-16">
+      {loading ? (
+        <>
+          {/* Skeleton do Mapa */}
+          <section className="mb-16">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+              <div className="h-[500px] w-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+            </div>
+          </section>
+          {/* Skeleton dos Cards */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <IgrejaCardSkeleton />
+            <IgrejaCardSkeleton />
+            <IgrejaCardSkeleton />
+          </div>
+        </>
+      ) : (
+        <>
+          {/* Mapa Interativo */}
+          <section className="mb-16">
         <Card className="shadow-medium overflow-hidden">
           <CardContent className="p-0">
             <div className="h-[500px] w-full">
@@ -83,6 +120,7 @@ export default function NossasIgrejas() {
                       key={igreja.id}
                       position={{ lat: igreja.latitude!, lng: igreja.longitude! }}
                       onClick={() => setSelectedChurch(igreja.id)}
+                      title={`Ver detalhes de ${igreja.nome}`}
                     >
                       <Pin
                         background={
@@ -110,10 +148,19 @@ export default function NossasIgrejas() {
         {igrejas.map((igreja) => (
           <Card
             key={igreja.id}
-            className={`shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 ${
+            className={`shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer ${
               selectedChurch === igreja.id ? "ring-2 ring-primary" : ""
             }`}
             onClick={() => setSelectedChurch(igreja.id)}
+            role="button"
+            tabIndex={0}
+            aria-label={`Selecionar ${igreja.nome}${igreja.bairro ? ` - ${igreja.bairro}` : ""}`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setSelectedChurch(igreja.id);
+              }
+            }}
           >
             <CardContent className="p-0">
               {/* Imagem da Igreja */}
@@ -121,6 +168,10 @@ export default function NossasIgrejas() {
                 <img
                   src={igreja.imagem_url}
                   alt={igreja.nome}
+                  width={400}
+                  height={225}
+                  loading="lazy"
+                  decoding="async"
                   className="aspect-video w-full object-cover rounded-t-lg"
                 />
               ) : (
@@ -139,7 +190,7 @@ export default function NossasIgrejas() {
 
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <div>
                       <p className="text-sm font-medium text-foreground">
                         Endereço
@@ -158,7 +209,7 @@ export default function NossasIgrejas() {
 
                   {(igreja.telefone || igreja.whatsapp) && (
                     <div className="flex items-start gap-3">
-                      <Phone className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                      <Phone className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
                       <div>
                         <p className="text-sm font-medium text-foreground">
                           Telefone
@@ -172,7 +223,7 @@ export default function NossasIgrejas() {
 
                   {igreja.horarios && (
                     <div className="flex items-start gap-3">
-                      <Clock className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                      <Clock className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
                       <div>
                         <p className="text-sm font-medium text-foreground">
                           Horários
@@ -201,7 +252,8 @@ export default function NossasIgrejas() {
                     href={`https://www.google.com/maps/search/?api=1&query=${igreja.latitude},${igreja.longitude}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-4 block w-full text-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+                    className="mt-4 block w-full text-center px-4 py-3 min-h-[48px] bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     Ver no Google Maps
                   </a>
@@ -211,7 +263,8 @@ export default function NossasIgrejas() {
           </Card>
         ))}
       </div>
-
+        </>
+      )}
     </div>
   );
 }
