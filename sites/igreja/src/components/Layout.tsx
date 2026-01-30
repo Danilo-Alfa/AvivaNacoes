@@ -649,25 +649,27 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             sidebarOpen ? "w-60" : "w-16"
           }`}
         >
-          {/* Toggle Button - Circular com hover colorido */}
-          <motion.button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label={sidebarOpen ? "Recolher menu lateral" : "Expandir menu lateral"}
-            aria-expanded={sidebarOpen}
-            className="absolute -right-4 top-8 z-[60] h-8 w-8 rounded-full shadow-lg bg-white dark:bg-card border border-border flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors duration-200"
-          >
-            {sidebarOpen ? (
-              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-            ) : (
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
-            )}
-          </motion.button>
+          {/* Toggle Button - No topo da sidebar */}
+          <div className={`flex ${sidebarOpen ? "justify-end pr-3" : "justify-center"} pt-3 pb-2`}>
+            <motion.button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label={sidebarOpen ? "Recolher menu lateral" : "Expandir menu lateral"}
+              aria-expanded={sidebarOpen}
+              className="h-8 w-8 rounded-full shadow-lg bg-white dark:bg-card border border-border flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors duration-200"
+            >
+              {sidebarOpen ? (
+                <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
+              )}
+            </motion.button>
+          </div>
 
           {/* Navigation Items com Seções */}
           <nav
-            className={`flex-1 pt-4 overflow-y-auto overflow-x-hidden ${
+            className={`flex-1 overflow-y-auto overflow-x-hidden ${
               sidebarOpen ? "px-3" : "px-2"
             }`}
           >
