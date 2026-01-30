@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 import { versiculoService } from "@/services/versiculoService";
 import { Versiculo } from "@/lib/supabase";
 
-// Lazy load ReactPlayer para reduzir TBT
 const ReactPlayer = lazy(() => import("react-player"));
 
 // Componente de placeholder para vídeo - evita carregar ReactPlayer até o usuário clicar
@@ -180,7 +179,8 @@ export default function Home() {
             alt="Igreja Aviva Nações"
             width={1920}
             height={600}
-            fetchPriority="high"
+            // @ts-expect-error fetchpriority is a valid HTML attribute
+            fetchpriority="high"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-[60%_top] md:object-center"
           />

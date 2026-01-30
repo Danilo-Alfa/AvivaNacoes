@@ -1,9 +1,6 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Clock, Play } from "lucide-react";
-
-// Lazy load ReactPlayer para reduzir TBT
-const ReactPlayer = lazy(() => import("react-player"));
 import {
   getVideoDestaque,
   getVideosRecentes,
@@ -25,14 +22,55 @@ const getYouTubeVideoId = (url: string): string | null => {
   return null;
 };
 
-// Gera a URL do thumbnail do YouTube
+// Gera URL do thumbnail do YouTube
 const getYouTubeThumbnail = (url: string): string | null => {
   const videoId = getYouTubeVideoId(url);
-  if (videoId) {
-    return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-  }
-  return null;
+  return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null;
 };
+
+// Componente de vídeo do YouTube com thumbnail e lazy loading
+function YouTubeVideo({ url, className }: { url: string; className?: string }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoId = getYouTubeVideoId(url);
+
+  if (!videoId) return null;
+
+  const thumbnailUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+
+  if (!isPlaying) {
+    return (
+      <button
+        onClick={() => setIsPlaying(true)}
+        className={`relative w-full h-full bg-black group cursor-pointer ${className || ''}`}
+        aria-label="Reproduzir vídeo"
+      >
+        <img
+          src={thumbnailUrl}
+          alt="Thumbnail do vídeo"
+          className="w-full h-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="absolute inset-0 flex items-center justify-center">
+          {/* Botão de play estilo YouTube */}
+          <div className="w-16 h-11 bg-[#212121]/80 group-hover:bg-[#ff0000] rounded-xl flex items-center justify-center transition-colors">
+            <Play className="w-7 h-7 text-white fill-white" aria-hidden="true" />
+          </div>
+        </div>
+      </button>
+    );
+  }
+
+  return (
+    <iframe
+      src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+      title="YouTube video player"
+      className={`w-full h-full ${className || ''}`}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  );
+}
 
 export default function Videos() {
   const [videoDestaque, setVideoDestaque] = useState<Video | null>(null);
@@ -197,20 +235,7 @@ export default function Videos() {
           <Card className="shadow-medium">
             <CardContent className="p-0">
               <div className="aspect-video bg-black rounded-t-lg overflow-hidden">
-                <Suspense fallback={
-                  <div className="w-full h-full flex items-center justify-center bg-black">
-                    <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin" />
-                  </div>
-                }>
-                  <ReactPlayer
-                    url={videoDestaque.url_video}
-                    width="100%"
-                    height="100%"
-                    controls
-                    light={videoDestaque.thumbnail_url || true}
-                    playing={false}
-                  />
-                </Suspense>
+                <YouTubeVideo url={videoDestaque.url_video} />
               </div>
               <div className="p-3 sm:p-4 md:p-6">
                 <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-2">
@@ -261,20 +286,7 @@ export default function Videos() {
               >
                 <CardContent className="p-0">
                   <div className="aspect-video bg-black rounded-t-lg overflow-hidden">
-                    <Suspense fallback={
-                      <div className="w-full h-full flex items-center justify-center bg-black">
-                        <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
-                      </div>
-                    }>
-                      <ReactPlayer
-                        url={video.url_video}
-                        width="100%"
-                        height="100%"
-                        controls
-                        light={video.thumbnail_url || true}
-                        playing={false}
-                      />
-                    </Suspense>
+                    <YouTubeVideo url={video.url_video} />
                   </div>
                   <div className="p-3 sm:p-4">
                     <h3 className="text-sm sm:text-base font-semibold mb-1.5 sm:mb-2 line-clamp-2">

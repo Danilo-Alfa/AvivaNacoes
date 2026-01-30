@@ -285,7 +285,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Header - Fixed */}
       <header className="fixed top-0 z-50 w-full">
         {/* Linha decorativa em gradiente no topo */}
-        <div className="h-1 w-full bg-gradient-to-r from-primary via-primary/80 to-accent" />
+        {/* <div className="h-1 w-full bg-gradient-to-r from-primary via-primary/80 to-accent" /> */}
 
         <nav
           className={`transition-all duration-300 ${
@@ -313,7 +313,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         width={56}
                         height={56}
                         decoding="async"
-                        fetchPriority="high"
+                        // @ts-expect-error fetchpriority is a valid HTML attribute
+                        fetchpriority="high"
                         className="relative w-12 h-12 md:w-14 md:h-14 object-contain"
                       />
                     </picture>
@@ -726,7 +727,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
                         {/* Indicador lateral quando ativo */}
                         {isActive && (
-                          <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-primary to-accent rounded-full shadow-lg shadow-primary/50" />
+                          <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-full shadow-lg shadow-primary/50" />
                         )}
 
                         {/* Ícone */}

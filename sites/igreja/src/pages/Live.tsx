@@ -18,7 +18,6 @@ import {
 import { Loader2, Radio, User, Users } from "lucide-react";
 import { useCallback, useEffect, useState, lazy, Suspense } from "react";
 
-// Lazy load ReactPlayer para reduzir TBT
 const ReactPlayer = lazy(() => import("react-player"));
 
 // Declarar gtag para TypeScript
