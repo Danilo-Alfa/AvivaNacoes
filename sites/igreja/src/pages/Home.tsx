@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ArrowRight,
@@ -7,11 +7,44 @@ import {
   Calendar,
   Heart,
   Users,
+  Play,
 } from "lucide-react";
-import ReactPlayer from "react-player";
 import { Link } from "react-router-dom";
 import { versiculoService } from "@/services/versiculoService";
 import { Versiculo } from "@/lib/supabase";
+
+// Lazy load ReactPlayer para reduzir TBT
+const ReactPlayer = lazy(() => import("react-player"));
+
+// Componente de placeholder para vídeo - evita carregar ReactPlayer até o usuário clicar
+function VideoPlaceholder({
+  videoId,
+  onPlay
+}: {
+  videoId: string;
+  onPlay: () => void;
+}) {
+  return (
+    <button
+      onClick={onPlay}
+      className="relative w-full h-full bg-black group cursor-pointer"
+      aria-label="Reproduzir vídeo"
+    >
+      <img
+        src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
+        alt="Thumbnail do vídeo"
+        className="w-full h-full object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+        <div className="w-16 h-16 md:w-20 md:h-20 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+          <Play className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" aria-hidden="true" />
+        </div>
+      </div>
+    </button>
+  );
+}
 
 const cultos = [
   {
@@ -92,10 +125,14 @@ const getProximoCulto = () => {
   return cultos[proximoDia];
 };
 
+// ID do vídeo do YouTube
+const YOUTUBE_VIDEO_ID = "Nz-EPSwe5as";
+
 export default function Home() {
   const [versiculoDoDia, setVersiculoDoDia] = useState<Versiculo | null>(null);
   const [loadingVersiculo, setLoadingVersiculo] = useState(true);
   const [proximoCulto, setProximoCulto] = useState(getProximoCulto());
+  const [videoStarted, setVideoStarted] = useState(false);
 
   useEffect(() => {
     carregarVersiculoDoDia();
@@ -126,15 +163,28 @@ export default function Home() {
     <div className="min-h-[calc(100vh-200px)]">
       {/* Hero Section - Banner */}
       <section className="relative min-h-[275px] md:min-h-[600px] overflow-hidden">
-        <img
-          src="/AvivaNacoes/hero-bg.jpg"
-          alt="Igreja Aviva Nações"
-          width={1920}
-          height={600}
-          fetchPriority="high"
-          decoding="async"
-          className="absolute inset-0 w-full h-full object-cover object-[60%_top] md:object-center"
-        />
+        <picture>
+          {/* WebP para navegadores modernos */}
+          <source
+            media="(max-width: 768px)"
+            srcSet="/AvivaNacoes/hero-bg-mobile.webp"
+            type="image/webp"
+          />
+          <source
+            srcSet="/AvivaNacoes/hero-bg.webp"
+            type="image/webp"
+          />
+          {/* Fallback JPG */}
+          <img
+            src="/AvivaNacoes/hero-bg.jpg"
+            alt="Igreja Aviva Nações"
+            width={1920}
+            height={600}
+            fetchPriority="high"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover object-[60%_top] md:object-center"
+          />
+        </picture>
       </section>
 
       {/* Botões - metade sobre o banner, metade abaixo */}
@@ -213,14 +263,26 @@ export default function Home() {
             </Link>
           </div>
           <div className="aspect-video bg-black rounded-lg shadow-medium overflow-hidden">
-            <ReactPlayer
-              src="https://youtu.be/Nz-EPSwe5as?si=Kwl7A51XJoqx2mcW"
-              width="100%"
-              height="100%"
-              controls
-              light
-              playing={false}
-            />
+            {!videoStarted ? (
+              <VideoPlaceholder
+                videoId={YOUTUBE_VIDEO_ID}
+                onPlay={() => setVideoStarted(true)}
+              />
+            ) : (
+              <Suspense fallback={
+                <div className="w-full h-full flex items-center justify-center bg-black">
+                  <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                </div>
+              }>
+                <ReactPlayer
+                  url={`https://www.youtube.com/watch?v=${YOUTUBE_VIDEO_ID}`}
+                  width="100%"
+                  height="100%"
+                  controls
+                  playing
+                />
+              </Suspense>
+            )}
           </div>
         </div>
       </section>

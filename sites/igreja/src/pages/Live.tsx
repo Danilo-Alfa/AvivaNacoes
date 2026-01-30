@@ -16,8 +16,10 @@ import {
   type LiveConfig,
 } from "@/services/liveService";
 import { Loader2, Radio, User, Users } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import ReactPlayer from "react-player";
+import { useCallback, useEffect, useState, lazy, Suspense } from "react";
+
+// Lazy load ReactPlayer para reduzir TBT
+const ReactPlayer = lazy(() => import("react-player"));
 
 // Declarar gtag para TypeScript
 declare global {
@@ -383,26 +385,32 @@ export default function Live() {
                 )}
 
                 <div className="aspect-video bg-black rounded-lg overflow-hidden">
-                  <ReactPlayer
-                    src={streamUrl}
-                    playing
-                    controls
-                    width="100%"
-                    height="100%"
-                    config={{
-                      hls: {
-                        enableWorker: true,
-                        lowLatencyMode: true,
-                        maxBufferLength: 10,
-                        maxMaxBufferLength: 30,
-                      },
-                    }}
-                    controlsList="nodownload"
-                    onError={(e) => {
-                      console.error("Erro no player:", e);
-                      setIsLive(false);
-                    }}
-                  />
+                  <Suspense fallback={
+                    <div className="w-full h-full flex items-center justify-center bg-black">
+                      <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                    </div>
+                  }>
+                    <ReactPlayer
+                      url={streamUrl}
+                      playing
+                      controls
+                      width="100%"
+                      height="100%"
+                      config={{
+                        hls: {
+                          enableWorker: true,
+                          lowLatencyMode: true,
+                          maxBufferLength: 10,
+                          maxMaxBufferLength: 30,
+                        },
+                      }}
+                      controlsList="nodownload"
+                      onError={(e) => {
+                        console.error("Erro no player:", e);
+                        setIsLive(false);
+                      }}
+                    />
+                  </Suspense>
                 </div>
 
                 <Alert>

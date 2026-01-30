@@ -14,7 +14,9 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:danilo-alfa.github.io)",
       "Bash(git commit:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(where:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

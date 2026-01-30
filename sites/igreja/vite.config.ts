@@ -118,6 +118,7 @@ export default defineConfig(({ mode }) => ({
           ui: ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu", "@radix-ui/react-tooltip"],
           query: ["@tanstack/react-query"],
           motion: ["framer-motion"],
+          player: ["react-player"],
         },
       },
     },

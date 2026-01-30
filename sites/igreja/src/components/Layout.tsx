@@ -305,15 +305,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     className="relative"
                   >
                     <div className="absolute inset-0 bg-primary/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <img
-                      src="/AvivaNacoes/logoheader.png"
-                      alt="Logo Aviva Nações"
-                      width={56}
-                      height={56}
-                      decoding="async"
-                      fetchPriority="high"
-                      className="relative w-12 h-12 md:w-14 md:h-14 object-contain"
-                    />
+                    <picture>
+                      <source srcSet="/AvivaNacoes/logoheader.webp" type="image/webp" />
+                      <img
+                        src="/AvivaNacoes/logoheader.png"
+                        alt="Logo Aviva Nações"
+                        width={56}
+                        height={56}
+                        decoding="async"
+                        fetchPriority="high"
+                        className="relative w-12 h-12 md:w-14 md:h-14 object-contain"
+                      />
+                    </picture>
                   </motion.div>
                 </div>
                 <div className="flex flex-col">
@@ -387,7 +390,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   whileTap={{ scale: 0.95 }}
                   aria-label="Abrir menu de navegação"
                   aria-expanded={mobileMenuOpen}
-                  className="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg shadow-primary/30"
+                  className="lg:hidden w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg shadow-primary/30"
                 >
                   <Menu className="h-5 w-5" aria-hidden="true" />
                 </motion.button>
@@ -437,22 +440,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 onClick={() => setMobileMenuOpen(false)}
                 whileTap={{ scale: 0.9 }}
                 aria-label="Fechar menu de navegação"
-                className="absolute top-4 right-4 w-11 h-11 flex items-center justify-center rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm transition-colors border border-white/20"
+                className="absolute top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm transition-colors border border-white/20"
               >
                 <X className="w-5 h-5 text-white" aria-hidden="true" />
               </motion.button>
 
               {/* Logo e mensagem de boas-vindas */}
               <div className="flex items-center gap-4 mb-4">
-                <img
-                  src="/AvivaNacoes/logoheader.png"
-                  alt="Logo Aviva Nações"
-                  width={64}
-                  height={64}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-16 h-16 rounded-2xl object-contain"
-                />
+                <picture>
+                  <source srcSet="/AvivaNacoes/logoheader.webp" type="image/webp" />
+                  <img
+                    src="/AvivaNacoes/logoheader.png"
+                    alt="Logo Aviva Nações"
+                    width={64}
+                    height={64}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-16 h-16 rounded-2xl object-contain"
+                  />
+                </picture>
                 <div>
                   <h2 className="text-white font-display text-2xl font-bold">
                     Aviva Nações
@@ -840,15 +846,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <img
-                  src="/AvivaNacoes/logoheader.png"
-                  alt="Logo Aviva Nações"
-                  width={40}
-                  height={40}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-10 h-10 object-contain"
-                />
+                <picture>
+                  <source srcSet="/AvivaNacoes/logoheader.webp" type="image/webp" />
+                  <img
+                    src="/AvivaNacoes/logoheader.png"
+                    alt="Logo Aviva Nações"
+                    width={40}
+                    height={40}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-10 h-10 object-contain"
+                  />
+                </picture>
                 <h3 className="text-lg font-display font-bold text-foreground">
                   Aviva Nações
                 </h3>

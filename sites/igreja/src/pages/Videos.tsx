@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Clock, Play } from "lucide-react";
-import ReactPlayer from "react-player";
+
+// Lazy load ReactPlayer para reduzir TBT
+const ReactPlayer = lazy(() => import("react-player"));
 import {
   getVideoDestaque,
   getVideosRecentes,
@@ -195,14 +197,20 @@ export default function Videos() {
           <Card className="shadow-medium">
             <CardContent className="p-0">
               <div className="aspect-video bg-black rounded-t-lg overflow-hidden">
-                <ReactPlayer
-                  src={videoDestaque.url_video}
-                  width="100%"
-                  height="100%"
-                  controls
-                  light={videoDestaque.thumbnail_url || true}
-                  playing={false}
-                />
+                <Suspense fallback={
+                  <div className="w-full h-full flex items-center justify-center bg-black">
+                    <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                  </div>
+                }>
+                  <ReactPlayer
+                    url={videoDestaque.url_video}
+                    width="100%"
+                    height="100%"
+                    controls
+                    light={videoDestaque.thumbnail_url || true}
+                    playing={false}
+                  />
+                </Suspense>
               </div>
               <div className="p-3 sm:p-4 md:p-6">
                 <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-2">
@@ -253,14 +261,20 @@ export default function Videos() {
               >
                 <CardContent className="p-0">
                   <div className="aspect-video bg-black rounded-t-lg overflow-hidden">
-                    <ReactPlayer
-                      src={video.url_video}
-                      width="100%"
-                      height="100%"
-                      controls
-                      light={video.thumbnail_url || true}
-                      playing={false}
-                    />
+                    <Suspense fallback={
+                      <div className="w-full h-full flex items-center justify-center bg-black">
+                        <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                      </div>
+                    }>
+                      <ReactPlayer
+                        url={video.url_video}
+                        width="100%"
+                        height="100%"
+                        controls
+                        light={video.thumbnail_url || true}
+                        playing={false}
+                      />
+                    </Suspense>
                   </div>
                   <div className="p-3 sm:p-4">
                     <h3 className="text-sm sm:text-base font-semibold mb-1.5 sm:mb-2 line-clamp-2">
