@@ -308,6 +308,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <img
                       src="/AvivaNacoes/logoheader.png"
                       alt="Logo Aviva Nações"
+                      width={56}
+                      height={56}
+                      decoding="async"
+                      fetchPriority="high"
                       className="relative w-12 h-12 md:w-14 md:h-14 object-contain"
                     />
                   </motion.div>
@@ -367,12 +371,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   onClick={() => setIsDark(!isDark)}
                   whileHover={{ rotate: 180 }}
                   transition={{ duration: 0.3 }}
+                  aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
                   className="hidden md:flex w-10 h-10 items-center justify-center rounded-xl bg-secondary/50 hover:bg-primary hover:text-white transition-colors duration-200"
                 >
                   {isDark ? (
-                    <Sun className="h-5 w-5" />
+                    <Sun className="h-5 w-5" aria-hidden="true" />
                   ) : (
-                    <Moon className="h-5 w-5" />
+                    <Moon className="h-5 w-5" aria-hidden="true" />
                   )}
                 </motion.button>
 
@@ -380,9 +385,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <motion.button
                   onClick={() => setMobileMenuOpen(true)}
                   whileTap={{ scale: 0.95 }}
+                  aria-label="Abrir menu de navegação"
+                  aria-expanded={mobileMenuOpen}
                   className="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg shadow-primary/30"
                 >
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-5 w-5" aria-hidden="true" />
                 </motion.button>
               </div>
             </div>
@@ -429,9 +436,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <motion.button
                 onClick={() => setMobileMenuOpen(false)}
                 whileTap={{ scale: 0.9 }}
+                aria-label="Fechar menu de navegação"
                 className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm transition-colors border border-white/20"
               >
-                <X className="w-5 h-5 text-white" />
+                <X className="w-5 h-5 text-white" aria-hidden="true" />
               </motion.button>
 
               {/* Logo e mensagem de boas-vindas */}
@@ -439,6 +447,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <img
                   src="/AvivaNacoes/logoheader.png"
                   alt="Logo Aviva Nações"
+                  width={64}
+                  height={64}
+                  loading="lazy"
+                  decoding="async"
                   className="w-16 h-16 rounded-2xl object-contain"
                 />
                 <div>
@@ -635,12 +647,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             onClick={() => setSidebarOpen(!sidebarOpen)}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
+            aria-label={sidebarOpen ? "Recolher menu lateral" : "Expandir menu lateral"}
+            aria-expanded={sidebarOpen}
             className="absolute -right-4 top-8 z-[60] h-8 w-8 rounded-full shadow-lg bg-white dark:bg-card border border-border flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors duration-200"
           >
             {sidebarOpen ? (
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             ) : (
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
             )}
           </motion.button>
 
@@ -828,6 +842,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <img
                   src="/AvivaNacoes/logoheader.png"
                   alt="Logo Aviva Nações"
+                  width={40}
+                  height={40}
+                  loading="lazy"
+                  decoding="async"
                   className="w-10 h-10 object-contain"
                 />
                 <h3 className="text-lg font-display font-bold text-foreground">

@@ -236,6 +236,63 @@ export default function Eventos() {
     );
   };
 
+  // Skeleton para o calendário - mantém o mesmo tamanho do calendário real
+  const CalendarioSkeleton = () => (
+    <section className="mb-16">
+      <div className="flex flex-col items-center mb-6 sm:mb-8 gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
+          <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+        </div>
+        <div className="h-10 w-48 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+      </div>
+      <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 min-h-[400px]">
+        <div className="grid grid-cols-7 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 rounded-t-2xl">
+          {[...Array(7)].map((_, i) => (
+            <div key={i} className="py-4 flex justify-center">
+              <div className="h-4 w-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-7 gap-2 p-3">
+          {[...Array(35)].map((_, i) => (
+            <div key={i} className="aspect-square rounded-2xl bg-gray-100 dark:bg-gray-800 animate-pulse" />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
+  // Skeleton para eventos em destaque
+  const EventoDestaqueSkeleton = () => (
+    <section className="mb-16">
+      <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mb-8" />
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+          <div className="grid md:grid-cols-3 gap-0">
+            <div className="aspect-video md:aspect-auto md:h-80 bg-gray-200 dark:bg-gray-700 animate-pulse" />
+            <div className="md:col-span-2 p-6 md:p-8 space-y-4">
+              <div className="h-6 w-24 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+              <div className="h-8 w-3/4 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+              <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              <div className="grid sm:grid-cols-2 gap-4 mt-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+                    <div className="space-y-2 flex-1">
+                      <div className="h-3 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                      <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
@@ -249,9 +306,10 @@ export default function Eventos() {
       </div>
 
       {loading ? (
-        <div className="text-center py-20">
-          <p className="text-muted-foreground">Carregando eventos...</p>
-        </div>
+        <>
+          <EventoDestaqueSkeleton />
+          <CalendarioSkeleton />
+        </>
       ) : (
         <>
           {/* Eventos em Destaque */}
@@ -267,16 +325,20 @@ export default function Eventos() {
                     <CardContent className="p-0">
                       <div className="grid md:grid-cols-3 gap-0">
                         {/* Imagem do Evento */}
-                        <div className="aspect-video md:aspect-auto md:max-h-80">
+                        <div className="aspect-video md:aspect-auto md:h-80">
                           {evento.imagem_url ? (
                             <img
                               src={evento.imagem_url}
                               alt={evento.titulo}
-                              className="w-full h-full object-cover max-h-80"
+                              width={400}
+                              height={320}
+                              loading="lazy"
+                              decoding="async"
+                              className="w-full h-full object-cover"
                             />
                           ) : (
-                            <div className="h-full bg-gradient-accent flex items-center justify-center">
-                              <Calendar className="w-16 h-16 text-accent-foreground" />
+                            <div className="h-full min-h-[200px] md:h-80 bg-gradient-accent flex items-center justify-center">
+                              <Calendar className="w-16 h-16 text-accent-foreground" aria-hidden="true" />
                             </div>
                           )}
                         </div>
@@ -284,7 +346,7 @@ export default function Eventos() {
                         {/* Informações do Evento */}
                         <div className="md:col-span-2 p-6 md:p-8">
                           <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full mb-3">
-                            <Star className="w-3 h-3" />
+                            <Star className="w-3 h-3" aria-hidden="true" />
                             DESTAQUE
                           </div>
                           <h3 className="text-2xl font-bold mb-2">
@@ -299,7 +361,7 @@ export default function Eventos() {
                           <div className="grid sm:grid-cols-2 gap-4">
                             <div className="flex items-center gap-3">
                               <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <Calendar className="w-5 h-5 text-primary" />
+                                <Calendar className="w-5 h-5 text-primary" aria-hidden="true" />
                               </div>
                               <div>
                                 <p className="text-xs text-muted-foreground">
@@ -313,7 +375,7 @@ export default function Eventos() {
 
                             <div className="flex items-center gap-3">
                               <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <Clock className="w-5 h-5 text-primary" />
+                                <Clock className="w-5 h-5 text-primary" aria-hidden="true" />
                               </div>
                               <div>
                                 <p className="text-xs text-muted-foreground">
@@ -331,7 +393,7 @@ export default function Eventos() {
                             {evento.local && (
                               <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                                  <MapPin className="w-5 h-5 text-primary" />
+                                  <MapPin className="w-5 h-5 text-primary" aria-hidden="true" />
                                 </div>
                                 <div>
                                   <p className="text-xs text-muted-foreground">
@@ -375,7 +437,7 @@ export default function Eventos() {
             <div className="flex flex-col items-center mb-6 sm:mb-8 gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-white" />
+                  <Calendar className="w-5 h-5 text-white" aria-hidden="true" />
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
                   Calendário
@@ -408,7 +470,7 @@ export default function Eventos() {
             </div>
 
             {/* Grade do Calendário */}
-            <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 min-h-[400px]">
               {/* Dias da semana */}
               <div className="grid grid-cols-7 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800 border-b border-gray-200 dark:border-gray-700 rounded-t-2xl">
                 {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(
@@ -454,9 +516,13 @@ export default function Eventos() {
                   const isTopRows = linhaNoCalendario <= 1;
 
                   return (
-                    <div
+                    <button
+                      type="button"
                       key={index}
-                      className={`aspect-square p-2 sm:p-2.5 rounded-2xl relative group transition-all duration-200 ease-out flex flex-col cursor-pointer border
+                      aria-label={temEvento
+                        ? `${dia} de ${mesAtual.toLocaleDateString("pt-BR", { month: "long" })}, ${eventosNoDia.length} ${eventosNoDia.length === 1 ? "evento" : "eventos"}`
+                        : `${dia} de ${mesAtual.toLocaleDateString("pt-BR", { month: "long" })}`}
+                      className={`aspect-square p-2 sm:p-2.5 rounded-2xl relative group transition-all duration-200 ease-out flex flex-col cursor-pointer border text-left
                         hover:bg-white hover:shadow-xl hover:scale-[1.03] hover:-translate-y-1 hover:z-10 dark:hover:bg-gray-800
                         ${isToday
                           ? "ring-2 ring-indigo-400 bg-indigo-50/60 dark:bg-indigo-900/30 shadow-md border-indigo-200 dark:border-indigo-700"
@@ -531,13 +597,13 @@ export default function Eventos() {
                               {/* Header do tooltip */}
                               <div className="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 flex items-center gap-3">
                                 <div className="w-9 h-9 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl flex items-center justify-center">
-                                  <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                                  <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" aria-hidden="true" />
                                 </div>
                                 <div>
                                   <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
                                     {dia} de {mesAtual.toLocaleDateString("pt-BR", { month: "long" })}
                                   </div>
-                                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  <div className="text-xs text-gray-600 dark:text-gray-300">
                                     {eventosNoDia.length} {eventosNoDia.length === 1 ? "evento" : "eventos"}
                                   </div>
                                 </div>
@@ -558,12 +624,12 @@ export default function Eventos() {
                                       {evento.titulo}
                                     </div>
                                     {evento.descricao && (
-                                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+                                      <div className="text-xs text-gray-600 dark:text-gray-300 mt-0.5 line-clamp-2">
                                         {evento.descricao}
                                       </div>
                                     )}
-                                    <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                                      <Clock className="w-3.5 h-3.5" />
+                                    <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-600 dark:text-gray-300">
+                                      <Clock className="w-3.5 h-3.5" aria-hidden="true" />
                                       <span>{formatarHorario(evento.data_inicio, evento.data_fim)}</span>
                                     </div>
                                   </div>
@@ -574,7 +640,7 @@ export default function Eventos() {
 
                         </>
                       )}
-                    </div>
+                    </button>
                   );
                 })}
               </div>
@@ -601,18 +667,18 @@ export default function Eventos() {
 
                       <div className="space-y-2">
                         <div className="flex items-center gap-2 text-sm">
-                          <Calendar className="w-4 h-4 text-primary" />
+                          <Calendar className="w-4 h-4 text-primary" aria-hidden="true" />
                           <span>{formatarPeriodo(evento.data_inicio, evento.data_fim)}</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm">
-                          <Clock className="w-4 h-4 text-primary" />
+                          <Clock className="w-4 h-4 text-primary" aria-hidden="true" />
                           <span>
                             {formatarHorario(evento.data_inicio, evento.data_fim)}
                           </span>
                         </div>
                         {evento.local && (
                           <div className="flex items-center gap-2 text-sm">
-                            <MapPin className="w-4 h-4 text-primary" />
+                            <MapPin className="w-4 h-4 text-primary" aria-hidden="true" />
                             <span>{evento.local}</span>
                           </div>
                         )}
@@ -626,7 +692,7 @@ export default function Eventos() {
 
           {eventosFuturos.length === 0 && eventosDestaque.length === 0 && (
             <div className="text-center py-20">
-              <Calendar className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+              <Calendar className="w-16 h-16 mx-auto mb-4 text-muted-foreground" aria-hidden="true" />
               <p className="text-lg text-muted-foreground">
                 Nenhum evento futuro agendado no momento
               </p>
@@ -640,8 +706,12 @@ export default function Eventos() {
         <div
           className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-0 sm:p-4"
           onClick={() => setDiaSelecionado(null)}
+          role="presentation"
         >
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
             className="bg-white dark:bg-gray-800 w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl shadow-2xl max-h-[80vh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
@@ -649,10 +719,10 @@ export default function Eventos() {
             <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-white" />
+                  <Calendar className="w-5 h-5 text-white" aria-hidden="true" />
                 </div>
                 <div>
-                  <div className="font-bold text-white text-lg">
+                  <div id="modal-title" className="font-bold text-white text-lg">
                     {diaSelecionado} de {mesAtual.toLocaleDateString("pt-BR", { month: "long" })}
                   </div>
                   <div className="text-white/80 text-sm">
@@ -662,9 +732,10 @@ export default function Eventos() {
               </div>
               <button
                 onClick={() => setDiaSelecionado(null)}
+                aria-label="Fechar modal de eventos"
                 className="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
               >
-                <X className="w-5 h-5 text-white" />
+                <X className="w-5 h-5 text-white" aria-hidden="true" />
               </button>
             </div>
 
@@ -683,17 +754,17 @@ export default function Eventos() {
                     {evento.titulo}
                   </div>
                   {evento.descricao && (
-                    <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                       {evento.descricao}
                     </div>
                   )}
-                  <div className="flex items-center gap-2 mt-3 text-sm text-gray-500 dark:text-gray-400">
-                    <Clock className="w-4 h-4" />
+                  <div className="flex items-center gap-2 mt-3 text-sm text-gray-600 dark:text-gray-300">
+                    <Clock className="w-4 h-4" aria-hidden="true" />
                     <span>{formatarHorario(evento.data_inicio, evento.data_fim)}</span>
                   </div>
                   {evento.local && (
-                    <div className="flex items-center gap-2 mt-1 text-sm text-gray-500 dark:text-gray-400">
-                      <MapPin className="w-4 h-4" />
+                    <div className="flex items-center gap-2 mt-1 text-sm text-gray-600 dark:text-gray-300">
+                      <MapPin className="w-4 h-4" aria-hidden="true" />
                       <span>{evento.local}</span>
                     </div>
                   )}
