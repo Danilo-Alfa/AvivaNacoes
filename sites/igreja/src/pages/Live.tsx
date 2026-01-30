@@ -204,11 +204,11 @@ export default function Live() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-200px)]">
         <Card>
           <CardContent className="flex items-center justify-center min-h-[400px]">
             <div className="flex flex-col items-center gap-4">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden="true" />
               <p className="text-muted-foreground">
                 Verificando transmissão...
               </p>
@@ -227,7 +227,7 @@ export default function Live() {
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                <User className="w-8 h-8 text-primary" />
+                <User className="w-8 h-8 text-primary" aria-hidden="true" />
               </div>
             </div>
             <CardTitle className="text-2xl">Bem-vindo(a) a Live!</CardTitle>
@@ -265,7 +265,7 @@ export default function Live() {
               </div>
 
               <Button type="submit" className="w-full">
-                <Radio className="w-4 h-4 mr-2" />
+                <Radio className="w-4 h-4 mr-2" aria-hidden="true" />
                 Assistir Live
               </Button>
             </form>
@@ -276,7 +276,7 @@ export default function Live() {
                 className="animate-pulse gap-1.5"
                 style={{ backgroundColor: config?.cor_badge || "#ef4444" }}
               >
-                <Radio className="h-3 w-3" />
+                <Radio className="h-3 w-3" aria-hidden="true" />
                 AO VIVO
               </Badge>
               <span className="text-sm font-medium">
@@ -290,7 +290,7 @@ export default function Live() {
   }
 
   return (
-    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 min-h-[calc(100vh-200px)]">
       {/* Layout com Chat quando ao vivo */}
       {isLive && isRegistered ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
@@ -318,7 +318,7 @@ export default function Live() {
                         variant="secondary"
                         className="gap-1 text-xs shrink-0"
                       >
-                        <Users className="h-3 w-3" />
+                        <Users className="h-3 w-3" aria-hidden="true" />
                         {viewers}
                         <span className="hidden sm:inline"> assistindo</span>
                       </Badge>
@@ -327,7 +327,7 @@ export default function Live() {
                       variant="outline"
                       className="gap-1 text-xs shrink-0 max-w-[120px] sm:max-w-[150px]"
                     >
-                      <User className="h-3 w-3 shrink-0" />
+                      <User className="h-3 w-3 shrink-0" aria-hidden="true" />
                       <span className="truncate">{nome}</span>
                     </Badge>
                     <Badge
@@ -337,7 +337,7 @@ export default function Live() {
                         backgroundColor: config?.cor_badge || "#ef4444",
                       }}
                     >
-                      <Radio className="h-3 w-3" />
+                      <Radio className="h-3 w-3" aria-hidden="true" />
                       AO VIVO
                     </Badge>
                   </div>
@@ -406,7 +406,7 @@ export default function Live() {
                 </div>
 
                 <Alert>
-                  <Radio className="h-4 w-4" />
+                  <Radio className="h-4 w-4" aria-hidden="true" />
                   <AlertDescription>
                     Transmissão ao vivo ativa. Se houver problemas de
                     reprodução, tente recarregar a página ou verificar sua
@@ -447,7 +447,7 @@ export default function Live() {
             <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
               <div className="text-center p-8">
                 <div className="mb-4">
-                  <Radio className="h-16 w-16 mx-auto text-muted-foreground/50" />
+                  <Radio className="h-16 w-16 mx-auto text-muted-foreground/50" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">
                   {config?.mensagem_offline?.split(".")[0] ||

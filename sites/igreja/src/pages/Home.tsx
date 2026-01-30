@@ -123,7 +123,7 @@ export default function Home() {
     return `Versículo do dia ${dia} de ${mes}`;
   };
   return (
-    <div>
+    <div className="min-h-[calc(100vh-200px)]">
       {/* Hero Section - Banner */}
       <section className="relative min-h-[275px] md:min-h-[600px] overflow-hidden">
         <img

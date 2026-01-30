@@ -17,7 +17,7 @@ export default function FaleConosco() {
   // Localização da sede principal - SUBSTITUA com as coordenadas reais
   const mainChurchLocation = { lat: -23.5505, lng: -46.6333 };
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
       {/* Hero Section */}
       <div className="mb-16 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">
@@ -110,7 +110,7 @@ export default function FaleConosco() {
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-primary" />
+                    <Phone className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Telefone</h3>
@@ -125,7 +125,7 @@ export default function FaleConosco() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-6 h-6 text-primary" />
+                    <Mail className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">E-mail</h3>
@@ -140,7 +140,7 @@ export default function FaleConosco() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-primary" />
+                    <MapPin className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">
@@ -158,7 +158,7 @@ export default function FaleConosco() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-primary" />
+                    <Clock className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">
@@ -187,7 +187,7 @@ export default function FaleConosco() {
                     gestureHandling="cooperative"
                     disableDefaultUI={false}
                   >
-                    <AdvancedMarker position={mainChurchLocation}>
+                    <AdvancedMarker position={mainChurchLocation} title="Ver localização da sede principal">
                       <Pin
                         background="#6366F1"
                         borderColor="#4F46E5"
@@ -204,7 +204,7 @@ export default function FaleConosco() {
                   rel="noopener noreferrer"
                   className="text-sm text-primary hover:text-primary/80 font-medium flex items-center justify-center gap-2"
                 >
-                  <MapPin className="w-4 h-4" />
+                  <MapPin className="w-4 h-4" aria-hidden="true" />
                   Ver rotas no Google Maps
                 </a>
               </div>

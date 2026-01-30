@@ -144,7 +144,7 @@ export default function Projetos() {
   }, []);
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
       {/* Hero Section */}
       <div className="mb-16 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">

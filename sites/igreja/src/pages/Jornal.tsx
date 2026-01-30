@@ -27,7 +27,7 @@ function JornalThumbnail({
   if (erro) {
     return (
       <div className="w-full h-full bg-gradient-hero rounded-lg flex items-center justify-center">
-        <FileText className="w-12 h-12 text-primary-foreground" />
+        <FileText className="w-12 h-12 text-primary-foreground" aria-hidden="true" />
       </div>
     );
   }
@@ -95,7 +95,7 @@ export default function Jornal() {
   const jornalMaisRecente = jornais[0];
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
       {/* Hero Section */}
       <div className="mb-16 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">
@@ -107,12 +107,44 @@ export default function Jornal() {
       </div>
 
       {loading ? (
-        <div className="text-center py-20">
-          <p className="text-muted-foreground">Carregando jornais...</p>
+        <div className="min-h-[calc(100vh-400px)]">
+          {/* Skeleton do Jornal em Destaque */}
+          <section className="mb-16">
+            <div className="bg-card rounded-lg shadow overflow-hidden">
+              <div className="bg-muted flex items-center justify-center py-12 px-4">
+                <div className="max-w-3xl w-full">
+                  <div className="aspect-[9/16] bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+                </div>
+              </div>
+              <div className="p-6 border-t border-border bg-background">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-2">
+                    <div className="h-6 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                    <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                  </div>
+                  <div className="h-10 w-36 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Skeleton das Edições Anteriores */}
+          <section className="mb-16">
+            <div className="h-8 w-56 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-8" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="bg-card rounded-lg shadow p-4">
+                  <div className="aspect-[3/4] bg-gray-200 dark:bg-gray-700 rounded-lg mb-3 animate-pulse" />
+                  <div className="h-4 w-3/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto mb-1" />
+                  <div className="h-3 w-1/2 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto" />
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
       ) : jornais.length === 0 ? (
         <div className="text-center py-20">
-          <FileText className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+          <FileText className="w-16 h-16 mx-auto mb-4 text-muted-foreground" aria-hidden="true" />
           <p className="text-lg text-muted-foreground">
             Nenhum jornal disponível no momento
           </p>
@@ -162,7 +194,7 @@ export default function Jornal() {
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
                     >
-                      <Download className="w-4 h-4" />
+                      <Download className="w-4 h-4" aria-hidden="true" />
                       Ver em Tela Cheia
                     </a>
                   </div>

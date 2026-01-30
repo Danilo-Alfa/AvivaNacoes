@@ -822,7 +822,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Main Content - Com margin-left para compensar a sidebar fixa */}
         <main
-          className={`flex-1 transition-all duration-300 ${
+          className={`flex-1 min-h-[calc(100vh-68px)] lg:transition-[margin-left] lg:duration-300 ${
             sidebarOpen ? "lg:ml-60" : "lg:ml-16"
           }`}
         >
@@ -832,7 +832,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Footer */}
       <footer
-        className={`mt-20 border-t border-border bg-muted/30 transition-all duration-300 ${
+        className={`mt-20 border-t border-border bg-muted/30 lg:transition-[margin-left] lg:duration-300 ${
           sidebarOpen ? "lg:ml-60" : "lg:ml-16"
         }`}
       >

@@ -38,16 +38,59 @@ export default function Programacao() {
       })),
   }));
 
+  // Skeleton para card de dia
+  const DiaCardSkeleton = () => (
+    <div className="bg-card rounded-lg shadow p-4">
+      <div className="text-center mb-4">
+        <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto" />
+      </div>
+      <div className="space-y-3">
+        <div className="bg-muted/50 rounded-lg p-3 space-y-2">
+          <div className="h-4 w-3/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+          <div className="h-3 w-1/2 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+          <div className="h-3 w-2/3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        </div>
+      </div>
+    </div>
+  );
+
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-12">
-        <p className="text-center text-muted-foreground">Carregando programação...</p>
+      <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
+        {/* Hero Section Skeleton */}
+        <div className="mb-16 text-center">
+          <div className="h-12 w-56 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto mb-4" />
+          <div className="h-5 w-80 max-w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto" />
+        </div>
+
+        {/* Calendário Semanal Skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+          {[...Array(7)].map((_, i) => (
+            <DiaCardSkeleton key={i} />
+          ))}
+        </div>
+
+        {/* Informações Adicionais Skeleton */}
+        <section className="mt-16">
+          <div className="bg-card rounded-lg shadow p-8">
+            <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto mb-6" />
+            <div className="grid md:grid-cols-3 gap-6">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="text-center">
+                  <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-4 animate-pulse" />
+                  <div className="h-5 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto mb-2" />
+                  <div className="h-4 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
       {/* Hero Section */}
       <div className="mb-16 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">
@@ -92,11 +135,11 @@ export default function Programacao() {
                       </h4>
                       <div className="space-y-1">
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <Clock className="w-3 h-3" />
+                          <Clock className="w-3 h-3" aria-hidden="true" />
                           <span>{atividade.horario}</span>
                         </div>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <MapPin className="w-3 h-3" />
+                          <MapPin className="w-3 h-3" aria-hidden="true" />
                           <span>{atividade.local}</span>
                         </div>
                       </div>
@@ -125,7 +168,7 @@ export default function Programacao() {
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
                 <div className="w-16 h-16 bg-primary/10 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <Clock className="w-8 h-8 text-primary" />
+                  <Clock className="w-8 h-8 text-primary" aria-hidden="true" />
                 </div>
                 <h3 className="font-semibold mb-2">Pontualidade</h3>
                 <p className="text-sm text-muted-foreground">
@@ -135,7 +178,7 @@ export default function Programacao() {
 
               <div className="text-center">
                 <div className="w-16 h-16 bg-accent/10 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <MapPin className="w-8 h-8 text-accent" />
+                  <MapPin className="w-8 h-8 text-accent" aria-hidden="true" />
                 </div>
                 <h3 className="font-semibold mb-2">Igreja Sede</h3>
                 <p className="text-sm text-muted-foreground">

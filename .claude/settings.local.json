@@ -13,7 +13,8 @@
       "Bash(gh run:*)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:danilo-alfa.github.io)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

@@ -10,6 +10,28 @@ import {
   type Playlist,
 } from "@/services/videoService";
 
+// Extrai o ID do vídeo do YouTube de uma URL
+const getYouTubeVideoId = (url: string): string | null => {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?/]+)/,
+    /^([a-zA-Z0-9_-]{11})$/
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
+};
+
+// Gera a URL do thumbnail do YouTube
+const getYouTubeThumbnail = (url: string): string | null => {
+  const videoId = getYouTubeVideoId(url);
+  if (videoId) {
+    return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+  }
+  return null;
+};
+
 export default function Videos() {
   const [videoDestaque, setVideoDestaque] = useState<Video | null>(null);
   const [videosRecentes, setVideosRecentes] = useState<Video[]>([]);
@@ -19,6 +41,33 @@ export default function Videos() {
   useEffect(() => {
     carregarDados();
   }, []);
+
+  // Pré-carrega o thumbnail do vídeo em destaque para melhorar o LCP
+  useEffect(() => {
+    if (videoDestaque) {
+      const thumbnailUrl = videoDestaque.thumbnail_url || getYouTubeThumbnail(videoDestaque.url_video);
+      if (thumbnailUrl) {
+        // Remove preload anterior se existir
+        const existingPreload = document.querySelector('link[data-video-preload]');
+        if (existingPreload) {
+          existingPreload.remove();
+        }
+
+        // Adiciona novo preload
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = thumbnailUrl;
+        link.setAttribute('data-video-preload', 'true');
+        link.setAttribute('fetchpriority', 'high');
+        document.head.appendChild(link);
+
+        return () => {
+          link.remove();
+        };
+      }
+    }
+  }, [videoDestaque]);
 
   const carregarDados = async () => {
     try {
@@ -91,7 +140,7 @@ export default function Videos() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12">
+      <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12 min-h-[calc(100vh-200px)]">
         {/* Hero Section Skeleton */}
         <div className="mb-6 sm:mb-8 md:mb-16 text-center">
           <div className="h-10 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto mb-3" />
@@ -129,7 +178,7 @@ export default function Videos() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12">
+    <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12 min-h-[calc(100vh-200px)]">
       {/* Hero Section */}
       <div className="mb-6 sm:mb-8 md:mb-16 text-center">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">
