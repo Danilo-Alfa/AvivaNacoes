@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, BookOpen, Clock, Users, FileText, Download, Loader2 } from "lucide-react";
@@ -21,6 +21,13 @@ const CursoDetalhe = () => {
 
   const [currentLesson, setCurrentLesson] = useState<LessonWithProgress | null>(null);
   const [quizModalOpen, setQuizModalOpen] = useState(false);
+  const [videoProgress, setVideoProgress] = useState(0);
+
+  const REQUIRED_VIDEO_PERCENTAGE = 80; // Porcentagem mínima para liberar conclusão
+
+  const handleVideoProgress = useCallback((percentage: number) => {
+    setVideoProgress(percentage);
+  }, []);
 
   // Set initial lesson when course loads
   if (course && !currentLesson && course.lessons.length > 0) {
@@ -61,6 +68,7 @@ const CursoDetalhe = () => {
   const handleSelectLesson = (lesson: LessonWithProgress) => {
     if (!lesson.is_locked) {
       setCurrentLesson(lesson);
+      setVideoProgress(0); // Resetar progresso do vídeo ao mudar de aula
     }
   };
 
@@ -130,6 +138,8 @@ const CursoDetalhe = () => {
               <VideoPlayer
                 videoId={currentLesson.video_id}
                 title={currentLesson.titulo}
+                onProgressUpdate={handleVideoProgress}
+                requiredPercentage={REQUIRED_VIDEO_PERCENTAGE}
               />
             )}
           </motion.div>
@@ -142,27 +152,25 @@ const CursoDetalhe = () => {
           >
             <Card className="shadow-soft">
               <CardContent className="p-4 md:p-6">
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="badge-primary">
-                        Aula {currentLessonIndex + 1} de {course.lessons_count}
-                      </span>
-                      {currentLesson?.has_quiz && (
-                        <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
-                          Quiz
-                        </span>
-                      )}
-                    </div>
-                    <h2 className="text-xl md:text-2xl font-display font-bold text-foreground mb-2">
-                      {currentLesson?.titulo}
-                    </h2>
-                    <p className="text-muted-foreground">
-                      Duracao: {currentLesson?.duracao}
-                    </p>
-                  </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="badge-primary">
+                    Aula {currentLessonIndex + 1} de {course.lessons_count}
+                  </span>
+                  {currentLesson?.has_quiz && (
+                    <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                      Quiz
+                    </span>
+                  )}
+                </div>
+                <h2 className="text-xl md:text-2xl font-display font-bold text-foreground mb-2">
+                  {currentLesson?.titulo}
+                </h2>
+                <p className="text-muted-foreground mb-4">
+                  Duracao: {currentLesson?.duracao}
+                </p>
 
-                  {currentLesson && (
+                {currentLesson && (
+                  <div className="pt-4 border-t border-border">
                     <LessonCompleteButton
                       lessonId={currentLesson.id}
                       courseId={course.id}
@@ -170,9 +178,10 @@ const CursoDetalhe = () => {
                       isCompleted={currentLesson.is_completed}
                       onQuizRequired={handleQuizRequired}
                       onComplete={handleLessonComplete}
+                      videoWatched={videoProgress >= REQUIRED_VIDEO_PERCENTAGE}
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </motion.div>

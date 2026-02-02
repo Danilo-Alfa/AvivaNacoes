@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMarkLessonComplete } from '@/hooks/useProgress';
-import { CheckCircle2, Loader2, BookOpen } from 'lucide-react';
+import { CheckCircle2, Loader2, BookOpen, Play } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface LessonCompleteButtonProps {
@@ -11,6 +11,7 @@ interface LessonCompleteButtonProps {
   isCompleted: boolean;
   onQuizRequired: () => void;
   onComplete: () => void;
+  videoWatched?: boolean; // Se o vídeo foi assistido (80%+)
 }
 
 export function LessonCompleteButton({
@@ -20,6 +21,7 @@ export function LessonCompleteButton({
   isCompleted,
   onQuizRequired,
   onComplete,
+  videoWatched = false,
 }: LessonCompleteButtonProps) {
   const markComplete = useMarkLessonComplete();
   const [isMarking, setIsMarking] = useState(false);
@@ -58,11 +60,29 @@ export function LessonCompleteButton({
     );
   }
 
+  // Se o vídeo não foi assistido, mostrar botão desabilitado
+  if (!videoWatched) {
+    return (
+      <div className="space-y-2">
+        <Button
+          disabled
+          className="gap-2 bg-gray-400 text-white cursor-not-allowed"
+        >
+          <Play className="w-4 h-4" />
+          Assista o vídeo para liberar
+        </Button>
+        <p className="text-xs text-muted-foreground">
+          Você precisa assistir pelo menos 80% do vídeo para concluir a aula
+        </p>
+      </div>
+    );
+  }
+
   return (
     <Button
       onClick={handleClick}
       disabled={isMarking}
-      className="gap-2 bg-aviva-blue hover:bg-aviva-blue/90"
+      className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
     >
       {isMarking ? (
         <>

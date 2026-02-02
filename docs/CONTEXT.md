@@ -365,7 +365,7 @@ Pending implementation - user to decide which solution to use.
 
 ## Important Notes
 
-- Keep placeholder YouTube URL (`dQw4w9WgXcQ`) until real videos are provided
+- Current placeholder YouTube video ID: `Qx8cUj9mfSw`
 - Facebook iframe URLs need to be properly encoded
 - All external links should have security attributes (`target="_blank" rel="noopener noreferrer"`)
 - Maintain consistent spacing and styling throughout

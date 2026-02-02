@@ -143,7 +143,7 @@ export function Quiz({
           <Button
             onClick={handleSubmit}
             disabled={!allAnswered || isSubmitting}
-            className="bg-aviva-blue hover:bg-aviva-blue/90"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             {isSubmitting ? 'Verificando...' : 'Verificar Respostas'}
           </Button>
@@ -162,7 +162,7 @@ export function Quiz({
             <Button
               onClick={handleContinue}
               disabled={!result?.passed}
-              className="bg-aviva-blue hover:bg-aviva-blue/90 gap-2"
+              className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
             >
               {result?.passed ? 'Continuar' : 'Precisa passar para continuar'}
               {result?.passed && <ArrowRight className="w-4 h-4" />}

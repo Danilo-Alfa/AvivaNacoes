@@ -229,111 +229,111 @@ VALUES (
 
 -- Aulas do Curso 1: Fundamentos da Fé
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Introdução ao Curso', 'dQw4w9WgXcQ', '15:00', 1, false FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'Introdução ao Curso', 'Qx8cUj9mfSw', '15:00', 1, false FROM courses WHERE slug = 'fundamentos-da-fe';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'A Natureza de Deus', 'dQw4w9WgXcQ', '35:00', 2, true FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'A Natureza de Deus', 'Qx8cUj9mfSw', '35:00', 2, true FROM courses WHERE slug = 'fundamentos-da-fe';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'A Pessoa de Jesus', 'dQw4w9WgXcQ', '40:00', 3, true FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'A Pessoa de Jesus', 'Qx8cUj9mfSw', '40:00', 3, true FROM courses WHERE slug = 'fundamentos-da-fe';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'O Espírito Santo', 'dQw4w9WgXcQ', '35:00', 4, true FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'O Espírito Santo', 'Qx8cUj9mfSw', '35:00', 4, true FROM courses WHERE slug = 'fundamentos-da-fe';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Salvação pela Graça', 'dQw4w9WgXcQ', '30:00', 5, true FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'Salvação pela Graça', 'Qx8cUj9mfSw', '30:00', 5, true FROM courses WHERE slug = 'fundamentos-da-fe';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'A Bíblia: Palavra de Deus', 'dQw4w9WgXcQ', '25:00', 6, false FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'A Bíblia: Palavra de Deus', 'Qx8cUj9mfSw', '25:00', 6, false FROM courses WHERE slug = 'fundamentos-da-fe';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Fé e Obras', 'dQw4w9WgXcQ', '30:00', 7, true FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'Fé e Obras', 'Qx8cUj9mfSw', '30:00', 7, true FROM courses WHERE slug = 'fundamentos-da-fe';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Batismo e Ceia', 'dQw4w9WgXcQ', '35:00', 8, false FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'Batismo e Ceia', 'Qx8cUj9mfSw', '35:00', 8, false FROM courses WHERE slug = 'fundamentos-da-fe';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'A Igreja', 'dQw4w9WgXcQ', '30:00', 9, true FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'A Igreja', 'Qx8cUj9mfSw', '30:00', 9, true FROM courses WHERE slug = 'fundamentos-da-fe';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Vida Cristã Prática', 'dQw4w9WgXcQ', '40:00', 10, false FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'Vida Cristã Prática', 'Qx8cUj9mfSw', '40:00', 10, false FROM courses WHERE slug = 'fundamentos-da-fe';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Crescimento Espiritual', 'dQw4w9WgXcQ', '35:00', 11, true FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'Crescimento Espiritual', 'Qx8cUj9mfSw', '35:00', 11, true FROM courses WHERE slug = 'fundamentos-da-fe';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Conclusão e Próximos Passos', 'dQw4w9WgXcQ', '20:00', 12, false FROM courses WHERE slug = 'fundamentos-da-fe';
+SELECT id, 'Conclusão e Próximos Passos', 'Qx8cUj9mfSw', '20:00', 12, false FROM courses WHERE slug = 'fundamentos-da-fe';
 
 -- Aulas do Curso 2: Vida de Oração
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'O que é Oração', 'dQw4w9WgXcQ', '20:00', 1, false FROM courses WHERE slug = 'vida-de-oracao';
+SELECT id, 'O que é Oração', 'Qx8cUj9mfSw', '20:00', 1, false FROM courses WHERE slug = 'vida-de-oracao';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Tipos de Oração', 'dQw4w9WgXcQ', '35:00', 2, true FROM courses WHERE slug = 'vida-de-oracao';
+SELECT id, 'Tipos de Oração', 'Qx8cUj9mfSw', '35:00', 2, true FROM courses WHERE slug = 'vida-de-oracao';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'O Pai Nosso', 'dQw4w9WgXcQ', '40:00', 3, true FROM courses WHERE slug = 'vida-de-oracao';
+SELECT id, 'O Pai Nosso', 'Qx8cUj9mfSw', '40:00', 3, true FROM courses WHERE slug = 'vida-de-oracao';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Oração Intercessória', 'dQw4w9WgXcQ', '30:00', 4, true FROM courses WHERE slug = 'vida-de-oracao';
+SELECT id, 'Oração Intercessória', 'Qx8cUj9mfSw', '30:00', 4, true FROM courses WHERE slug = 'vida-de-oracao';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Jejum e Oração', 'dQw4w9WgXcQ', '35:00', 5, false FROM courses WHERE slug = 'vida-de-oracao';
+SELECT id, 'Jejum e Oração', 'Qx8cUj9mfSw', '35:00', 5, false FROM courses WHERE slug = 'vida-de-oracao';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Oração no Espírito', 'dQw4w9WgXcQ', '30:00', 6, true FROM courses WHERE slug = 'vida-de-oracao';
+SELECT id, 'Oração no Espírito', 'Qx8cUj9mfSw', '30:00', 6, true FROM courses WHERE slug = 'vida-de-oracao';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Obstáculos à Oração', 'dQw4w9WgXcQ', '25:00', 7, true FROM courses WHERE slug = 'vida-de-oracao';
+SELECT id, 'Obstáculos à Oração', 'Qx8cUj9mfSw', '25:00', 7, true FROM courses WHERE slug = 'vida-de-oracao';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Desenvolvendo Hábito de Oração', 'dQw4w9WgXcQ', '20:00', 8, false FROM courses WHERE slug = 'vida-de-oracao';
+SELECT id, 'Desenvolvendo Hábito de Oração', 'Qx8cUj9mfSw', '20:00', 8, false FROM courses WHERE slug = 'vida-de-oracao';
 
 -- Aulas do Curso 3: Panorama Bíblico
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Introdução à Bíblia', 'dQw4w9WgXcQ', '25:00', 1, false FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Introdução à Bíblia', 'Qx8cUj9mfSw', '25:00', 1, false FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Pentateuco', 'dQw4w9WgXcQ', '50:00', 2, true FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Pentateuco', 'Qx8cUj9mfSw', '50:00', 2, true FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Livros Históricos', 'dQw4w9WgXcQ', '55:00', 3, true FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Livros Históricos', 'Qx8cUj9mfSw', '55:00', 3, true FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Livros Poéticos', 'dQw4w9WgXcQ', '45:00', 4, true FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Livros Poéticos', 'Qx8cUj9mfSw', '45:00', 4, true FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Profetas Maiores', 'dQw4w9WgXcQ', '50:00', 5, true FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Profetas Maiores', 'Qx8cUj9mfSw', '50:00', 5, true FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Profetas Menores', 'dQw4w9WgXcQ', '45:00', 6, false FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Profetas Menores', 'Qx8cUj9mfSw', '45:00', 6, false FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Período Intertestamentário', 'dQw4w9WgXcQ', '30:00', 7, false FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Período Intertestamentário', 'Qx8cUj9mfSw', '30:00', 7, false FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Evangelhos', 'dQw4w9WgXcQ', '55:00', 8, true FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Evangelhos', 'Qx8cUj9mfSw', '55:00', 8, true FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Atos dos Apóstolos', 'dQw4w9WgXcQ', '40:00', 9, true FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Atos dos Apóstolos', 'Qx8cUj9mfSw', '40:00', 9, true FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Cartas Paulinas', 'dQw4w9WgXcQ', '50:00', 10, true FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Cartas Paulinas', 'Qx8cUj9mfSw', '50:00', 10, true FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Cartas Gerais', 'dQw4w9WgXcQ', '35:00', 11, false FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Cartas Gerais', 'Qx8cUj9mfSw', '35:00', 11, false FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Apocalipse', 'dQw4w9WgXcQ', '45:00', 12, true FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Apocalipse', 'Qx8cUj9mfSw', '45:00', 12, true FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Linha do Tempo Bíblica', 'dQw4w9WgXcQ', '30:00', 13, false FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Linha do Tempo Bíblica', 'Qx8cUj9mfSw', '30:00', 13, false FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Como Estudar a Bíblia', 'dQw4w9WgXcQ', '35:00', 14, true FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Como Estudar a Bíblia', 'Qx8cUj9mfSw', '35:00', 14, true FROM courses WHERE slug = 'panorama-biblico';
 
 INSERT INTO lessons (course_id, titulo, video_id, duracao, ordem, has_quiz)
-SELECT id, 'Conclusão', 'dQw4w9WgXcQ', '15:00', 15, false FROM courses WHERE slug = 'panorama-biblico';
+SELECT id, 'Conclusão', 'Qx8cUj9mfSw', '15:00', 15, false FROM courses WHERE slug = 'panorama-biblico';
 
 -- Perguntas de exemplo para a aula "A Natureza de Deus" (Fundamentos da Fé)
 DO $$
