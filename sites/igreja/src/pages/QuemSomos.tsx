@@ -139,20 +139,22 @@ export default function QuemSomos() {
           Nossos Ministérios
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
-          {["Infantil", "Jovens", "Intercessão"].map((ministerio) => (
+          {[
+            { nome: "Infantil", emoji: "🧒", descricao: "\"Ensina a criança no caminho em que deve andar, e ainda quando for velho não se desviará dele.\" — Provérbios 22:6" },
+            { nome: "Jovens", emoji: "✨", descricao: "\"Ninguém despreze a tua mocidade; mas sê o exemplo dos fiéis, na palavra, no trato, na caridade, no espírito, na fé, na pureza.\" — 1 Timóteo 4:12" },
+            { nome: "Intercessão", emoji: "🙏", descricao: "\"Orai sem cessar.\" — 1 Tessalonicenses 5:17" },
+          ].map((ministerio) => (
             <Card
-              key={ministerio}
+              key={ministerio.nome}
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
             >
               <CardContent className="p-6 text-center">
                 <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Ícone
-                  </span>
+                  <span className="text-4xl">{ministerio.emoji}</span>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{ministerio}</h3>
+                <h3 className="text-lg font-semibold mb-2">{ministerio.nome}</h3>
                 <p className="text-sm text-muted-foreground">
-                  [Descrição do ministério]
+                  {ministerio.descricao}
                 </p>
               </CardContent>
             </Card>
@@ -169,13 +171,11 @@ export default function QuemSomos() {
           <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1">
             <CardContent className="p-6 text-center">
               <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-sm font-medium text-muted-foreground">
-                  Ícone
-                </span>
+                <span className="text-4xl">🤝</span>
               </div>
               <h3 className="text-lg font-semibold mb-2">Associação Beneficente</h3>
               <p className="text-sm text-muted-foreground">
-                [Descrição da associação beneficente]
+                "Cada um contribua segundo propôs no seu coração; não com tristeza, ou por necessidade; porque Deus ama ao que dá com alegria." — 2 Coríntios 9:7
               </p>
             </CardContent>
           </Card>
@@ -188,18 +188,22 @@ export default function QuemSomos() {
           Nossos Grupos
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
-          {["Ebenézer", "Revive", "Rosas de Saron"].map((grupo) => (
+          {[
+            { nome: "Ebenézer", emoji: "🪨" },
+            { nome: "Revive", emoji: "🔥" },
+            { nome: "Rosas de Saron", emoji: "🌹" },
+            { nome: "Levitas", emoji: "🛐" },
+            { nome: "Emunah", emoji: "🕯️" },
+          ].map((grupo) => (
             <Card
-              key={grupo}
+              key={grupo.nome}
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
             >
               <CardContent className="p-6 text-center">
                 <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Ícone
-                  </span>
+                  <span className="text-4xl">{grupo.emoji}</span>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{grupo}</h3>
+                <h3 className="text-lg font-semibold mb-2">{grupo.nome}</h3>
                 <p className="text-sm text-muted-foreground">
                   [Descrição do grupo]
                 </p>

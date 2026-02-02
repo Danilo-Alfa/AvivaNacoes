@@ -161,7 +161,7 @@ export default function Home() {
   return (
     <div className="min-h-[calc(100vh-200px)]">
       {/* Hero Section - Banner */}
-      <section className="relative min-h-[275px] md:min-h-[600px] overflow-hidden">
+      <section className="relative min-h-[300px] md:min-h-[75vh] md:max-h-[800px] overflow-hidden">
         <picture>
           {/* WebP para navegadores modernos */}
           <source
@@ -182,21 +182,21 @@ export default function Home() {
             // @ts-expect-error fetchpriority is a valid HTML attribute
             fetchpriority="high"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-[60%_top] md:object-center"
+            className="absolute inset-0 w-full h-full object-cover object-[60%_top] md:object-[center_top]"
           />
         </picture>
       </section>
 
-      {/* Botões - metade sobre o banner, metade abaixo */}
-      <div className="container mx-auto px-4 -mt-4 md:-mt-5 relative z-10">
-        <div className="flex flex-row gap-3 md:gap-4 justify-center max-w-md mx-auto">
-          <Link to="/quem-somos" className="flex-1">
-            <button className="w-full px-4 py-4 md:px-8 md:py-4 min-h-[48px] text-sm md:text-base bg-background text-foreground font-semibold rounded-lg hover:bg-muted transition-all border-2 border-border shadow-lg">
+      {/* Botões centralizados abaixo do banner */}
+      <div className="container mx-auto px-4 mt-4 md:mt-6">
+        <div className="flex flex-row gap-3 md:gap-4 justify-center">
+          <Link to="/quem-somos">
+            <button className="px-4 py-3 md:px-8 md:py-4 min-h-[44px] md:min-h-[48px] text-sm md:text-base bg-background text-foreground font-semibold rounded-lg hover:bg-muted transition-all border-2 border-border shadow-lg">
               Nossa História
             </button>
           </Link>
-          <Link to="/programacao" className="flex-1">
-            <button className="w-full px-4 py-4 md:px-8 md:py-4 min-h-[48px] text-sm md:text-base bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg">
+          <Link to="/programacao">
+            <button className="px-4 py-3 md:px-8 md:py-4 min-h-[44px] md:min-h-[48px] text-sm md:text-base bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg">
               Programação
             </button>
           </Link>
