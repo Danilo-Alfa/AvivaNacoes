@@ -18,6 +18,7 @@ export default function RedesSociais() {
       name: "Facebook",
       icon: Facebook,
       url: "https://web.facebook.com/igrejaevangelicaaviva/",
+      handle: "@igrejaevangelicaaviva",
       description:
         "Acompanhe nossas postagens diárias, eventos e transmissões ao vivo dos cultos.",
       followers: "Seguidores ativos",
@@ -27,6 +28,7 @@ export default function RedesSociais() {
       name: "Instagram",
       icon: Instagram,
       url: "https://www.instagram.com/igrejaavivanacoes/",
+      handle: "@igrejaavivanacoes",
       description:
         "Versículos inspiradores, stories dos eventos e momentos da nossa comunidade.",
       followers: "Comunidade engajada",
@@ -36,6 +38,7 @@ export default function RedesSociais() {
       name: "Canal Aviva Nações",
       icon: Youtube,
       url: "https://www.youtube.com/@TvAvivaNacoes",
+      handle: "@TvAvivaNacoes",
       description:
         "Assista aos cultos completos, pregações, louvores e testemunhos.",
       followers: "Inscritos no canal",
@@ -72,6 +75,7 @@ export default function RedesSociais() {
       name: "Aviva Jovens",
       icon: Users,
       url: "https://www.instagram.com/_aviva.jovens",
+      handle: "@_aviva.jovens",
       description:
         "Ministério voltado para jovens com eventos, encontros e conteúdo relevante.",
       followers: "Jovens conectados",
@@ -158,9 +162,16 @@ export default function RedesSociais() {
                   </div>
 
                   {/* Nome */}
-                  <h2 className="text-xl font-bold mb-2 text-foreground">
+                  <h2 className="text-xl font-bold text-foreground">
                     {network.name}
                   </h2>
+
+                  {/* Handle/Arroba */}
+                  {network.handle && (
+                    <p className="text-sm text-primary font-medium mb-2">
+                      {network.handle}
+                    </p>
+                  )}
 
                   {/* Descrição */}
                   <p className="text-muted-foreground text-sm mb-4 leading-relaxed">

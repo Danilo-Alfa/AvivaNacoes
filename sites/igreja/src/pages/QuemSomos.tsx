@@ -134,12 +134,12 @@ export default function QuemSomos() {
       </section>
 
       {/* Ministérios */}
-      <section>
+      <section className="mb-16">
         <h2 className="text-3xl font-bold mb-8 text-center">
           Nossos Ministérios
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {["Louvor", "Jovens", "Infantil", "Intercessão"].map((ministerio) => (
+        <div className="grid md:grid-cols-3 gap-6">
+          {["Infantil", "Jovens", "Intercessão"].map((ministerio) => (
             <Card
               key={ministerio}
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
@@ -153,6 +153,55 @@ export default function QuemSomos() {
                 <h3 className="text-lg font-semibold mb-2">{ministerio}</h3>
                 <p className="text-sm text-muted-foreground">
                   [Descrição do ministério]
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Associação */}
+      <section className="mb-16">
+        <h2 className="text-3xl font-bold mb-8 text-center">
+          Nossa Associação
+        </h2>
+        <div className="max-w-md mx-auto">
+          <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1">
+            <CardContent className="p-6 text-center">
+              <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Ícone
+                </span>
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Associação Beneficente</h3>
+              <p className="text-sm text-muted-foreground">
+                [Descrição da associação beneficente]
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Grupos */}
+      <section>
+        <h2 className="text-3xl font-bold mb-8 text-center">
+          Nossos Grupos
+        </h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {["Ebenézer", "Revive", "Rosas de Saron"].map((grupo) => (
+            <Card
+              key={grupo}
+              className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
+            >
+              <CardContent className="p-6 text-center">
+                <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-sm font-medium text-muted-foreground">
+                    Ícone
+                  </span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{grupo}</h3>
+                <p className="text-sm text-muted-foreground">
+                  [Descrição do grupo]
                 </p>
               </CardContent>
             </Card>
