@@ -6,7 +6,6 @@ import {
   X,
   BookOpen,
   FileText,
-  Flame,
   Shield,
   User,
   LogOut
@@ -81,9 +80,16 @@ export function MobileMenu() {
             className="flex items-center gap-3"
             whileHover={{ scale: 1.02 }}
           >
-            <div className="w-9 h-9 gradient-hero rounded-lg flex items-center justify-center">
-              <Flame className="w-5 h-5 text-primary-foreground" />
-            </div>
+            <picture>
+              <source srcSet={`${import.meta.env.BASE_URL}logoheader.webp`} type="image/webp" />
+              <img
+                src={`${import.meta.env.BASE_URL}logoheader.png`}
+                alt="Logo Aviva Nações"
+                width={36}
+                height={36}
+                className="w-9 h-9 object-contain"
+              />
+            </picture>
             <div>
               <h1 className="font-display font-bold text-foreground">Escola Aviva</h1>
             </div>
@@ -141,9 +147,16 @@ export function MobileMenu() {
             {/* Menu Header */}
             <div className="flex items-center justify-between p-4 border-b border-border">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 gradient-hero rounded-lg flex items-center justify-center">
-                  <Flame className="w-5 h-5 text-primary-foreground" />
-                </div>
+                <picture>
+                  <source srcSet={`${import.meta.env.BASE_URL}logoheader.webp`} type="image/webp" />
+                  <img
+                    src={`${import.meta.env.BASE_URL}logoheader.png`}
+                    alt="Logo Aviva Nações"
+                    width={36}
+                    height={36}
+                    className="w-9 h-9 object-contain"
+                  />
+                </picture>
                 <span className="font-display font-bold text-foreground">Menu</span>
               </div>
               <button

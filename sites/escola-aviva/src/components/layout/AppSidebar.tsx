@@ -5,7 +5,6 @@ import {
   BookOpen,
   FileText,
   ChevronLeft,
-  Flame,
   Shield
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -45,9 +44,16 @@ export function AppSidebar() {
           className="flex items-center gap-3"
           whileHover={{ scale: 1.02 }}
         >
-          <div className="w-10 h-10 gradient-hero rounded-lg flex items-center justify-center flex-shrink-0">
-            <Flame className="w-6 h-6 text-primary-foreground" />
-          </div>
+          <picture>
+            <source srcSet={`${import.meta.env.BASE_URL}logoheader.webp`} type="image/webp" />
+            <img
+              src={`${import.meta.env.BASE_URL}logoheader.png`}
+              alt="Logo Aviva Nações"
+              width={40}
+              height={40}
+              className="w-10 h-10 object-contain flex-shrink-0"
+            />
+          </picture>
           <AnimatePresence>
             {!isCollapsed && (
               <motion.div
