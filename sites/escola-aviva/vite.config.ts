@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "logoheader.png", "logoheader.webp"],
+      includeAssets: ["favicon.ico", "logoheader.png", "logoheader.webp", "apple-touch-icon.png", "apple-touch-icon-152x152.png"],
       manifest: {
         name: "Escola Aviva - Formação Espiritual",
         short_name: "Escola Aviva",
