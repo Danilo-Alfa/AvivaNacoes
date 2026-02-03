@@ -53,21 +53,45 @@ if (existsSync(escolaDist)) {
   process.exit(1);
 }
 
-// 5. Criar arquivo 404.html para SPA routing (copia do index.html principal)
-const indexHtml = join(distDir, 'index.html');
+// 5. Criar arquivo 404.html unificado para SPA routing
+// GitHub Pages so usa o 404.html da raiz, entao precisamos de um script inteligente
 const notFoundHtml = join(distDir, '404.html');
-if (existsSync(indexHtml)) {
-  console.log('Criando 404.html para SPA routing...');
-  copyFileSync(indexHtml, notFoundHtml);
-}
+console.log('Criando 404.html unificado para SPA routing...');
 
-// 6. Criar 404.html para a escola tambem
-const escolaIndexHtml = join(distDir, 'escolaAviva', 'index.html');
-const escolaNotFoundHtml = join(distDir, 'escolaAviva', '404.html');
-if (existsSync(escolaIndexHtml)) {
-  console.log('Criando escolaAviva/404.html para SPA routing...');
-  copyFileSync(escolaIndexHtml, escolaNotFoundHtml);
-}
+const unified404Content = `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Aviva Nacoes</title>
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages - Unified 404 handler
+      // Detecta automaticamente qual site (igreja ou escolaAviva) e redireciona corretamente
+
+      var l = window.location;
+      var pathname = l.pathname;
+
+      // Verifica se e uma rota do escolaAviva
+      var isEscolaAviva = pathname.indexOf('/AvivaNacoes/escolaAviva') === 0;
+
+      // Define pathSegmentsToKeep baseado no site
+      // /AvivaNacoes/ = 1 segmento (igreja)
+      // /AvivaNacoes/escolaAviva/ = 2 segmentos (escola)
+      var pathSegmentsToKeep = isEscolaAviva ? 2 : 1;
+
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    </script>
+  </head>
+  <body>
+  </body>
+</html>`;
+
+writeFileSync(notFoundHtml, unified404Content);
 
 // 7. Criar arquivo .nojekyll para GitHub Pages (necessario para servir subpastas)
 const nojekyllFile = join(distDir, '.nojekyll');
@@ -79,9 +103,8 @@ console.log('\nEstrutura final:');
 console.log('dist/');
 console.log('├── .nojekyll');
 console.log('├── index.html (site igreja)');
-console.log('├── 404.html');
+console.log('├── 404.html (unificado - detecta igreja ou escola)');
 console.log('├── assets/');
 console.log('└── escolaAviva/');
 console.log('    ├── index.html (escola aviva)');
-console.log('    ├── 404.html');
 console.log('    └── assets/');
