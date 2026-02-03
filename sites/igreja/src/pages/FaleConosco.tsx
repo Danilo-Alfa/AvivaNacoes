@@ -14,8 +14,8 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 export default function FaleConosco() {
   const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
-  // Localização da sede principal - SUBSTITUA com as coordenadas reais
-  const mainChurchLocation = { lat: -23.5505, lng: -46.6333 };
+  // Localização da sede principal - Campos Gerais
+  const mainChurchLocation = { lat: -23.574401, lng: -46.758482 };
   return (
     <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
       {/* Hero Section */}
@@ -144,14 +144,14 @@ export default function FaleConosco() {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">
-                      Endereço - Sede Principal
+                      Endereço - Sede Central
                     </h3>
                     <p className="text-muted-foreground text-sm">
-                      Rua Exemplo, 123 - Bairro Centro
+                      Rua Lucas Padilha, 7 – Jd Esther
                       <br />
-                      Cidade - Estado
+                      São Paulo - SP
                       <br />
-                      CEP 00000-000
+                      CEP 05366-080
                     </p>
                   </div>
                 </div>
@@ -165,9 +165,7 @@ export default function FaleConosco() {
                       Horário de Atendimento
                     </h3>
                     <p className="text-muted-foreground text-sm">
-                      Segunda a Sexta: 9h às 17h
-                      <br />
-                      Sábado: 9h às 12h
+                      Todo dia: 18h até 22h
                     </p>
                   </div>
                 </div>

@@ -67,22 +67,8 @@ export default function NossasIgrejas() {
     (igreja) => igreja.latitude && igreja.longitude,
   );
 
-  // Calcular centro do mapa baseado em todas as igrejas com coordenadas
-  const centerMap =
-    igrejasComCoordenadas.length > 0
-      ? {
-          lat:
-            igrejasComCoordenadas.reduce(
-              (sum, igreja) => sum + (igreja.latitude || 0),
-              0,
-            ) / igrejasComCoordenadas.length,
-          lng:
-            igrejasComCoordenadas.reduce(
-              (sum, igreja) => sum + (igreja.longitude || 0),
-              0,
-            ) / igrejasComCoordenadas.length,
-        }
-      : { lat: -23.574401, lng: -46.758482 }; // Default: Jardim Esther, SP
+  // Localização da igreja sede - Jardim Esther, SP
+  const centerMap = { lat: -23.574401, lng: -46.758482 };
 
   return (
     <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
