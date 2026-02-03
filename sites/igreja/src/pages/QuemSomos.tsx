@@ -1,39 +1,130 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useTilt } from "@/hooks/useTilt";
+import { RotateCcw } from "lucide-react";
 
-function PastorCard({ pastor }: { pastor: number }) {
-  const tiltRef = useTilt<HTMLDivElement>({
-    maxTilt: 10,
-    perspective: 1000,
-    scale: 1.05,
-    speed: 400,
-    glare: true,
-    maxGlare: 0.3,
-  });
+interface PastorData {
+  nome: string;
+  cargo: string;
+  foto: string;
+  descricao: string;
+}
+
+function PastorCard({ pastor }: { pastor: PastorData }) {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  const handleClick = () => {
+    setIsFlipped(!isFlipped);
+  };
 
   return (
-    <Card
-      ref={tiltRef}
-      className="shadow-soft hover:shadow-medium transition-shadow"
-      style={{ transformStyle: 'preserve-3d' }}
+    <div
+      className="relative h-[400px] cursor-pointer group"
+      style={{ perspective: '1000px' }}
+      onClick={handleClick}
+      onMouseEnter={() => {
+        // Só ativa hover em telas maiores (não touch)
+        if (window.matchMedia('(hover: hover)').matches) {
+          setIsFlipped(true);
+        }
+      }}
+      onMouseLeave={() => {
+        if (window.matchMedia('(hover: hover)').matches) {
+          setIsFlipped(false);
+        }
+      }}
     >
-      <CardContent className="p-6" style={{ transform: 'translateZ(20px)' }}>
-        <div className="aspect-square bg-gradient-hero rounded-lg mb-4 flex items-center justify-center">
-          <span className="text-4xl text-primary-foreground font-bold">
-            Foto
-          </span>
-        </div>
-        <h3 className="text-xl font-bold mb-1">Pastor(a) Nome</h3>
-        <p className="text-sm text-accent font-medium mb-3">
-          Cargo/Função
-        </p>
-        <p className="text-sm text-muted-foreground">
-          [Breve biografia e informações sobre o pastor(a)]
-        </p>
-      </CardContent>
-    </Card>
+      <div
+        className="relative w-full h-full transition-transform duration-700"
+        style={{
+          transformStyle: 'preserve-3d',
+          transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+        }}
+      >
+        {/* Frente do Card - Foto */}
+        <Card
+          className="absolute inset-0 shadow-soft hover:shadow-medium transition-shadow overflow-hidden"
+          style={{ backfaceVisibility: 'hidden' }}
+        >
+          <CardContent className="p-0 h-full">
+            <div className="relative h-full bg-gradient-hero">
+              {/* Imagem do pastor (se existir e carregar) */}
+              {pastor.foto && (
+                <img
+                  src={pastor.foto}
+                  alt={pastor.nome}
+                  className="absolute inset-0 w-full h-full object-cover z-10"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              )}
+              {/* Placeholder "Foto" no centro */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-4xl text-primary-foreground font-bold">
+                  Foto
+                </span>
+              </div>
+              {/* Overlay com nome na parte inferior */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 z-20">
+                <h3 className="text-xl font-bold text-white">{pastor.nome}</h3>
+                <p className="text-sm text-white/80 font-medium">
+                  {pastor.cargo}
+                </p>
+              </div>
+              {/* Indicador de flip no mobile */}
+              <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full p-2 md:opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                <RotateCcw className="w-5 h-5 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Verso do Card - Descrição */}
+        <Card
+          className="absolute inset-0 shadow-soft hover:shadow-medium transition-shadow bg-gradient-to-br from-primary/10 to-accent/10"
+          style={{
+            backfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)',
+          }}
+        >
+          <CardContent className="p-6 h-full flex flex-col justify-center">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-hero rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-3xl font-bold text-primary-foreground">
+                  {pastor.nome.charAt(0)}
+                </span>
+              </div>
+              <h3 className="text-xl font-bold mb-1 text-foreground">{pastor.nome}</h3>
+              <p className="text-sm text-accent font-medium mb-4">
+                {pastor.cargo}
+              </p>
+              <div className="w-12 h-1 bg-gradient-hero mx-auto mb-4 rounded-full" />
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {pastor.descricao}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }
+
+// Dados dos pastores
+const pastores: PastorData[] = [
+  {
+    nome: "Pastor Nome",
+    cargo: "Pastor Presidente",
+    foto: "/images/pastor1.jpg", // Substitua pelo caminho real da imagem
+    descricao: "Breve biografia do pastor. Sua história de fé, chamado ministerial e visão para a igreja. Compartilhe aqui informações relevantes sobre sua trajetória.",
+  },
+  {
+    nome: "Pastora Nome",
+    cargo: "Pastora",
+    foto: "/images/pastor2.jpg", // Substitua pelo caminho real da imagem
+    descricao: "Breve biografia da pastora. Sua história de fé, chamado ministerial e atuação nos ministérios da igreja. Compartilhe aqui informações relevantes sobre sua trajetória.",
+  },
+];
 
 export default function QuemSomos() {
   return (
@@ -126,9 +217,9 @@ export default function QuemSomos() {
       {/* Liderança/Pastores */}
       <section className="mb-16">
         <h2 className="text-3xl font-bold mb-8 text-center">Nossa Liderança</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[1, 2, 3].map((pastor) => (
-            <PastorCard key={pastor} pastor={pastor} />
+        <div className="grid md:grid-cols-2 gap-8 md:px-32">
+          {pastores.map((pastor, index) => (
+            <PastorCard key={index} pastor={pastor} />
           ))}
         </div>
       </section>
