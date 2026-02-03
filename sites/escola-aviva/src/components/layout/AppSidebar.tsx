@@ -51,7 +51,7 @@ export function AppSidebar() {
               alt="Logo Aviva Nações"
               width={40}
               height={40}
-              className="w-10 h-10 object-contain flex-shrink-0"
+              className="w-16 h-16 object-contain flex-shrink-0"
             />
           </picture>
           <AnimatePresence>
