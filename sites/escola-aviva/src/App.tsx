@@ -32,7 +32,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename="/AvivaNacoes/escolaAviva">
+      <BrowserRouter basename={import.meta.env.VITE_BASE_PATH || "/"}>
         <AuthProvider>
           <Suspense fallback={<PageLoader />}>
             <Routes>
