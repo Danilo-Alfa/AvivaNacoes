@@ -63,6 +63,8 @@ jobs:
 
       - name: Build - Escola Aviva
         working-directory: sites/escola-aviva
+        env:
+          VITE_BASE_PATH: /AvivaNacoes/escolaAviva/
         run: npm run build
 
       # ========================================
