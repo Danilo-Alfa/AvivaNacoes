@@ -6,7 +6,9 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/AvivaNacoes/",
+  // Base path: usa variável de ambiente ou "/" como padrão (Vercel)
+  // Para GitHub Pages, definir VITE_BASE_PATH="/AvivaNacoes/"
+  base: process.env.VITE_BASE_PATH || "/",
   server: {
     host: "::",
     port: 8080,
@@ -26,8 +28,8 @@ export default defineConfig(({ mode }) => ({
         background_color: "#ffffff",
         display: "standalone",
         orientation: "portrait",
-        scope: "/AvivaNacoes/",
-        start_url: "/AvivaNacoes/",
+        scope: process.env.VITE_BASE_PATH || "/",
+        start_url: process.env.VITE_BASE_PATH || "/",
         icons: [
           {
             src: "pwa-48x48.png",

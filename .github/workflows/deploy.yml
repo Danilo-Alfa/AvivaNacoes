@@ -46,6 +46,8 @@ jobs:
 
       - name: Build - Igreja
         working-directory: sites/igreja
+        env:
+          VITE_BASE_PATH: /AvivaNacoes/
         run: npm run build
 
       # ========================================
