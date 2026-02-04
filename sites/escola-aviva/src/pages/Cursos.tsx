@@ -3,6 +3,7 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { useCourses } from "@/hooks/useCourses";
 import { Loader2 } from "lucide-react";
+import { normalizeImageUrl } from "@/lib/image-utils";
 
 const Cursos = () => {
   const { data: courses, isLoading, error } = useCourses();
@@ -63,7 +64,7 @@ const Cursos = () => {
                   id={course.slug}
                   title={course.titulo}
                   description={course.descricao || ""}
-                  thumbnail={course.thumbnail_url || "/images/default-course.jpg"}
+                  thumbnail={normalizeImageUrl(course.thumbnail_url)}
                   instructor={course.instrutor || "Instrutor"}
                   duration={course.duracao_total || ""}
                   lessonsCount={course.lessons_count}
