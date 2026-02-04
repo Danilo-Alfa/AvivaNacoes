@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { basePath } from "@/lib/image-utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -261,7 +262,7 @@ function AdminLiveContent() {
               <p className="text-xs text-muted-foreground">
                 Os visitantes podem assistir em:{" "}
                 <a
-                  href="/AvivaNacoes/live"
+                  href={`${basePath}live`}
                   target="_blank"
                   className="text-primary hover:underline"
                 >
@@ -597,8 +598,8 @@ function AdminLiveContent() {
           </p>
           <p>
             <strong>Página pública:</strong>{" "}
-            <a href="/AvivaNacoes/live" target="_blank" className="text-primary hover:underline">
-              /AvivaNacoes/live
+            <a href={`${basePath}live`} target="_blank" className="text-primary hover:underline">
+              {basePath}live
             </a>
           </p>
           <p className="text-xs pt-2 border-t">

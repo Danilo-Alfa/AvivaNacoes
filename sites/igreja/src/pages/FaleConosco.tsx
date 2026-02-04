@@ -3,19 +3,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  AdvancedMarker,
-  APIProvider,
-  Map,
-  Pin,
-} from "@vis.gl/react-google-maps";
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone, ExternalLink } from "lucide-react";
 
 export default function FaleConosco() {
-  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
-
   // Localização da sede principal - Campos Gerais
   const mainChurchLocation = { lat: -23.574401, lng: -46.758482 };
+
   return (
     <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
       {/* Hero Section */}
@@ -173,39 +166,22 @@ export default function FaleConosco() {
             </CardContent>
           </Card>
 
-          {/* Mapa */}
-          <Card className="shadow-soft overflow-hidden">
-            <CardContent className="p-0">
-              <div className="h-[350px] w-full">
-                <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
-                  <Map
-                    defaultCenter={mainChurchLocation}
-                    defaultZoom={15}
-                    mapId="contact-map"
-                    gestureHandling="cooperative"
-                    disableDefaultUI={false}
-                  >
-                    <AdvancedMarker position={mainChurchLocation} title="Ver localização da sede principal">
-                      <Pin
-                        background="#6366F1"
-                        borderColor="#4F46E5"
-                        glyphColor="#FFFFFF"
-                      />
-                    </AdvancedMarker>
-                  </Map>
-                </APIProvider>
-              </div>
-              <div className="p-4 border-t border-border bg-background">
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${mainChurchLocation.lat},${mainChurchLocation.lng}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-primary hover:text-primary/80 font-medium flex items-center justify-center gap-2"
-                >
-                  <MapPin className="w-4 h-4" aria-hidden="true" />
-                  Ver rotas no Google Maps
-                </a>
-              </div>
+          {/* Localização */}
+          <Card className="shadow-soft">
+            <CardContent className="p-8">
+              <h3 className="text-xl font-bold mb-4">Nossa Localização</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Clique no botão abaixo para ver a localização da nossa sede no Google Maps
+              </p>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${mainChurchLocation.lat},${mainChurchLocation.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Ver no Google Maps
+              </a>
             </CardContent>
           </Card>
 

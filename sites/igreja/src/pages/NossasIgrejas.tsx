@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Phone, Clock } from "lucide-react";
-import {
-  APIProvider,
-  Map,
-  AdvancedMarker,
-  Pin,
-} from "@vis.gl/react-google-maps";
+import { MapPin, Phone, Clock, ExternalLink } from "lucide-react";
 import { getIgrejasAtivas, type Igreja } from "@/services/igrejaService";
 
 // Skeleton para card de igreja
@@ -40,7 +34,6 @@ function IgrejaCardSkeleton() {
 export default function NossasIgrejas() {
   const [igrejas, setIgrejas] = useState<Igreja[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedChurch, setSelectedChurch] = useState<string | null>(null);
 
   useEffect(() => {
     const carregarIgrejas = async () => {
@@ -57,19 +50,6 @@ export default function NossasIgrejas() {
     carregarIgrejas();
   }, []);
 
-  // Chave da API do Google Maps vinda das variáveis de ambiente
-  const GOOGLE_MAPS_API_KEY =
-    import.meta.env.VITE_GOOGLE_MAPS_API_KEY ||
-    "AIzaSyCkN8txAwSMXcQUYln22XKt1kDP9P8RDuY";
-
-  // Filtrar igrejas com coordenadas válidas para o mapa
-  const igrejasComCoordenadas = igrejas.filter(
-    (igreja) => igreja.latitude && igreja.longitude,
-  );
-
-  // Localização da igreja sede - Jardim Esther, SP
-  const centerMap = { lat: -23.574401, lng: -46.758482 };
-
   return (
     <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
       {/* Hero Section */}
@@ -84,12 +64,6 @@ export default function NossasIgrejas() {
 
       {loading ? (
         <>
-          {/* Skeleton do Mapa */}
-          <section className="mb-16">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-              <div className="h-[500px] w-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
-            </div>
-          </section>
           {/* Skeleton dos Cards */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <IgrejaCardSkeleton />
@@ -99,72 +73,12 @@ export default function NossasIgrejas() {
         </>
       ) : (
         <>
-          {/* Mapa Interativo */}
-          <section className="mb-16">
-            <Card className="shadow-medium overflow-hidden">
-              <CardContent className="p-0">
-                <div className="h-[500px] w-full">
-                  <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
-                    <Map
-                      defaultCenter={centerMap}
-                      defaultZoom={12}
-                      mapId="church-map"
-                      gestureHandling="cooperative"
-                      disableDefaultUI={false}
-                    >
-                      {igrejasComCoordenadas.map((igreja) => (
-                        <AdvancedMarker
-                          key={igreja.id}
-                          position={{
-                            lat: igreja.latitude!,
-                            lng: igreja.longitude!,
-                          }}
-                          onClick={() => setSelectedChurch(igreja.id)}
-                          title={`Ver detalhes de ${igreja.nome}`}
-                        >
-                          <Pin
-                            background={
-                              selectedChurch === igreja.id
-                                ? "#8B5CF6"
-                                : "#6366F1"
-                            }
-                            borderColor={
-                              selectedChurch === igreja.id
-                                ? "#7C3AED"
-                                : "#4F46E5"
-                            }
-                            glyphColor="#FFFFFF"
-                          />
-                        </AdvancedMarker>
-                      ))}
-                    </Map>
-                  </APIProvider>
-                </div>
-              </CardContent>
-            </Card>
-            <p className="text-sm text-center text-muted-foreground mt-4">
-              Clique nos marcadores para ver detalhes de cada igreja
-            </p>
-          </section>
-
           {/* Grid de Igrejas */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {igrejas.map((igreja) => (
               <Card
                 key={igreja.id}
-                className={`shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 cursor-pointer h-full flex flex-col ${
-                  selectedChurch === igreja.id ? "ring-2 ring-primary" : ""
-                }`}
-                onClick={() => setSelectedChurch(igreja.id)}
-                role="button"
-                tabIndex={0}
-                aria-label={`Selecionar ${igreja.nome}${igreja.bairro ? ` - ${igreja.bairro}` : ""}`}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setSelectedChurch(igreja.id);
-                  }
-                }}
+                className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1 h-full flex flex-col"
               >
                 <CardContent className="p-0 flex flex-col flex-1">
                   {/* Imagem da Igreja */}
@@ -268,9 +182,9 @@ export default function NossasIgrejas() {
                         href={`https://www.google.com/maps/search/?api=1&query=${igreja.latitude},${igreja.longitude}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-auto pt-4 block w-full text-center px-4 py-3 min-h-[48px] bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
-                        onClick={(e) => e.stopPropagation()}
+                        className="mt-auto pt-4 flex items-center justify-center gap-2 w-full text-center px-4 py-3 min-h-[48px] bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
                       >
+                        <ExternalLink className="w-4 h-4" />
                         Ver no Google Maps
                       </a>
                     ) : (

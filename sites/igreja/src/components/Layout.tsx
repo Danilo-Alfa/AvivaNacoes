@@ -1,5 +1,6 @@
 import { Switch } from "@/components/ui/switch";
 import { getLiveStatus } from "@/services/liveService";
+import { asset } from "@/lib/image-utils";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   BookOpen,
@@ -306,9 +307,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   >
                     <div className="absolute inset-0 bg-primary/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <picture>
-                      <source srcSet="/AvivaNacoes/logoheader.webp" type="image/webp" />
+                      <source srcSet={asset("logoheader.webp")} type="image/webp" />
                       <img
-                        src="/AvivaNacoes/logoheader.png"
+                        src={asset("logoheader.png")}
                         alt="Logo Aviva Nações"
                         width={56}
                         height={56}
@@ -449,9 +450,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               {/* Logo e mensagem de boas-vindas */}
               <div className="flex items-center gap-4 mb-4">
                 <picture>
-                  <source srcSet="/AvivaNacoes/logoheader.webp" type="image/webp" />
+                  <source srcSet={asset("logoheader.webp")} type="image/webp" />
                   <img
-                    src="/AvivaNacoes/logoheader.png"
+                    src={asset("logoheader.png")}
                     alt="Logo Aviva Nações"
                     width={64}
                     height={64}
@@ -850,9 +851,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <picture>
-                  <source srcSet="/AvivaNacoes/logoheader.webp" type="image/webp" />
+                  <source srcSet={asset("logoheader.webp")} type="image/webp" />
                   <img
-                    src="/AvivaNacoes/logoheader.png"
+                    src={asset("logoheader.png")}
                     alt="Logo Aviva Nações"
                     width={40}
                     height={40}
