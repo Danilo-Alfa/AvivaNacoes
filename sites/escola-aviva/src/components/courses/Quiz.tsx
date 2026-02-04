@@ -61,10 +61,10 @@ export function Quiz({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header com progresso */}
       <div className="space-y-2">
-        <div className="flex justify-between text-sm text-gray-600">
+        <div className="flex justify-between text-xs sm:text-sm text-gray-600">
           <span>Progresso do Quiz</span>
           <span>
             {answeredCount} de {questions.length} respondidas
@@ -76,28 +76,28 @@ export function Quiz({
       {/* Resultado do Quiz */}
       {showResults && result && (
         <div
-          className={`p-6 rounded-lg border-2 ${
+          className={`p-4 sm:p-6 rounded-lg border-2 ${
             result.passed
               ? 'bg-green-50 border-green-200'
               : 'bg-red-50 border-red-200'
           }`}
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-start sm:items-center gap-3 sm:gap-4">
             {result.passed ? (
-              <CheckCircle2 className="w-12 h-12 text-green-600" />
+              <CheckCircle2 className="w-8 h-8 sm:w-12 sm:h-12 text-green-600 flex-shrink-0" />
             ) : (
-              <XCircle className="w-12 h-12 text-red-600" />
+              <XCircle className="w-8 h-8 sm:w-12 sm:h-12 text-red-600 flex-shrink-0" />
             )}
-            <div>
+            <div className="min-w-0">
               <h3
-                className={`text-xl font-bold ${
+                className={`text-lg sm:text-xl font-bold ${
                   result.passed ? 'text-green-800' : 'text-red-800'
                 }`}
               >
                 {result.passed ? 'Parabens!' : 'Quase la!'}
               </h3>
               <p
-                className={`text-sm ${
+                className={`text-xs sm:text-sm ${
                   result.passed ? 'text-green-700' : 'text-red-700'
                 }`}
               >
@@ -105,7 +105,7 @@ export function Quiz({
                 perguntas ({result.percentage}%)
               </p>
               {!result.passed && (
-                <p className="text-sm text-red-600 mt-1">
+                <p className="text-xs sm:text-sm text-red-600 mt-1">
                   Voce precisa de pelo menos 70% para avancar. Tente novamente!
                 </p>
               )}
@@ -115,7 +115,7 @@ export function Quiz({
       )}
 
       {/* Perguntas */}
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         {questions.map((question, index) => {
           const response = result?.responses.find(
             (r) => r.question_id === question.id
@@ -138,12 +138,12 @@ export function Quiz({
       </div>
 
       {/* Botoes de acao */}
-      <div className="flex justify-end gap-3 pt-4 border-t">
+      <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 pt-4 border-t">
         {!showResults ? (
           <Button
             onClick={handleSubmit}
             disabled={!allAnswered || isSubmitting}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-aviva-blue hover:bg-aviva-blue/90 text-white w-full sm:w-auto"
           >
             {isSubmitting ? 'Verificando...' : 'Verificar Respostas'}
           </Button>
@@ -153,7 +153,7 @@ export function Quiz({
               <Button
                 variant="outline"
                 onClick={handleRetry}
-                className="gap-2"
+                className="gap-2 w-full sm:w-auto order-2 sm:order-1"
               >
                 <RotateCcw className="w-4 h-4" />
                 Tentar Novamente
@@ -162,9 +162,9 @@ export function Quiz({
             <Button
               onClick={handleContinue}
               disabled={!result?.passed}
-              className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+              className="bg-aviva-blue hover:bg-aviva-blue/90 text-white gap-2 w-full sm:w-auto order-1 sm:order-2"
             >
-              {result?.passed ? 'Continuar' : 'Precisa passar para continuar'}
+              {result?.passed ? 'Continuar' : 'Precisa passar'}
               {result?.passed && <ArrowRight className="w-4 h-4" />}
             </Button>
           </>

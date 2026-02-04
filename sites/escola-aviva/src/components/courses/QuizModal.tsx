@@ -47,19 +47,19 @@ export function QuizModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-xl sm:rounded-lg">
+        <DialogHeader className="pr-8">
           <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-aviva-blue" />
-            <DialogTitle>Quiz: {lessonTitle}</DialogTitle>
+            <BookOpen className="w-5 h-5 text-aviva-blue flex-shrink-0" />
+            <DialogTitle className="text-base sm:text-lg">Quiz: {lessonTitle}</DialogTitle>
           </div>
-          <DialogDescription>
+          <DialogDescription className="text-sm leading-relaxed">
             Responda as perguntas abaixo para testar seu conhecimento. Voce
             precisa acertar pelo menos 70% para avancar.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="mt-4">
+        <div className="mt-2 sm:mt-4">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <Loader2 className="w-8 h-8 animate-spin text-aviva-blue" />
