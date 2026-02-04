@@ -13,7 +13,8 @@ import {
   UserPlus,
   Eye,
   EyeOff,
-  Key
+  Key,
+  Pencil
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { MainLayout } from '@/components/layout/MainLayout';
@@ -72,6 +73,14 @@ export default function Admin() {
   const [selectedUser, setSelectedUser] = useState<UserWithProgress | null>(null);
   const [newPassword, setNewPassword] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
+
+  // Estado para editar usuario
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editUser, setEditUser] = useState({
+    nome: '',
+    email: '',
+  });
 
   const { toast } = useToast();
 
@@ -254,6 +263,70 @@ export default function Admin() {
     setSelectedUser(user);
     setNewPassword('');
     setIsPasswordDialogOpen(true);
+  };
+
+  const openEditDialog = (user: UserWithProgress) => {
+    setSelectedUser(user);
+    setEditUser({
+      nome: user.nome,
+      email: user.email,
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleEditUser = async () => {
+    if (!selectedUser) return;
+
+    if (!editUser.nome && !editUser.email) {
+      toast({
+        title: 'Campos obrigatorios',
+        description: 'Preencha pelo menos nome ou email.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setEditing(true);
+
+    try {
+      const response = await supabase.functions.invoke('update-user', {
+        body: {
+          userId: selectedUser.id,
+          nome: editUser.nome || undefined,
+          email: editUser.email || undefined,
+        },
+      });
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Erro ao editar usuario');
+      }
+
+      if (response.data?.error) {
+        throw new Error(response.data.error);
+      }
+
+      toast({
+        title: 'Usuario atualizado!',
+        description: `Os dados de ${editUser.nome} foram atualizados com sucesso.`,
+      });
+
+      // Limpar e fechar
+      setEditUser({ nome: '', email: '' });
+      setSelectedUser(null);
+      setIsEditDialogOpen(false);
+
+      // Recarregar lista
+      fetchUsers();
+
+    } catch (err: any) {
+      toast({
+        title: 'Erro ao editar usuario',
+        description: err.message || 'Tente novamente.',
+        variant: 'destructive',
+      });
+    } finally {
+      setEditing(false);
+    }
   };
 
   const getInitials = (name: string) => {
@@ -567,8 +640,20 @@ export default function Admin() {
                             </div>
                           </div>
 
-                          {/* Botao Alterar Senha */}
-                          <div className="mb-4">
+                          {/* Botoes de Acoes */}
+                          <div className="mb-4 flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openEditDialog(user);
+                              }}
+                              className="gap-2"
+                            >
+                              <Pencil className="w-4 h-4" />
+                              Editar
+                            </Button>
                             <Button
                               variant="outline"
                               size="sm"
@@ -668,6 +753,54 @@ export default function Admin() {
                   </>
                 ) : (
                   'Salvar Senha'
+                )}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Dialog Editar Usuario */}
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Editar Usuario</DialogTitle>
+              <DialogDescription>
+                Altere os dados de {selectedUser?.nome}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="editNome">Nome completo</Label>
+                <Input
+                  id="editNome"
+                  placeholder="Nome do usuario"
+                  value={editUser.nome}
+                  onChange={(e) => setEditUser({ ...editUser, nome: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="editEmail">Email</Label>
+                <Input
+                  id="editEmail"
+                  type="email"
+                  placeholder="email@exemplo.com"
+                  value={editUser.email}
+                  onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-3">
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={handleEditUser} disabled={editing}>
+                {editing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Salvando...
+                  </>
+                ) : (
+                  'Salvar'
                 )}
               </Button>
             </div>
