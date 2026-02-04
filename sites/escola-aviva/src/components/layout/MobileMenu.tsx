@@ -65,9 +65,10 @@ export function MobileMenu() {
   };
 
   const handleSignOut = async () => {
-    await signOut();
     setIsOpen(false);
-    navigate('/');
+    await signOut();
+    // Navegar diretamente para login para garantir redirecionamento imediato
+    navigate('/login', { replace: true });
   };
 
   return (

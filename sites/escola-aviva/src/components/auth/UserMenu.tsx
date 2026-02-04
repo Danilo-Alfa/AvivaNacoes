@@ -29,7 +29,7 @@ export function UserMenu({ collapsed = false }: UserMenuProps) {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/login');
+    navigate('/login', { replace: true });
   };
 
   if (loading || !user) {

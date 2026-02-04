@@ -47,9 +47,10 @@ export function QuizModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-xl sm:rounded-lg">
-        <DialogHeader className="pr-8">
-          <div className="flex items-center gap-2">
+      <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] p-0 rounded-xl sm:rounded-lg flex flex-col overflow-hidden">
+        {/* Header fixo */}
+        <DialogHeader className="px-4 sm:px-6 pt-4 sm:pt-6 pb-3 border-b bg-background sticky top-0 z-10">
+          <div className="flex items-center gap-2 pr-10">
             <BookOpen className="w-5 h-5 text-aviva-blue flex-shrink-0" />
             <DialogTitle className="text-base sm:text-lg">Quiz: {lessonTitle}</DialogTitle>
           </div>
@@ -59,7 +60,8 @@ export function QuizModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="mt-2 sm:mt-4">
+        {/* Conteudo rolavel */}
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <Loader2 className="w-8 h-8 animate-spin text-aviva-blue" />

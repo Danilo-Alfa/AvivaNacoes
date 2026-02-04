@@ -20,8 +20,8 @@ export function MainLayout({ children }: MainLayoutProps) {
         {/* Decorative top line for desktop */}
         <div className="hidden lg:block h-1 gradient-hero" />
         
-        {/* Mobile header spacer */}
-        <div className="h-14 lg:hidden" />
+        {/* Mobile header spacer (h-1 gradient + h-12 header = 52px ~= h-[52px]) */}
+        <div className="h-[52px] lg:hidden" />
         
         {/* Page Content */}
         <div className="container-custom py-6 md:py-10">
