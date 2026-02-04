@@ -83,7 +83,7 @@ export function LessonCompleteButton({
     <Button
       onClick={handleClick}
       disabled={isMarking}
-      className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+      className="gap-2 bg-aviva-blue hover:bg-aviva-blue/90 text-white w-full sm:w-auto min-h-[44px] text-sm font-medium shadow-md"
     >
       {isMarking ? (
         <>

@@ -69,6 +69,8 @@ const CursoDetalhe = () => {
     if (!lesson.is_locked) {
       setCurrentLesson(lesson);
       setVideoProgress(0); // Resetar progresso do vídeo ao mudar de aula
+      // Scroll to top ao mudar de aula
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -91,6 +93,8 @@ const CursoDetalhe = () => {
         if (currentIndex < course.lessons.length - 1) {
           const nextLesson = course.lessons[currentIndex + 1];
           setCurrentLesson({ ...nextLesson, is_locked: false });
+          // Scroll to top ao avançar para próxima aula
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       } catch (error) {
         console.error("Erro ao marcar aula:", error);
@@ -107,6 +111,8 @@ const CursoDetalhe = () => {
       if (currentIndex < course.lessons.length - 1) {
         const nextLesson = course.lessons[currentIndex + 1];
         setCurrentLesson({ ...nextLesson, is_locked: false });
+        // Scroll to top ao avançar para próxima aula
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
   };

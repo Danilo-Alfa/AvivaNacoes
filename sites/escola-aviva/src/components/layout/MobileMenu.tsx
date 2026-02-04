@@ -75,30 +75,28 @@ export function MobileMenu() {
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="h-1 gradient-hero" />
-        <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center justify-between px-4 h-12">
           <motion.div
-            className="flex items-center gap-3"
+            className="flex items-center gap-2"
             whileHover={{ scale: 1.02 }}
           >
-            <picture>
+            <picture className="flex-shrink-0">
               <source srcSet={`${import.meta.env.BASE_URL}logoheader.webp`} type="image/webp" />
               <img
                 src={`${import.meta.env.BASE_URL}logoheader.png`}
                 alt="Logo Aviva Nações"
-                width={36}
-                height={36}
-                className="w-9 h-9 object-contain"
+                width={32}
+                height={32}
+                className="w-8 h-8 object-contain"
               />
             </picture>
-            <div>
-              <h1 className="font-display font-bold text-foreground">Escola Aviva</h1>
-            </div>
+            <h1 className="font-display font-bold text-foreground text-sm leading-none">Escola Aviva</h1>
           </motion.div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {/* User Avatar (se logado) */}
             {!loading && user && (
-              <Link to="/perfil" className="mr-1">
+              <Link to="/perfil" className="flex items-center justify-center">
                 <Avatar className="w-8 h-8 border-2 border-primary/20">
                   <AvatarImage src={profile?.avatar_url} />
                   <AvatarFallback className="gradient-hero text-primary-foreground text-xs">
@@ -110,7 +108,7 @@ export function MobileMenu() {
 
             <button
               onClick={() => setIsOpen(true)}
-              className="p-2 rounded-lg hover:bg-secondary transition-colors"
+              className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-secondary transition-colors"
               aria-label="Abrir menu"
             >
               <Menu className="w-6 h-6 text-foreground" />
