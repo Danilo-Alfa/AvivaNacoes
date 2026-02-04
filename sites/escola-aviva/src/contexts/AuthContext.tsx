@@ -106,11 +106,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setProfile(null);
-    setSession(null);
-    setProfileLoaded(false);
+    try {
+      // Limpar estado local primeiro
+      setUser(null);
+      setProfile(null);
+      setSession(null);
+      setProfileLoaded(false);
+
+      // Fazer signOut no Supabase (scope: 'global' invalida todas as sessões)
+      const { error } = await supabase.auth.signOut({ scope: 'global' });
+
+      if (error) {
+        console.error('Erro ao fazer logout:', error);
+      }
+
+      // Limpar qualquer dado em cache do localStorage relacionado ao Supabase
+      const keysToRemove = Object.keys(localStorage).filter(key =>
+        key.startsWith('sb-') || key.includes('supabase')
+      );
+      keysToRemove.forEach(key => localStorage.removeItem(key));
+
+    } catch (err) {
+      console.error('Erro no signOut:', err);
+    }
   };
 
   const isAdmin = profile?.role === 'admin';
