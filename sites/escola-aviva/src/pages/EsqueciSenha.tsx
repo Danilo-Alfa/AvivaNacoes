@@ -31,7 +31,7 @@ export default function EsqueciSenha() {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/AvivaNacoes/escolaAviva/redefinir-senha`,
+        redirectTo: `${window.location.origin}/redefinir-senha`,
       });
 
       if (error) {

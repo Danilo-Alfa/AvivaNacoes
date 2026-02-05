@@ -46,7 +46,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename={import.meta.env.VITE_BASE_PATH || "/"}>
+      <BrowserRouter basename="">
         <ScrollToTop />
         <Layout>
           <Suspense fallback={<PageLoader />}>

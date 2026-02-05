@@ -1,8 +1,7 @@
 /**
  * Retorna o caminho base para assets estáticos
- * No Vercel: "/" | No GitHub Pages: "/AvivaNacoes/"
  */
-export const basePath = import.meta.env.VITE_BASE_PATH || "/";
+export const basePath = "/";
 
 /**
  * Constrói o caminho completo para um asset
