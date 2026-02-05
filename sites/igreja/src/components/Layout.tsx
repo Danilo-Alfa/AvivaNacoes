@@ -2,6 +2,7 @@ import { Switch } from "@/components/ui/switch";
 import { getLiveStatus } from "@/services/liveService";
 import { asset } from "@/lib/image-utils";
 import { AnimatePresence, motion } from "framer-motion";
+import AudioPlayer from "@/components/AudioPlayer";
 import {
   BookOpen,
   Calendar,
@@ -886,6 +887,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </footer>
+
+      {/* Player de Rádio */}
+      <AudioPlayer />
     </div>
   );
 }
