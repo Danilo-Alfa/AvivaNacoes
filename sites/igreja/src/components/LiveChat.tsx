@@ -30,15 +30,27 @@ export default function LiveChat({
   const inputRef = useRef<HTMLInputElement>(null);
   const digitandoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Filtrar apenas mensagens de hoje
+  const filtrarMensagensDeHoje = useCallback((msgs: ChatMensagem[]) => {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    return msgs.filter((msg) => new Date(msg.created_at) >= hoje);
+  }, []);
+
   // Auto scroll para última mensagem
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      const viewport = scrollRef.current.querySelector(
+        "[data-radix-scroll-area-viewport]"
+      );
+      if (viewport) {
+        viewport.scrollTop = viewport.scrollHeight;
+      }
     }
   }, []);
 
   useEffect(() => {
-    scrollToBottom();
+    requestAnimationFrame(scrollToBottom);
   }, [mensagens, scrollToBottom]);
 
   // Conectar ao chat
@@ -53,7 +65,7 @@ export default function LiveChat({
     };
 
     const handleMensagensAnteriores = (msgs: ChatMensagem[]) => {
-      setMensagens(msgs);
+      setMensagens(filtrarMensagensDeHoje(msgs));
     };
 
     const handleUsersOnline = (count: number) => {
@@ -119,7 +131,7 @@ export default function LiveChat({
       chatClient.off("desconectado", handleDesconectado);
       chatClient.disconnect();
     };
-  }, [isLive, sessionId, nome, email]);
+  }, [isLive, sessionId, nome, email, filtrarMensagensDeHoje]);
 
   // Enviar mensagem
   const handleEnviar = (e: React.FormEvent) => {

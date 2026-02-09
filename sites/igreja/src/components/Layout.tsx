@@ -322,12 +322,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     </picture>
                   </motion.div>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-lg font-display font-bold text-primary dark:text-blue-400">
-                    Aviva Nações
-                  </span>
+                <div className="flex flex-col -space-y-1">
                   <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
                     Igreja Evangélica
+                  </span>
+                  <span className="text-lg font-display font-bold text-primary dark:text-blue-400">
+                    Aviva Nações
                   </span>
                 </div>
               </Link>
