@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Download, FileText } from "lucide-react";
+import { Download, ExternalLink, FileText } from "lucide-react";
 import { getUltimosJornais, type Jornal } from "@/services/jornalService";
 
 // Componente para thumbnail do jornal com fallback
@@ -67,6 +67,8 @@ export default function Jornal() {
     }
   };
 
+  const isCanvaSite = (url: string): boolean => url.includes(".my.canva.site");
+
   // Converte automaticamente links do Canva para formato embed
   const converterParaEmbed = (url: string): string => {
     // Canva Design: converte /view para /view?embed
@@ -74,13 +76,6 @@ export default function Jornal() {
       // Remove parâmetros existentes e adiciona ?embed
       const urlBase = url.split("?")[0];
       return `${urlBase}?embed`;
-    }
-
-    // Canva Site (.my.canva.site): tenta carregar como iframe direto
-    if (url.includes(".my.canva.site")) {
-      // Remove parâmetros de tracking (fbclid, etc) para URL mais limpa
-      const urlObj = new URL(url);
-      return `${urlObj.origin}${urlObj.pathname}`;
     }
 
     // Issuu: converte para embed
@@ -155,22 +150,47 @@ export default function Jornal() {
           <section className="mb-16">
             <Card className="shadow-medium overflow-hidden">
               <CardContent className="p-0">
-                {/* Área de Visualização - PDF Embed */}
+                {/* Área de Visualização */}
                 <div className="bg-muted flex items-center justify-center py-12 px-4">
                   <div className="max-w-3xl w-full">
-                    <div className="aspect-[9/16] bg-background rounded-lg shadow-soft overflow-hidden">
-                      <iframe
-                        loading="lazy"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          border: "none",
-                        }}
-                        src={converterParaEmbed(jornalMaisRecente.url_pdf)}
-                        title={jornalMaisRecente.titulo || "Jornal"}
-                        allow="fullscreen"
-                      ></iframe>
-                    </div>
+                    {isCanvaSite(jornalMaisRecente.url_pdf) ? (
+                      <a
+                        href={jornalMaisRecente.url_pdf}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block aspect-[9/16] bg-background rounded-lg shadow-soft overflow-hidden group"
+                      >
+                        <div className="w-full h-full flex flex-col items-center justify-center gap-6 bg-gradient-hero text-primary-foreground p-8">
+                          <FileText className="w-24 h-24 opacity-80" aria-hidden="true" />
+                          <div className="text-center">
+                            <h3 className="text-2xl font-bold mb-2">
+                              {jornalMaisRecente.titulo || "Última Edição"}
+                            </h3>
+                            <p className="text-sm opacity-80 mb-6">
+                              Clique para visualizar o jornal completo
+                            </p>
+                          </div>
+                          <span className="flex items-center gap-2 px-6 py-3 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors font-medium">
+                            <ExternalLink className="w-5 h-5" aria-hidden="true" />
+                            Abrir Jornal
+                          </span>
+                        </div>
+                      </a>
+                    ) : (
+                      <div className="aspect-[9/16] bg-background rounded-lg shadow-soft overflow-hidden">
+                        <iframe
+                          loading="lazy"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            border: "none",
+                          }}
+                          src={converterParaEmbed(jornalMaisRecente.url_pdf)}
+                          title={jornalMaisRecente.titulo || "Jornal"}
+                          allow="fullscreen"
+                        ></iframe>
+                      </div>
+                    )}
                   </div>
                 </div>
 

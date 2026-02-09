@@ -110,3 +110,28 @@ export async function deletarJornal(id: string): Promise<void> {
     throw error;
   }
 }
+
+/**
+ * Faz upload de um PDF para o Supabase Storage e retorna a URL pública
+ */
+export async function uploadPdfJornal(arquivo: File): Promise<string> {
+  const nomeArquivo = `${Date.now()}-${arquivo.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+
+  const { error } = await supabase.storage
+    .from("jornais")
+    .upload(nomeArquivo, arquivo, {
+      contentType: "application/pdf",
+      upsert: false,
+    });
+
+  if (error) {
+    console.error("Erro ao fazer upload do PDF:", error);
+    throw error;
+  }
+
+  const { data: urlData } = supabase.storage
+    .from("jornais")
+    .getPublicUrl(nomeArquivo);
+
+  return urlData.publicUrl;
+}
