@@ -45,6 +45,11 @@ export default function Live() {
 
   const streamUrl = config?.url_stream || import.meta.env.VITE_STREAM_URL || "";
 
+  // Log para debug
+  console.log("Stream URL:", streamUrl);
+  console.log("Config:", config);
+  console.log("Env VITE_STREAM_URL:", import.meta.env.VITE_STREAM_URL);
+
   // Detectar se está em HTTPS e stream é HTTP (mixed content)
   const isHttps = window.location.protocol === "https:";
   const isStreamHttp = streamUrl.startsWith("http:");
@@ -396,18 +401,26 @@ export default function Live() {
                       width="100%"
                       height="100%"
                       config={{
-                        hls: {
-                          enableWorker: true,
-                          lowLatencyMode: true,
-                          maxBufferLength: 10,
-                          maxMaxBufferLength: 30,
+                        file: {
+                          forceHLS: true,
+                          hlsOptions: {
+                            enableWorker: true,
+                            lowLatencyMode: true,
+                            maxBufferLength: 10,
+                            maxMaxBufferLength: 30,
+                            debug: true,
+                          },
                         },
                       }}
                       controlsList="nodownload"
+                      onReady={() => console.log("Player pronto!")}
                       onError={(e) => {
                         console.error("Erro no player:", e);
-                        setIsLive(false);
+                        console.error("Tipo do erro:", typeof e, e);
+                        toast.error("Erro ao carregar a transmissão. Verifique o console para mais detalhes.");
                       }}
+                      onBuffer={() => console.log("Buffering...")}
+                      onBufferEnd={() => console.log("Buffer finalizado")}
                     />
                   </Suspense>
                 </div>
