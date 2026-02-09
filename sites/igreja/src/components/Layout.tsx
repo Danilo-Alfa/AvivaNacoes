@@ -156,7 +156,11 @@ const sidebarSections = [
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved) return saved === "dark";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [scrolled, setScrolled] = useState(false);
@@ -213,6 +217,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     } else {
       root.classList.remove("dark");
     }
+
+    localStorage.setItem("theme", isDark ? "dark" : "light");
 
     let metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (isDark) {

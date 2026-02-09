@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/escolaAviva/(.*)",
+      "destination": "/escolaAviva/index.html"
+    },
+    {
+      "source": "/((?!escolaAviva).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
