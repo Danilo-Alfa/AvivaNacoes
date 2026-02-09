@@ -15,10 +15,9 @@ import {
   sairDaLive,
   type LiveConfig,
 } from "@/services/liveService";
+import HlsPlayer from "@/components/HlsPlayer";
 import { Loader2, Radio, User, Users } from "lucide-react";
-import { useCallback, useEffect, useState, lazy, Suspense } from "react";
-
-const ReactPlayer = lazy(() => import("react-player"));
+import { useCallback, useEffect, useState } from "react";
 
 // Declarar gtag para TypeScript
 declare global {
@@ -389,40 +388,16 @@ export default function Live() {
                 )}
 
                 <div className="aspect-video bg-black rounded-lg overflow-hidden">
-                  <Suspense fallback={
-                    <div className="w-full h-full flex items-center justify-center bg-black">
-                      <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin" />
-                    </div>
-                  }>
-                    <ReactPlayer
-                      url={streamUrl}
-                      playing
-                      controls
-                      width="100%"
-                      height="100%"
-                      config={{
-                        file: {
-                          forceHLS: true,
-                          hlsOptions: {
-                            enableWorker: true,
-                            lowLatencyMode: true,
-                            maxBufferLength: 10,
-                            maxMaxBufferLength: 30,
-                            debug: true,
-                          },
-                        },
-                      }}
-                      controlsList="nodownload"
-                      onReady={() => console.log("Player pronto!")}
-                      onError={(e) => {
-                        console.error("Erro no player:", e);
-                        console.error("Tipo do erro:", typeof e, e);
-                        toast.error("Erro ao carregar a transmissão. Verifique o console para mais detalhes.");
-                      }}
-                      onBuffer={() => console.log("Buffering...")}
-                      onBufferEnd={() => console.log("Buffer finalizado")}
-                    />
-                  </Suspense>
+                  <HlsPlayer
+                    url={streamUrl}
+                    onReady={() => console.log("Player pronto!")}
+                    onError={(e) => {
+                      console.error("Erro no player:", e);
+                      toast.error(
+                        "Erro ao carregar a transmissão. Verifique o console para mais detalhes."
+                      );
+                    }}
+                  />
                 </div>
 
                 <Alert>
