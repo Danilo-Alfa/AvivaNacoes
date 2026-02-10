@@ -148,11 +148,10 @@ export default function QuemSomos() {
             </h2>
             <div className="prose prose-lg max-w-none text-muted-foreground">
               <p className="mb-4">
-                Com o nascimento de um propósito grandioso que se
-                transformou em um ministério de impacto. A Igreja Evangélica
-                Avivamento para as Nações teve grande crescimento com a Igreja da Arca,
-                localizada na Vila Dalva, dando origem a diversos sonhos e
-                projetos que hoje estão se concretizando.
+                A Igreja Evangélica Avivamento para as Nações teve seu início de
+                uma forma simples, em um bairro humilde, mas que com o passar
+                dos anos foi crescendo e se fortalecendo, dando origem a
+                diversos sonhos e projetos que hoje estão se concretizando.
               </p>
               <p className="mb-4">
                 Uma viagem à Colômbia foi um marco transformador, onde o modelo
@@ -164,7 +163,7 @@ export default function QuemSomos() {
               <p className="mb-4">
                 Hoje, com sede na Rua Lucas Padilha, 07, Jardim Ester, Zona
                 Oeste de São Paulo, a igreja é o ponto mais ativo do ministério,
-                com cultos semanais, reuniões, treinamentos, vigílias e a Web
+                com cultos diários, reuniões, treinamentos, vigílias e a Web
                 Rádio. Sempre pensando nas vidas que o Senhor acrescenta e no
                 crescimento do ministério, outros espaços surgiram com a direção
                 de Deus: um acampamento para retiros espirituais, o espaço em
