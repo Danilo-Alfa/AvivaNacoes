@@ -148,9 +148,9 @@ export default function QuemSomos() {
             </h2>
             <div className="prose prose-lg max-w-none text-muted-foreground">
               <p className="mb-4">
-                Em um humilde começo, nasceu um propósito grandioso que se
+                Com o nascimento de um propósito grandioso que se
                 transformou em um ministério de impacto. A Igreja Evangélica
-                Avivamento para as Nações teve seu início com a Igreja da Arca,
+                Avivamento para as Nações teve grande crescimento com a Igreja da Arca,
                 localizada na Vila Dalva, dando origem a diversos sonhos e
                 projetos que hoje estão se concretizando.
               </p>
