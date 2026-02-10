@@ -125,7 +125,12 @@ All colors MUST be HSL.
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  background: hsl(215 15% 90%);
+  border-radius: 3px;
+}
+
+.dark .sidebar-scrollbar::-webkit-scrollbar-track {
+  background: hsl(215 20% 15%);
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-thumb {
