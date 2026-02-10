@@ -113,16 +113,16 @@ function PastorCard({ pastor }: { pastor: PastorData }) {
 // Dados dos pastores
 const pastores: PastorData[] = [
   {
-    nome: "Pastor Nome",
-    cargo: "Pastor Presidente",
-    foto: "/images/pastor1.jpg", // Substitua pelo caminho real da imagem
-    descricao: "Breve biografia do pastor. Sua história de fé, chamado ministerial e visão para a igreja. Compartilhe aqui informações relevantes sobre sua trajetória.",
+    nome: "Rowilson Oliveira",
+    cargo: "Apóstolo",
+    foto: "/images/pastor1.jpg",
+    descricao: "São mais de 40 anos seguindo uma vida de entrega, visão espiritual e compromisso com o Reino. Ao longo de sua trajetória, tem impactado gerações com sua fé inabalável, liderança inspiradora e coração pastoral. Também é o principal levita do ministério, andando junto com as ovelhas e carregando o que for necessário para a obra crescer.",
   },
   {
-    nome: "Pastora Nome",
-    cargo: "Pastora",
-    foto: "/images/pastor2.jpg", // Substitua pelo caminho real da imagem
-    descricao: "Breve biografia da pastora. Sua história de fé, chamado ministerial e atuação nos ministérios da igreja. Compartilhe aqui informações relevantes sobre sua trajetória.",
+    nome: "Cristiane de Oliveira",
+    cargo: "Apóstola",
+    foto: "/images/pastor2.jpg",
+    descricao: "Ao lado do Apóstolo Rowilson, construiu uma aliança firme no ministério e na vida. Juntos, são pais de Isabelle e Samuel, uma família que reflete a presença e a união de Deus em cada detalhe. Sua dedicação e fé têm sido fundamentais na edificação da igreja e no cuidado com cada vida.",
   },
 ];
 
@@ -148,13 +148,34 @@ export default function QuemSomos() {
             </h2>
             <div className="prose prose-lg max-w-none text-muted-foreground">
               <p className="mb-4">
-                [Aqui você pode adicionar a história de como a igreja surgiu, os
-                marcos importantes, e a jornada de fé que trouxe a igreja até
-                hoje]
+                Em um humilde começo, nasceu um propósito grandioso que se
+                transformou em um ministério de impacto. A Igreja Evangélica
+                Avivamento para as Nações teve seu início com a Igreja da Arca,
+                localizada na Vila Dalva, dando origem a diversos sonhos e
+                projetos que hoje estão se concretizando.
+              </p>
+              <p className="mb-4">
+                Uma viagem à Colômbia foi um marco transformador, onde o modelo
+                de igreja em célula foi aprendido. Essa visão transformou nossa
+                igreja, trazendo crescimento espiritual, comunhão e
+                multiplicação. As células se tornaram locais de cuidado,
+                discipulado e fortalecimento da fé.
+              </p>
+              <p className="mb-4">
+                Hoje, com sede na Rua Lucas Padilha, 07, Jardim Ester, Zona
+                Oeste de São Paulo, a igreja é o ponto mais ativo do ministério,
+                com cultos semanais, reuniões, treinamentos, vigílias e a Web
+                Rádio. Sempre pensando nas vidas que o Senhor acrescenta e no
+                crescimento do ministério, outros espaços surgiram com a direção
+                de Deus: um acampamento para retiros espirituais, o espaço em
+                Embu das Artes com capacidade para 1.000 pessoas, a área em
+                Itapecerica da Serra e a base missionária em Caldas, Minas
+                Gerais.
               </p>
               <p>
-                [Continue contando a história da igreja, mencionando momentos
-                significativos e o crescimento ao longo dos anos]
+                O chamado missionário também ultrapassou fronteiras, com missões
+                em Israel, Argentina e Estados Unidos, levando avivamento e o
+                Evangelho aonde o Senhor manda ir.
               </p>
             </div>
           </CardContent>
@@ -170,8 +191,13 @@ export default function QuemSomos() {
                 Nossa Missão
               </h2>
               <p className="text-muted-foreground">
-                [Descreva a missão da igreja - o propósito e objetivo principal
-                da comunidade de fé]
+                Prestar culto ao Trino Deus, promover a pregação da Palavra de
+                Deus, ministrar aos seus membros os sacramentos que os levam a
+                viver de conformidade com a vontade de Deus, fazer discípulos e
+                instruí-los no ensino e na prática de toda a doutrina bíblica,
+                batizando-os em nome do Pai, do Filho e do Espírito Santo,
+                levando-os ao crescimento espiritual e estimulando obras de
+                caráter social.
               </p>
             </CardContent>
           </Card>
@@ -181,8 +207,12 @@ export default function QuemSomos() {
                 Nossa Visão
               </h2>
               <p className="text-muted-foreground">
-                [Descreva a visão da igreja - aonde vocês querem chegar e o
-                impacto que desejam causar]
+                Ser uma igreja que rompe barreiras e alcança nações,
+                transformando vidas através do poder do Evangelho. Como na visão
+                profética do Apóstolo Rowilson, onde pedras eram lançadas por
+                todos os lados, cruzando continentes, somos chamados a levar
+                avivamento a todas as nações, formando discípulos e expandindo o
+                Reino de Deus além das fronteiras.
               </p>
             </CardContent>
           </Card>
@@ -193,20 +223,33 @@ export default function QuemSomos() {
       <section className="mb-16">
         <h2 className="text-3xl font-bold mb-8 text-center">Nossos Valores</h2>
         <div className="grid md:grid-cols-3 gap-6">
-          {[1, 2, 3].map((item) => (
+          {[
+            {
+              titulo: "Fé e Palavra",
+              descricao: "Cremos na Bíblia Sagrada como a Palavra de Deus e fundamento de toda doutrina. Nossa fé é inabalável e guia cada passo do ministério.",
+            },
+            {
+              titulo: "Comunhão e Discipulado",
+              descricao: "Através das células e do convívio fraterno, cultivamos relacionamentos que fortalecem a fé, promovem o cuidado mútuo e formam discípulos comprometidos.",
+            },
+            {
+              titulo: "Missões e Avivamento",
+              descricao: "Somos chamados a alcançar nações. Levamos o Evangelho além das fronteiras, cruzando continentes com o propósito de transformar vidas pelo poder de Deus.",
+            },
+          ].map((valor, index) => (
             <Card
-              key={item}
+              key={index}
               className="shadow-soft hover:shadow-medium transition-shadow"
             >
               <CardContent className="p-6 text-center">
                 <div className="w-16 h-16 bg-gradient-accent rounded-full mx-auto mb-4 flex items-center justify-center">
                   <span className="text-2xl font-bold text-accent-foreground">
-                    {item}
+                    {index + 1}
                   </span>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Valor {item}</h3>
+                <h3 className="text-xl font-semibold mb-2">{valor.titulo}</h3>
                 <p className="text-muted-foreground">
-                  [Descreva cada valor fundamental da igreja]
+                  {valor.descricao}
                 </p>
               </CardContent>
             </Card>
@@ -231,9 +274,9 @@ export default function QuemSomos() {
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[
-            { nome: "Infantil", emoji: "🧒", descricao: "\"Ensina a criança no caminho em que deve andar, e ainda quando for velho não se desviará dele.\" — Provérbios 22:6" },
-            { nome: "Jovens", emoji: "✨", descricao: "\"Ninguém despreze a tua mocidade; mas sê o exemplo dos fiéis, na palavra, no trato, na caridade, no espírito, na fé, na pureza.\" — 1 Timóteo 4:12" },
-            { nome: "Intercessão", emoji: "🙏", descricao: "\"Orai sem cessar.\" — 1 Tessalonicenses 5:17" },
+            { nome: "Infantil", emoji: "🧒", descricao: "\"Ensina a criança no caminho em que deve andar, e ainda quando for velho não se desviará dele.\" - Provérbios 22:6" },
+            { nome: "Jovens", emoji: "✨", descricao: "\"Ninguém despreze a tua mocidade; mas sê o exemplo dos fiéis, na palavra, no trato, na caridade, no espírito, na fé, na pureza.\" - 1 Timóteo 4:12" },
+            { nome: "Intercessão", emoji: "🙏", descricao: "\"Orai sem cessar.\" - 1 Tessalonicenses 5:17" },
           ].map((ministerio) => (
             <Card
               key={ministerio.nome}
@@ -280,11 +323,11 @@ export default function QuemSomos() {
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[
-            { nome: "Ebenézer", emoji: "🪨" },
-            { nome: "Revive", emoji: "🔥" },
-            { nome: "Rosas de Saron", emoji: "🌹" },
-            { nome: "Levitas", emoji: "🛐" },
-            { nome: "Emunah", emoji: "🕯️" },
+            { nome: "Ebenézer", emoji: "🪨", descricao: "\"Até aqui nos ajudou o Senhor.\" Grupo de louvor que levanta pedras de adoração, proclamando a fidelidade de Deus em cada nota." },
+            { nome: "Revive", emoji: "🔥", descricao: "Grupo de louvor que busca o avivamento através da adoração, trazendo renovação e o fogo do Espírito Santo a cada ministração." },
+            { nome: "Rosas de Saron", emoji: "🌹", descricao: "Grupo de louvor que exala a fragrância da adoração, levando a beleza e a doçura da presença de Deus a cada momento." },
+            { nome: "Levitas", emoji: "🛐", descricao: "Grupo de louvor dedicado ao serviço no altar, seguindo o exemplo dos levitas bíblicos na adoração consagrada ao Senhor." },
+            { nome: "Emunah", emoji: "🕯️", descricao: "Emunah significa \"fé\" em hebraico. Grupo de louvor que adora com convicção e fidelidade, declarando as promessas de Deus." },
           ].map((grupo) => (
             <Card
               key={grupo.nome}
@@ -296,7 +339,7 @@ export default function QuemSomos() {
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{grupo.nome}</h3>
                 <p className="text-sm text-muted-foreground">
-                  [Descrição do grupo]
+                  {grupo.descricao}
                 </p>
               </CardContent>
             </Card>
