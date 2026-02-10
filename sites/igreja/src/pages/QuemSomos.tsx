@@ -190,7 +190,7 @@ export default function QuemSomos() {
                 Nossa Missão
               </h2>
               <p className="text-muted-foreground">
-                Prestar culto ao Trino Deus, promover a pregação da Palavra de
+                Prestar culto a Deus, promover a pregação da Palavra de
                 Deus, ministrar aos seus membros os sacramentos que os levam a
                 viver de conformidade com a vontade de Deus, fazer discípulos e
                 instruí-los no ensino e na prática de toda a doutrina bíblica,
@@ -315,10 +315,70 @@ export default function QuemSomos() {
         </div>
       </section>
 
+      {/* Equipes */}
+      <section className="mb-16">
+        <h2 className="text-3xl font-bold mb-8 text-center">
+          Nossas Equipes
+        </h2>
+        <div className="grid md:grid-cols-4 gap-6">
+          {[
+            { nome: "Ganhar", emoji: "🎯", descricao: "Alcançar vidas para Cristo, levando o Evangelho a quem ainda não conhece o amor de Deus." },
+            { nome: "Consolidar", emoji: "🤝", descricao: "Acolher e fortalecer os novos convertidos, firmando-os na fé e na comunhão com a igreja." },
+            { nome: "Treinar", emoji: "📖", descricao: "Capacitar e equipar os membros para o serviço do Reino, através do ensino da Palavra." },
+            { nome: "Enviar", emoji: "🚀", descricao: "Levantar e enviar novos líderes e missionários para multiplicar o Evangelho em toda parte." },
+          ].map((equipe) => (
+            <Card
+              key={equipe.nome}
+              className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
+            >
+              <CardContent className="p-6 text-center">
+                <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-4xl">{equipe.emoji}</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{equipe.nome}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {equipe.descricao}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
       {/* Grupos */}
-      <section>
+      {/* Grupos */}
+      <section className="mb-16">
         <h2 className="text-3xl font-bold mb-8 text-center">
           Nossos Grupos
+        </h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {[
+            { nome: "Mídia", emoji: "📸", descricao: "Responsável por registrar e transmitir os momentos da igreja, levando a mensagem do Evangelho através das plataformas digitais." },
+            { nome: "Web Rádio", emoji: "📻", descricao: "Nossa rádio online que leva a Palavra de Deus, louvores e conteúdo edificante para ouvintes em qualquer lugar." },
+            { nome: "Coreografia", emoji: "💃", descricao: "\"Louvem o seu nome com danças.\" - Salmos 149:3. Adoração ao Senhor através da expressão corporal e da dança." },
+          ].map((grupo) => (
+            <Card
+              key={grupo.nome}
+              className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
+            >
+              <CardContent className="p-6 text-center">
+                <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-4xl">{grupo.emoji}</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{grupo.nome}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {grupo.descricao}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Grupos de Louvor */}
+      <section>
+        <h2 className="text-3xl font-bold mb-8 text-center">
+          Nossos Grupos de Louvor
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[
@@ -327,6 +387,10 @@ export default function QuemSomos() {
             { nome: "Rosas de Saron", emoji: "🌹", descricao: "Grupo de louvor que exala a fragrância da adoração, levando a beleza e a doçura da presença de Deus a cada momento." },
             { nome: "Levitas", emoji: "🛐", descricao: "Grupo de louvor dedicado ao serviço no altar, seguindo o exemplo dos levitas bíblicos na adoração consagrada ao Senhor." },
             { nome: "Emunah", emoji: "🕯️", descricao: "Emunah significa \"fé\" em hebraico. Grupo de louvor que adora com convicção e fidelidade, declarando as promessas de Deus." },
+            { nome: "Elohim", emoji: "👑", descricao: "Elohim, um dos nomes de Deus. Grupo de louvor que exalta a grandeza e a soberania do Criador em cada adoração." },
+            { nome: "Efraim", emoji: "🌿", descricao: "Efraim significa \"frutífero\". Grupo de louvor que busca produzir frutos de adoração que glorifiquem o nome do Senhor." },
+            { nome: "El Elion", emoji: "⭐", descricao: "El Elion, o Deus Altíssimo. Grupo de louvor que eleva a adoração ao lugar mais alto, reconhecendo a majestade de Deus." },
+            { nome: "Maranata", emoji: "✝️", descricao: "\"Maranata, ora vem Senhor Jesus!\" Grupo de louvor que vive na expectativa da volta de Cristo, adorando com urgência e paixão." },
           ].map((grupo) => (
             <Card
               key={grupo.nome}
