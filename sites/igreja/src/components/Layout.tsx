@@ -677,7 +677,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Navigation Items com Seções */}
           <nav
-            className={`flex-1 overflow-y-auto overflow-x-hidden ${
+            className={`flex-1 overflow-y-auto overflow-x-hidden sidebar-scrollbar ${
               sidebarOpen ? "px-3" : "px-2"
             }`}
           >

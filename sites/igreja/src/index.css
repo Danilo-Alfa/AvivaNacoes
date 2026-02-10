@@ -118,3 +118,29 @@ All colors MUST be HSL.
     filter: invert(1);
   }
 }
+
+/* Scrollbar customizada da sidebar */
+.sidebar-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(215 15% 75%);
+  border-radius: 3px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(215 15% 60%);
+}
+
+.dark .sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(215 20% 25%);
+}
+
+.dark .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(215 20% 35%);
+}
