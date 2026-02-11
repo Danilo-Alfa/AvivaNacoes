@@ -173,7 +173,7 @@ export default function QuemSomos() {
               </p>
               <p>
                 O chamado missionário também ultrapassou fronteiras, com missões
-                em Israel, Argentina e Estados Unidos, levando avivamento e o
+                em Israel, Argentina, Estados Unidos, Moçambique e Malawi, levando avivamento e o
                 Evangelho aonde o Senhor manda ir.
               </p>
             </div>

@@ -895,7 +895,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </footer>
 
       {/* Player de Rádio */}
-      <AudioPlayer />
+      {mobileMenuOpen === false && <AudioPlayer />}
     </div>
   );
 }
