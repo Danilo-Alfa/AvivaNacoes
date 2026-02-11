@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Phone, Clock, ExternalLink } from "lucide-react";
+import { MapPin, Phone, Clock, ExternalLink, Maximize2, X } from "lucide-react";
 import { getIgrejasAtivas, type Igreja } from "@/services/igrejaService";
 
 // Skeleton para card de igreja
@@ -34,6 +34,7 @@ function IgrejaCardSkeleton() {
 export default function NossasIgrejas() {
   const [igrejas, setIgrejas] = useState<Igreja[]>([]);
   const [loading, setLoading] = useState(true);
+  const [imagemFullscreen, setImagemFullscreen] = useState<{ url: string; nome: string } | null>(null);
 
   useEffect(() => {
     const carregarIgrejas = async () => {
@@ -83,15 +84,24 @@ export default function NossasIgrejas() {
                 <CardContent className="p-0 flex flex-col flex-1">
                   {/* Imagem da Igreja */}
                   {igreja.imagem_url ? (
-                    <img
-                      src={igreja.imagem_url}
-                      alt={igreja.nome}
-                      width={400}
-                      height={225}
-                      loading="lazy"
-                      decoding="async"
-                      className="aspect-video w-full object-cover rounded-t-lg"
-                    />
+                    <div className="relative group">
+                      <img
+                        src={igreja.imagem_url}
+                        alt={igreja.nome}
+                        width={400}
+                        height={225}
+                        loading="lazy"
+                        decoding="async"
+                        className="aspect-video w-full object-cover rounded-t-lg"
+                      />
+                      <button
+                        onClick={() => setImagemFullscreen({ url: igreja.imagem_url!, nome: igreja.nome })}
+                        className="absolute top-2 right-2 p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                        aria-label={`Ver foto de ${igreja.nome} em tela cheia`}
+                      >
+                        <Maximize2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   ) : (
                     <div className="aspect-video bg-gradient-hero rounded-t-lg flex items-center justify-center">
                       <span className="text-xl text-primary-foreground font-semibold">
@@ -200,6 +210,28 @@ export default function NossasIgrejas() {
             ))}
           </div>
         </>
+      )}
+
+      {/* Modal Fullscreen */}
+      {imagemFullscreen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setImagemFullscreen(null)}
+        >
+          <button
+            onClick={() => setImagemFullscreen(null)}
+            className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors cursor-pointer"
+            aria-label="Fechar imagem"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <img
+            src={imagemFullscreen.url}
+            alt={imagemFullscreen.nome}
+            className="max-w-full max-h-[90vh] object-contain rounded-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
       )}
     </div>
   );
