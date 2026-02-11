@@ -2,6 +2,14 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { RotateCcw } from "lucide-react";
 
+// Logos dos grupos e ministérios
+import logoABER from "./logos/ABER.jpeg";
+import logoWebRadio from "./logos/WebRadio.jpeg";
+import logoAvivaJovens from "./logos/AvivaJovens.jpeg";
+import logoResgatandoCriancas from "./logos/resgatandoCrianças.jpeg";
+import logoTVAvivaNacoes from "./logos/TV AVIVA NACOES.jpeg";
+import logoJOAN from "./logos/joanlogo.jpeg";
+
 interface PastorData {
   nome: string;
   cargo: string;
@@ -273,8 +281,8 @@ export default function QuemSomos() {
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[
-            { nome: "Infantil", emoji: "🧒", descricao: "\"Ensina a criança no caminho em que deve andar, e ainda quando for velho não se desviará dele.\" - Provérbios 22:6" },
-            { nome: "Jovens", emoji: "✨", descricao: "\"Ninguém despreze a tua mocidade; mas sê o exemplo dos fiéis, na palavra, no trato, na caridade, no espírito, na fé, na pureza.\" - 1 Timóteo 4:12" },
+            { nome: "Infantil", emoji: "🧒", logo: logoResgatandoCriancas, descricao: "\"Ensina a criança no caminho em que deve andar, e ainda quando for velho não se desviará dele.\" - Provérbios 22:6" },
+            { nome: "Jovens", emoji: "✨", logo: logoAvivaJovens, descricao: "\"Ninguém despreze a tua mocidade; mas sê o exemplo dos fiéis, na palavra, no trato, na caridade, no espírito, na fé, na pureza.\" - 1 Timóteo 4:12" },
             { nome: "Intercessão", emoji: "🙏", descricao: "\"Orai sem cessar.\" - 1 Tessalonicenses 5:17" },
           ].map((ministerio) => (
             <Card
@@ -282,8 +290,12 @@ export default function QuemSomos() {
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
             >
               <CardContent className="p-6 text-center">
-                <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-4xl">{ministerio.emoji}</span>
+                <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
+                  {ministerio.logo ? (
+                    <img src={ministerio.logo} alt={ministerio.nome} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-4xl">{ministerio.emoji}</span>
+                  )}
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{ministerio.nome}</h3>
                 <p className="text-sm text-muted-foreground">
@@ -303,8 +315,8 @@ export default function QuemSomos() {
         <div className="max-w-md mx-auto">
           <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1">
             <CardContent className="p-6 text-center">
-              <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-4xl">🤝</span>
+              <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
+                <img src={logoABER} alt="ABER - Associação Beneficente" className="w-full h-full object-cover" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Associação Beneficente</h3>
               <p className="text-sm text-muted-foreground">
@@ -353,8 +365,9 @@ export default function QuemSomos() {
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[
-            { nome: "Mídia", emoji: "📸", descricao: "Responsável por registrar e transmitir os momentos da igreja, levando a mensagem do Evangelho através das plataformas digitais." },
-            { nome: "Web Rádio", emoji: "📻", descricao: "Nossa rádio online que leva a Palavra de Deus, louvores e conteúdo edificante para ouvintes em qualquer lugar." },
+            { nome: "TV Aviva Nações", emoji: "📸", logo: logoTVAvivaNacoes, descricao: "Responsável por registrar e transmitir os momentos da igreja, levando a mensagem do Evangelho através das plataformas digitais." },
+            { nome: "Web Rádio", emoji: "📻", logo: logoWebRadio, descricao: "Nossa rádio online que leva a Palavra de Deus, louvores e conteúdo edificante para ouvintes em qualquer lugar." },
+            { nome: "JOAN - Jornal Online", emoji: "📰", logo: logoJOAN, descricao: "Jornal Online Aviva News — levando informação, edificação e as notícias do ministério para todos os lugares." },
             { nome: "Coreografia", emoji: "💃", descricao: "\"Louvem o seu nome com danças.\" - Salmos 149:3. Adoração ao Senhor através da expressão corporal e da dança." },
           ].map((grupo) => (
             <Card
@@ -362,8 +375,12 @@ export default function QuemSomos() {
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
             >
               <CardContent className="p-6 text-center">
-                <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-4xl">{grupo.emoji}</span>
+                <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
+                  {grupo.logo ? (
+                    <img src={grupo.logo} alt={grupo.nome} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-4xl">{grupo.emoji}</span>
+                  )}
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{grupo.nome}</h3>
                 <p className="text-sm text-muted-foreground">
