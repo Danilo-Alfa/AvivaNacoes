@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Download, ExternalLink, FileText } from "lucide-react";
 import { getUltimosJornais, type Jornal } from "@/services/jornalService";
+import logoJOANBanner from "./logos/joanlogo recortado.jpeg";
 
 // Componente para thumbnail do jornal com fallback
 function JornalThumbnail({
@@ -90,16 +91,21 @@ export default function Jornal() {
   const jornalMaisRecente = jornais[0];
 
   return (
-    <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
-      {/* Hero Section */}
-      <div className="mb-16 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">
-          Jornal Aviva News
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Acompanhe as notícias, reflexões e atualizações da nossa igreja
-        </p>
+    <div className="min-h-[calc(100vh-200px)]">
+      {/* Hero Banner - fica fixo enquanto o conteúdo sobe por cima */}
+      <div className="sticky top-0 z-0 bg-background">
+        <div className="container mx-auto flex items-center justify-center py-6 md:py-10">
+          <img
+            src={logoJOANBanner}
+            alt="JOAN - Jornal Online Aviva News"
+            className="w-auto max-w-full max-h-[30vh] md:max-h-[40vh] object-contain"
+          />
+        </div>
       </div>
+
+      {/* Conteúdo - sobe por cima do banner no scroll */}
+      <div className="relative z-10 bg-background rounded-t-3xl -mt-10 shadow-[0_-8px_30px_rgba(0,0,0,0.1)] pt-12">
+        <div className="container mx-auto px-4 pb-12">
 
       {loading ? (
         <div className="min-h-[calc(100vh-400px)]">
@@ -262,6 +268,9 @@ export default function Jornal() {
           )}
         </>
       )}
+
+        </div>
+      </div>
     </div>
   );
 }

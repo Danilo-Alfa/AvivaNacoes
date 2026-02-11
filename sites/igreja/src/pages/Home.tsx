@@ -11,6 +11,14 @@ import {
   Play,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+
+// Logos dos ministérios e grupos
+import logoResgatandoCriancas from "./logos/resgatandoCrianças.jpeg";
+import logoAvivaJovens from "./logos/AvivaJovens.jpeg";
+import logoTVAvivaNacoes from "./logos/TV AVIVA NACOES.jpeg";
+import logoWebRadio from "./logos/WebRadio.jpeg";
+import logoJOAN from "./logos/joanlogo.jpeg";
+import logoABER from "./logos/ABER.jpeg";
 import { versiculoService } from "@/services/versiculoService";
 import { Versiculo } from "@/lib/supabase";
 
@@ -334,6 +342,46 @@ export default function Home() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Nossos Ministérios e Grupos */}
+      <section className="container mx-auto px-4 py-12 md:py-20">
+        <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4 text-center">
+          Nossos Ministérios e Grupos
+        </h2>
+        <p className="text-sm md:text-base text-muted-foreground text-center mb-8 md:mb-12">
+          Conheça os projetos que fazem parte da nossa missão
+        </p>
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-5 max-w-4xl mx-auto">
+          {[
+            { nome: "Infantil", logo: logoResgatandoCriancas },
+            { nome: "Jovens", logo: logoAvivaJovens },
+            { nome: "TV Aviva", logo: logoTVAvivaNacoes },
+            { nome: "Web Rádio", logo: logoWebRadio },
+            { nome: "JOAN", logo: logoJOAN },
+            { nome: "ABER", logo: logoABER },
+          ].map((item) => (
+            <Link key={item.nome} to="/quem-somos" className="group">
+              <div className="flex flex-col items-center gap-2 md:gap-3">
+                <div className="h-20 w-full md:h-24 rounded-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-white/30 dark:border-gray-700/30 flex items-center justify-center group-hover:shadow-medium group-hover:-translate-y-1 transition-all">
+                  <img src={item.logo} alt={item.nome} className="max-h-14 md:max-h-16 max-w-[80%] object-contain drop-shadow-md" />
+                </div>
+                <span className="text-xs md:text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                  {item.nome}
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+        <div className="text-center mt-8">
+          <Link
+            to="/quem-somos"
+            className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+          >
+            Conheça todos
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+          </Link>
         </div>
       </section>
 

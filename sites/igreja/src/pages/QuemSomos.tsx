@@ -60,7 +60,7 @@ function PastorCard({ pastor }: { pastor: PastorData }) {
                 <img
                   src={pastor.foto}
                   alt={pastor.nome}
-                  className="absolute inset-0 w-full h-full object-cover z-10"
+                  className="absolute inset-0 w-full h-full object-cover object-[center_25%] z-10"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = 'none';
                   }}
@@ -123,13 +123,13 @@ const pastores: PastorData[] = [
   {
     nome: "Rowilson Oliveira",
     cargo: "Apóstolo",
-    foto: "/images/pastor1.jpg",
+    foto: "/Apostolo.jpeg",
     descricao: "São mais de 40 anos seguindo uma vida de entrega, visão espiritual e compromisso com o Reino. Ao longo de sua trajetória, tem impactado gerações com sua fé inabalável, liderança inspiradora e coração pastoral. Também é o principal levita do ministério, andando junto com as ovelhas e carregando o que for necessário para a obra crescer.",
   },
   {
     nome: "Cristiane de Oliveira",
     cargo: "Apóstola",
-    foto: "/images/pastor2.jpg",
+    foto: "/Apostola.jpeg",
     descricao: "Ao lado do Apóstolo Rowilson, construiu uma aliança firme no ministério e na vida. Juntos, são pais de Isabelle e Samuel, uma família que reflete a presença e a união de Deus em cada detalhe. Sua dedicação e fé têm sido fundamentais na edificação da igreja e no cuidado com cada vida.",
   },
 ];
@@ -290,13 +290,15 @@ export default function QuemSomos() {
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
             >
               <CardContent className="p-6 text-center">
-                <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
-                  {ministerio.logo ? (
-                    <img src={ministerio.logo} alt={ministerio.nome} className="w-full h-full object-cover" />
-                  ) : (
+                {ministerio.logo ? (
+                  <div className="h-28 w-full rounded-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-white/30 dark:border-gray-700/30 mx-auto mb-4 flex items-center justify-center">
+                    <img src={ministerio.logo} alt={ministerio.nome} className="max-h-20 max-w-[80%] object-contain drop-shadow-md" />
+                  </div>
+                ) : (
+                  <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
                     <span className="text-4xl">{ministerio.emoji}</span>
-                  )}
-                </div>
+                  </div>
+                )}
                 <h3 className="text-lg font-semibold mb-2">{ministerio.nome}</h3>
                 <p className="text-sm text-muted-foreground">
                   {ministerio.descricao}
@@ -315,8 +317,8 @@ export default function QuemSomos() {
         <div className="max-w-md mx-auto">
           <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1">
             <CardContent className="p-6 text-center">
-              <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
-                <img src={logoABER} alt="ABER - Associação Beneficente" className="w-full h-full object-cover" />
+              <div className="h-28 w-full rounded-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-white/30 dark:border-gray-700/30 mx-auto mb-4 flex items-center justify-center">
+                <img src={logoABER} alt="ABER - Associação Beneficente" className="max-h-20 max-w-[80%] object-contain drop-shadow-md" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Associação Beneficente</h3>
               <p className="text-sm text-muted-foreground">
@@ -375,13 +377,15 @@ export default function QuemSomos() {
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
             >
               <CardContent className="p-6 text-center">
-                <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
-                  {grupo.logo ? (
-                    <img src={grupo.logo} alt={grupo.nome} className="w-full h-full object-cover" />
-                  ) : (
+                {grupo.logo ? (
+                  <div className="h-28 w-full rounded-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-white/30 dark:border-gray-700/30 mx-auto mb-4 flex items-center justify-center">
+                    <img src={grupo.logo} alt={grupo.nome} className="max-h-20 max-w-[80%] object-contain drop-shadow-md" />
+                  </div>
+                ) : (
+                  <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
                     <span className="text-4xl">{grupo.emoji}</span>
-                  )}
-                </div>
+                  </div>
+                )}
                 <h3 className="text-lg font-semibold mb-2">{grupo.nome}</h3>
                 <p className="text-sm text-muted-foreground">
                   {grupo.descricao}

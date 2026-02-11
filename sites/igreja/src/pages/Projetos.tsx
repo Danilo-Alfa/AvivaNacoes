@@ -61,7 +61,7 @@ function ProjetoCard({ projeto, index }: { projeto: Projeto; index: number }) {
             {projeto.imagem_url ? (
               <img
                 src={projeto.imagem_url}
-                alt={projeto.titulo}
+                alt={projeto.nome}
                 width={600}
                 height={400}
                 loading="lazy"
@@ -71,7 +71,7 @@ function ProjetoCard({ projeto, index }: { projeto: Projeto; index: number }) {
             ) : (
               <div className="h-full bg-gradient-accent flex items-center justify-center min-h-[200px] md:min-h-[300px]">
                 <span className="text-xl text-accent-foreground font-semibold">
-                  {projeto.titulo}
+                  {projeto.nome}
                 </span>
               </div>
             )}
@@ -87,7 +87,7 @@ function ProjetoCard({ projeto, index }: { projeto: Projeto; index: number }) {
               </div>
             )}
 
-            <h2 className="text-3xl font-bold mb-4">{projeto.titulo}</h2>
+            <h2 className="text-3xl font-bold mb-4">{projeto.nome}</h2>
 
             {projeto.descricao && (
               <p className="text-muted-foreground mb-6 leading-relaxed">
@@ -164,14 +164,12 @@ export default function Projetos() {
             <ProjetoCardSkeleton index={1} />
             <ProjetoCardSkeleton index={2} />
           </>
-        ) : projetos.length === 0 ? (
-          <p className="text-center text-muted-foreground py-8">
-            Nenhum projeto cadastrado ainda.
-          </p>
         ) : (
-          projetos.map((projeto, index) => (
-            <ProjetoCard key={projeto.id} projeto={projeto} index={index} />
-          ))
+          <>
+            {projetos.map((projeto, index) => (
+              <ProjetoCard key={projeto.id} projeto={projeto} index={index} />
+            ))}
+          </>
         )}
       </div>
     </div>
