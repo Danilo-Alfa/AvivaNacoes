@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { RotateCcw } from "lucide-react";
 
-// Logos dos grupos e ministérios
-import logoABER from "./logos/ABER.jpeg";
-import logoWebRadio from "./logos/WebRadio.jpeg";
-import logoAvivaJovens from "./logos/AvivaJovens.jpeg";
-import logoResgatandoCriancas from "./logos/resgatandoCrianças.jpeg";
-import logoTVAvivaNacoes from "./logos/TV AVIVA NACOES.jpeg";
-import logoJOAN from "./logos/joanlogo.jpeg";
+// Logos dos grupos e ministérios (em public/logos/)
+const logoABER = "/logos/ABER.jpeg";
+const logoWebRadio = "/logos/WebRadio.jpeg";
+const logoAvivaJovens = "/logos/AvivaJovens.jpeg";
+const logoResgatandoCriancas = "/logos/resgatandoCrianças.jpeg";
+const logoTVAvivaNacoes = "/logos/TV AVIVA NACOES.jpeg";
+const logoJOAN = "/logos/joanlogo.jpeg";
 
 interface PastorData {
   nome: string;

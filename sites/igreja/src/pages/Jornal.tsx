@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Download, FileText } from "lucide-react";
 import { getUltimosJornais, type Jornal } from "@/services/jornalService";
-import logoJOANBanner from "./logos/joanlogo recortado.jpeg";
-import logoJOANBannerDark from "./logos/jornaldark.png";
+// Logos do jornal (em public/logos/)
+const logoJOANBanner = "/logos/joanlogo recortado.jpeg";
+const logoJOANBannerDark = "/logos/jornaldark.png";
 
 // Componente para thumbnail do jornal com fallback
 function JornalThumbnail({

@@ -12,13 +12,13 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-// Logos dos ministérios e grupos
-import logoResgatandoCriancas from "./logos/resgatandoCrianças.jpeg";
-import logoAvivaJovens from "./logos/AvivaJovens.jpeg";
-import logoTVAvivaNacoes from "./logos/TV AVIVA NACOES.jpeg";
-import logoWebRadio from "./logos/WebRadio.jpeg";
-import logoJOAN from "./logos/joanlogo.jpeg";
-import logoABER from "./logos/ABER.jpeg";
+// Logos dos ministérios e grupos (em public/logos/)
+const logoResgatandoCriancas = "/logos/resgatandoCrianças.jpeg";
+const logoAvivaJovens = "/logos/AvivaJovens.jpeg";
+const logoTVAvivaNacoes = "/logos/TV AVIVA NACOES.jpeg";
+const logoWebRadio = "/logos/WebRadio.jpeg";
+const logoJOAN = "/logos/joanlogo.jpeg";
+const logoABER = "/logos/ABER.jpeg";
 import { versiculoService } from "@/services/versiculoService";
 import { Versiculo } from "@/lib/supabase";
 
