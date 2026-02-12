@@ -175,16 +175,16 @@ export default function Home() {
           {/* WebP para navegadores modernos */}
           <source
             media="(max-width: 768px)"
-            srcSet={asset("hero-bg-mobile.webp")}
+            srcSet={asset("backgrounds/hero-bg-mobile.webp")}
             type="image/webp"
           />
           <source
-            srcSet={asset("hero-bg.webp")}
+            srcSet={asset("backgrounds/hero-bg.webp")}
             type="image/webp"
           />
           {/* Fallback JPG */}
           <img
-            src={asset("hero-bg.jpg")}
+            src={asset("backgrounds/hero-bg.jpg")}
             alt="Igreja Aviva Nações"
             width={1920}
             height={600}

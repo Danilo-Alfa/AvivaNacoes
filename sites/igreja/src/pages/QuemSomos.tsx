@@ -123,13 +123,13 @@ const pastores: PastorData[] = [
   {
     nome: "Rowilson Oliveira",
     cargo: "Apóstolo",
-    foto: "/Apostolo.jpeg",
+    foto: "/pastores/Apostolo.jpeg",
     descricao: "São mais de 40 anos seguindo uma vida de entrega, visão espiritual e compromisso com o Reino. Ao longo de sua trajetória, tem impactado gerações com sua fé inabalável, liderança inspiradora e coração pastoral. Também é o principal levita do ministério, andando junto com as ovelhas e carregando o que for necessário para a obra crescer.",
   },
   {
     nome: "Cristiane de Oliveira",
     cargo: "Apóstola",
-    foto: "/Apostola.jpeg",
+    foto: "/pastores/Apostola.jpeg",
     descricao: "Ao lado do Apóstolo Rowilson, construiu uma aliança firme no ministério e na vida. Juntos, são pais de Isabelle e Samuel, uma família que reflete a presença e a união de Deus em cada detalhe. Sua dedicação e fé têm sido fundamentais na edificação da igreja e no cuidado com cada vida.",
   },
 ];
