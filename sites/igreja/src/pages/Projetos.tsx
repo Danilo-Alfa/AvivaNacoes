@@ -56,7 +56,7 @@ function ProjetoCard({ projeto, index }: { projeto: Projeto; index: number }) {
         >
           {/* Imagem */}
           <div
-            className={`aspect-video md:aspect-auto min-h-[200px] md:min-h-[300px] ${index % 2 === 1 ? "md:col-start-2" : ""}`}
+            className={`overflow-hidden ${index % 2 === 1 ? "md:col-start-2" : ""}`}
           >
             {projeto.imagem_url ? (
               <img
@@ -66,7 +66,7 @@ function ProjetoCard({ projeto, index }: { projeto: Projeto; index: number }) {
                 height={400}
                 loading="lazy"
                 decoding="async"
-                className="h-full w-full object-cover"
+                className="w-full block"
               />
             ) : (
               <div className="h-full bg-gradient-accent flex items-center justify-center min-h-[200px] md:min-h-[300px]">

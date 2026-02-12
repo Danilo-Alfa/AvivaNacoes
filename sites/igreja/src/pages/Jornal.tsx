@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Download, ExternalLink, FileText } from "lucide-react";
+import { Download, FileText } from "lucide-react";
 import { getUltimosJornais, type Jornal } from "@/services/jornalService";
 import logoJOANBanner from "./logos/joanlogo recortado.jpeg";
+import logoJOANBannerDark from "./logos/jornaldark.png";
 
 // Componente para thumbnail do jornal com fallback
 function JornalThumbnail({
@@ -35,6 +36,12 @@ function JornalThumbnail({
 
   return (
     <>
+      {carregando && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted rounded-lg z-10">
+          <FileText className="w-10 h-10 text-muted-foreground animate-pulse mb-2" aria-hidden="true" />
+          <p className="text-xs text-muted-foreground animate-pulse">Carregando...</p>
+        </div>
+      )}
       <iframe
         src={src}
         title={titulo}
@@ -51,6 +58,7 @@ function JornalThumbnail({
 export default function Jornal() {
   const [jornais, setJornais] = useState<Jornal[]>([]);
   const [loading, setLoading] = useState(true);
+  const [iframeCarregando, setIframeCarregando] = useState(true);
 
   useEffect(() => {
     carregarJornais();
@@ -68,15 +76,15 @@ export default function Jornal() {
     }
   };
 
-  const isCanvaSite = (url: string): boolean => url.includes(".my.canva.site");
-
   // Converte automaticamente links do Canva para formato embed
   const converterParaEmbed = (url: string): string => {
-    // Canva Design: converte /view para /view?embed
-    if (url.includes("canva.com/design/") && url.includes("/view")) {
-      // Remove parâmetros existentes e adiciona ?embed
+    // Canva Design: converte para /view?embed
+    if (url.includes("canva.com/design/")) {
+      // Remove parâmetros existentes
       const urlBase = url.split("?")[0];
-      return `${urlBase}?embed`;
+      // Converte /edit para /view se necessário
+      const urlView = urlBase.replace(/\/edit$/, "/view");
+      return `${urlView}?embed`;
     }
 
     // Issuu: converte para embed
@@ -94,11 +102,16 @@ export default function Jornal() {
     <div className="min-h-[calc(100vh-200px)]">
       {/* Hero Banner - fica fixo enquanto o conteúdo sobe por cima */}
       <div className="sticky top-0 z-0 bg-background">
-        <div className="container mx-auto flex items-center justify-center py-6 md:py-10">
+        <div className="container mx-auto flex items-center justify-center pb-6 md:pb-10">
           <img
             src={logoJOANBanner}
             alt="JOAN - Jornal Online Aviva News"
-            className="w-auto max-w-full max-h-[30vh] md:max-h-[40vh] object-contain"
+            className="w-auto max-w-full max-h-[30vh] md:max-h-[40vh] object-contain dark:hidden"
+          />
+          <img
+            src={logoJOANBannerDark}
+            alt="JOAN - Jornal Online Aviva News"
+            className="w-auto max-w-full max-h-[30vh] md:max-h-[40vh] object-contain hidden dark:block"
           />
         </div>
       </div>
@@ -109,6 +122,7 @@ export default function Jornal() {
 
       {loading ? (
         <div className="min-h-[calc(100vh-400px)]">
+          <p className="text-center text-muted-foreground text-lg mb-8 animate-pulse">Carregando jornais...</p>
           {/* Skeleton do Jornal em Destaque */}
           <section className="mb-16">
             <div className="bg-card rounded-lg shadow overflow-hidden">
@@ -159,31 +173,13 @@ export default function Jornal() {
                 {/* Área de Visualização */}
                 <div className="bg-muted flex items-center justify-center py-12 px-4">
                   <div className="max-w-3xl w-full">
-                    {isCanvaSite(jornalMaisRecente.url_pdf) ? (
-                      <a
-                        href={jornalMaisRecente.url_pdf}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block aspect-[9/16] bg-background rounded-lg shadow-soft overflow-hidden group"
-                      >
-                        <div className="w-full h-full flex flex-col items-center justify-center gap-6 bg-gradient-hero text-primary-foreground p-8">
-                          <FileText className="w-24 h-24 opacity-80" aria-hidden="true" />
-                          <div className="text-center">
-                            <h3 className="text-2xl font-bold mb-2">
-                              {jornalMaisRecente.titulo || "Última Edição"}
-                            </h3>
-                            <p className="text-sm opacity-80 mb-6">
-                              Clique para visualizar o jornal completo
-                            </p>
+                    <div className="aspect-[9/16] bg-background rounded-lg shadow-soft overflow-hidden relative">
+                        {iframeCarregando && (
+                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted rounded-lg z-10">
+                            <FileText className="w-16 h-16 text-muted-foreground animate-pulse mb-3" aria-hidden="true" />
+                            <p className="text-sm text-muted-foreground animate-pulse">Carregando jornal...</p>
                           </div>
-                          <span className="flex items-center gap-2 px-6 py-3 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors font-medium">
-                            <ExternalLink className="w-5 h-5" aria-hidden="true" />
-                            Abrir Jornal
-                          </span>
-                        </div>
-                      </a>
-                    ) : (
-                      <div className="aspect-[9/16] bg-background rounded-lg shadow-soft overflow-hidden">
+                        )}
                         <iframe
                           loading="lazy"
                           style={{
@@ -194,9 +190,9 @@ export default function Jornal() {
                           src={converterParaEmbed(jornalMaisRecente.url_pdf)}
                           title={jornalMaisRecente.titulo || "Jornal"}
                           allow="fullscreen"
+                          onLoad={() => setIframeCarregando(false)}
                         ></iframe>
                       </div>
-                    )}
                   </div>
                 </div>
 
