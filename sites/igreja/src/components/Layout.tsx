@@ -305,14 +305,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="container mx-auto px-4">
             <div className="flex h-16 items-center justify-between">
               {/* Logo com efeito hover */}
-              <Link to="/" className="flex items-center gap-3 group">
-                <div className="relative">
+              <Link to="/" className="flex items-center gap-3 group min-w-0">
+                <div className="relative flex-shrink-0">
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                     className="relative"
                   >
-                    <div className="absolute inset-0 bg-primary/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute -inset-1 bg-primary/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <picture>
                       <source srcSet={asset("logoheader.webp")} type="image/webp" />
                       <img

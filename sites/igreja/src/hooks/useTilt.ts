@@ -27,6 +27,10 @@ export function useTilt<T extends HTMLElement>(options: TiltOptions = {}) {
     const element = ref.current;
     if (!element) return;
 
+    // Desabilitar tilt em dispositivos touch/mobile
+    const isTouchDevice = !window.matchMedia('(hover: hover)').matches;
+    if (isTouchDevice) return;
+
     let glareElement: HTMLDivElement | null = null;
 
     // Criar elemento de brilho (glare)

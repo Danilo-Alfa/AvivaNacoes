@@ -48,7 +48,7 @@ function ProjetoCard({ projeto, index }: { projeto: Projeto; index: number }) {
   return (
     <Card
       ref={tiltRef}
-      className="shadow-soft hover:shadow-medium transition-shadow"
+      className="shadow-soft md:hover:shadow-medium transition-shadow"
     >
       <CardContent className="p-0">
         <div

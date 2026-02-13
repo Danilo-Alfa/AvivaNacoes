@@ -149,3 +149,26 @@ All colors MUST be HSL.
 .dark .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
   background: hsl(215 20% 35%);
 }
+
+/* Desabilita efeitos de hover em dispositivos touch (mobile) para evitar "sticky hover" */
+@media (hover: none) {
+  .hover\:shadow-medium:hover {
+    box-shadow: var(--shadow-soft) !important;
+  }
+
+  .hover\:-translate-y-1:hover {
+    transform: none !important;
+  }
+
+  .group:hover .group-hover\:shadow-medium {
+    box-shadow: var(--shadow-soft) !important;
+  }
+
+  .group:hover .group-hover\:-translate-y-1 {
+    transform: none !important;
+  }
+
+  .group:hover .group-hover\:scale-105 {
+    transform: none !important;
+  }
+}
