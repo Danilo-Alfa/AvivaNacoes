@@ -101,24 +101,24 @@ export default function Jornal() {
 
   return (
     <div className="min-h-[calc(100vh-200px)]">
-      {/* Hero Banner - fica fixo enquanto o conteúdo sobe por cima */}
-      <div className="sticky top-0 z-0 bg-background">
-        <div className="container mx-auto flex items-center justify-center pb-6 md:pb-10">
+      {/* Hero Banner */}
+      <div className="bg-background">
+        <div className="container mx-auto flex items-center justify-center px-4 py-4 md:py-6">
           <img
             src={logoJOANBanner}
             alt="JOAN - Jornal Online Aviva News"
-            className="w-auto max-w-full max-h-[30vh] md:max-h-[40vh] object-contain dark:hidden"
+            className="w-full md:max-h-[40vh] object-contain dark:hidden"
           />
           <img
             src={logoJOANBannerDark}
             alt="JOAN - Jornal Online Aviva News"
-            className="w-auto max-w-full max-h-[30vh] md:max-h-[40vh] object-contain hidden dark:block"
+            className="w-full md:max-h-[40vh] object-contain hidden dark:block"
           />
         </div>
       </div>
 
-      {/* Conteúdo - sobe por cima do banner no scroll */}
-      <div className="relative z-10 bg-background rounded-t-3xl -mt-10 shadow-[0_-8px_30px_rgba(0,0,0,0.1)] pt-12">
+      {/* Conteúdo */}
+      <div className="relative bg-background pt-8">
         <div className="container mx-auto px-4 pb-12">
 
       {loading ? (
