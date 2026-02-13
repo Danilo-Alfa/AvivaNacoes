@@ -1,13 +1,73 @@
+import { useState, FormEvent } from "react";
+import emailjs from "@emailjs/browser";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Clock, Mail, MapPin, Phone, ExternalLink } from "lucide-react";
+import { Clock, Mail, MapPin, Phone, ExternalLink, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { salvarMensagemContato } from "@/services/contatoService";
 
 export default function FaleConosco() {
-  // Localização da sede principal - Campos Gerais
   const mainChurchLocation = { lat: -23.574401, lng: -46.758482 };
+
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [assunto, setAssunto] = useState("");
+  const [mensagem, setMensagem] = useState("");
+  const [enviando, setEnviando] = useState(false);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+
+    if (!nome.trim() || !email.trim() || !assunto.trim() || !mensagem.trim()) {
+      toast.error("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    setEnviando(true);
+
+    try {
+      // Enviar email via EmailJS
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: nome,
+          from_email: email,
+          phone: telefone || "Não informado",
+          subject: assunto,
+          message: mensagem,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+
+      // Salvar no Supabase
+      await salvarMensagemContato(
+        nome.trim(),
+        email.trim(),
+        telefone.trim() || null,
+        assunto.trim(),
+        mensagem.trim()
+      );
+
+      toast.success("Mensagem enviada com sucesso! Entraremos em contato em breve.");
+
+      // Limpar formulário
+      setNome("");
+      setEmail("");
+      setTelefone("");
+      setAssunto("");
+      setMensagem("");
+    } catch (error) {
+      console.error("Erro ao enviar mensagem:", error);
+      toast.error("Erro ao enviar mensagem. Tente novamente mais tarde.");
+    } finally {
+      setEnviando(false);
+    }
+  }
 
   return (
     <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
@@ -27,13 +87,17 @@ export default function FaleConosco() {
           <Card className="shadow-medium">
             <CardContent className="p-8">
               <h2 className="text-2xl font-bold mb-6">Envie sua Mensagem</h2>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="nome">Nome Completo *</Label>
                   <Input
                     id="nome"
                     placeholder="Seu nome completo"
                     className="h-11"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    disabled={enviando}
+                    required
                   />
                 </div>
 
@@ -45,6 +109,10 @@ export default function FaleConosco() {
                       type="email"
                       placeholder="seu@email.com"
                       className="h-11"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={enviando}
+                      required
                     />
                   </div>
 
@@ -55,6 +123,9 @@ export default function FaleConosco() {
                       type="tel"
                       placeholder="(00) 00000-0000"
                       className="h-11"
+                      value={telefone}
+                      onChange={(e) => setTelefone(e.target.value)}
+                      disabled={enviando}
                     />
                   </div>
                 </div>
@@ -65,6 +136,10 @@ export default function FaleConosco() {
                     id="assunto"
                     placeholder="Sobre o que você quer falar?"
                     className="h-11"
+                    value={assunto}
+                    onChange={(e) => setAssunto(e.target.value)}
+                    disabled={enviando}
+                    required
                   />
                 </div>
 
@@ -74,14 +149,26 @@ export default function FaleConosco() {
                     id="mensagem"
                     placeholder="Escreva sua mensagem aqui..."
                     className="min-h-[150px] resize-none"
+                    value={mensagem}
+                    onChange={(e) => setMensagem(e.target.value)}
+                    disabled={enviando}
+                    required
                   />
                 </div>
 
                 <Button
                   type="submit"
                   className="w-full h-11 bg-gradient-hero text-primary-foreground font-semibold hover:opacity-90"
+                  disabled={enviando}
                 >
-                  Enviar Mensagem
+                  {enviando ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Enviando...
+                    </>
+                  ) : (
+                    "Enviar Mensagem"
+                  )}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
@@ -123,10 +210,7 @@ export default function FaleConosco() {
                   <div>
                     <h3 className="font-semibold mb-1">E-mail</h3>
                     <p className="text-muted-foreground text-sm">
-                      contato@igrejaaviva.com.br
-                    </p>
-                    <p className="text-muted-foreground text-sm">
-                      secretaria@igrejaaviva.com.br
+                      avivanacoescontato@gmail.com
                     </p>
                   </div>
                 </div>
