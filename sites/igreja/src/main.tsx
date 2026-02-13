@@ -4,15 +4,12 @@ import App from "./App.tsx";
 import "./index.css";
 
 // Register service worker for PWA
-registerSW({
+const updateSW = registerSW({
   onNeedRefresh() {
-    if (confirm("Nova versão disponível! Deseja atualizar?")) {
-      window.location.reload();
-    }
+    // Força a atualização imediata sem perguntar ao usuário
+    updateSW(true);
   },
-  onOfflineReady() {
-    console.log("App pronto para uso offline!");
-  },
+  onOfflineReady() {},
 });
 
 createRoot(document.getElementById("root")!).render(<App />);
