@@ -29,6 +29,7 @@ const AdminLive = lazy(() => import("./pages/AdminLive"));
 const AdminProgramacao = lazy(() => import("./pages/AdminProgramacao"));
 const AdminIgrejas = lazy(() => import("./pages/AdminIgrejas"));
 const AdminProjetos = lazy(() => import("./pages/AdminProjetos"));
+const AdminMensagens = lazy(() => import("./pages/AdminMensagens"));
 const Live = lazy(() => import("./pages/Live"));
 const TesteLive = lazy(() => import("./pages/TesteLive"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -73,6 +74,8 @@ const App = () => (
               <Route path="/admin/programacao" element={<AdminProgramacao />} />
               <Route path="/admin/igrejas" element={<AdminIgrejas />} />
               <Route path="/admin/projetos" element={<AdminProjetos />} />
+              <Route path="/admin/mensagens" element={<AdminMensagens />} />
+              <Route path="/admin/fale-conosco" element={<AdminMensagens />} />
               <Route path="/live" element={<Live />} />
               <Route path="/teste-live" element={<TesteLive />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
