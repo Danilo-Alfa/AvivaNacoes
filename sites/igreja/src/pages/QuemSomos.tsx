@@ -3,12 +3,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RotateCcw } from "lucide-react";
 
 // Logos dos grupos e ministérios (em public/logos/)
-const logoABER = "/logos/ABER.jpeg";
-const logoWebRadio = "/logos/WebRadio.jpeg";
-const logoAvivaJovens = "/logos/AvivaJovens.jpeg";
-const logoResgatandoCriancas = "/logos/resgatandoCrianças.jpeg";
-const logoTVAvivaNacoes = "/logos/TV AVIVA NACOES.jpeg";
-const logoJOAN = "/logos/joanlogo.jpeg";
+const logoABER = "/logos/ABER (1).png";
+const logoWebRadio = "/logos/webradio (1).png";
+const logoAvivaJovens = "/logos/avivajovens (1).png";
+const logoResgatandoCriancas = "/logos/resgatando (1).png";
+const logoTVAvivaNacoes = "/logos/tvaviva (1).png";
+const logoJOAN = "/logos/joan (1).png";
 
 interface PastorData {
   nome: string;
@@ -289,16 +289,14 @@ export default function QuemSomos() {
               key={ministerio.nome}
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
             >
-              <CardContent className="p-6 text-center">
-                {ministerio.logo ? (
-                  <div className="h-28 w-full rounded-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-white/30 dark:border-gray-700/30 mx-auto mb-4 flex items-center justify-center">
-                    <img src={ministerio.logo} alt={ministerio.nome} className="max-h-20 max-w-[80%] object-contain drop-shadow-md" />
-                  </div>
-                ) : (
-                  <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
+              <CardContent className="p-6 text-center flex flex-col items-center">
+                <div className="w-20 h-20 bg-muted rounded-full mb-4 flex items-center justify-center overflow-hidden">
+                  {ministerio.logo ? (
+                    <img src={ministerio.logo} alt={ministerio.nome} className="max-h-14 max-w-[80%] object-contain" />
+                  ) : (
                     <span className="text-4xl">{ministerio.emoji}</span>
-                  </div>
-                )}
+                  )}
+                </div>
                 <h3 className="text-lg font-semibold mb-2">{ministerio.nome}</h3>
                 <p className="text-sm text-muted-foreground">
                   {ministerio.descricao}
@@ -316,9 +314,9 @@ export default function QuemSomos() {
         </h2>
         <div className="max-w-md mx-auto">
           <Card className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1">
-            <CardContent className="p-6 text-center">
-              <div className="h-28 w-full rounded-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-white/30 dark:border-gray-700/30 mx-auto mb-4 flex items-center justify-center">
-                <img src={logoABER} alt="ABER - Associação Beneficente" className="max-h-20 max-w-[80%] object-contain drop-shadow-md" />
+            <CardContent className="p-6 text-center flex flex-col items-center">
+              <div className="w-20 h-20 bg-muted rounded-full mb-4 flex items-center justify-center overflow-hidden">
+                <img src={logoABER} alt="ABER - Associação Beneficente" className="max-h-14 max-w-[80%] object-contain" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Associação Beneficente</h3>
               <p className="text-sm text-muted-foreground">
@@ -376,16 +374,14 @@ export default function QuemSomos() {
               key={grupo.nome}
               className="shadow-soft hover:shadow-medium transition-all hover:-translate-y-1"
             >
-              <CardContent className="p-6 text-center">
-                {grupo.logo ? (
-                  <div className="h-28 w-full rounded-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-white/30 dark:border-gray-700/30 mx-auto mb-4 flex items-center justify-center">
-                    <img src={grupo.logo} alt={grupo.nome} className="max-h-20 max-w-[80%] object-contain drop-shadow-md" />
-                  </div>
-                ) : (
-                  <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
+              <CardContent className="p-6 text-center flex flex-col items-center">
+                <div className="w-20 h-20 bg-muted rounded-full mb-4 flex items-center justify-center overflow-hidden">
+                  {grupo.logo ? (
+                    <img src={grupo.logo} alt={grupo.nome} className="max-h-14 max-w-[80%] object-contain" />
+                  ) : (
                     <span className="text-4xl">{grupo.emoji}</span>
-                  </div>
-                )}
+                  )}
+                </div>
                 <h3 className="text-lg font-semibold mb-2">{grupo.nome}</h3>
                 <p className="text-sm text-muted-foreground">
                   {grupo.descricao}

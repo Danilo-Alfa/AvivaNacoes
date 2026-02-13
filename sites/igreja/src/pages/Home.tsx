@@ -13,12 +13,12 @@ import {
 import { Link } from "react-router-dom";
 
 // Logos dos ministérios e grupos (em public/logos/)
-const logoResgatandoCriancas = "/logos/resgatandoCrianças.jpeg";
-const logoAvivaJovens = "/logos/AvivaJovens.jpeg";
-const logoTVAvivaNacoes = "/logos/TV AVIVA NACOES.jpeg";
-const logoWebRadio = "/logos/WebRadio.jpeg";
-const logoJOAN = "/logos/joanlogo.jpeg";
-const logoABER = "/logos/ABER.jpeg";
+const logoResgatandoCriancas = "/logos/resgatando (1).png";
+const logoAvivaJovens = "/logos/avivajovens (1).png";
+const logoTVAvivaNacoes = "/logos/tvaviva (1).png";
+const logoWebRadio = "/logos/webradio (1).png";
+const logoJOAN = "/logos/joan (1).png";
+const logoABER = "/logos/ABER (1).png";
 import { versiculoService } from "@/services/versiculoService";
 import { Versiculo } from "@/lib/supabase";
 
@@ -364,8 +364,8 @@ export default function Home() {
           ].map((item) => (
             <Link key={item.nome} to="/quem-somos" className="group">
               <div className="flex flex-col items-center gap-2 md:gap-3">
-                <div className="h-20 w-full md:h-24 rounded-2xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-white/30 dark:border-gray-700/30 flex items-center justify-center group-hover:shadow-medium group-hover:-translate-y-1 transition-all">
-                  <img src={item.logo} alt={item.nome} className="max-h-14 md:max-h-16 max-w-[80%] object-contain drop-shadow-md" />
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-muted rounded-full flex items-center justify-center overflow-hidden group-hover:shadow-medium group-hover:-translate-y-1 transition-all">
+                  <img src={item.logo} alt={item.nome} className="max-h-10 md:max-h-14 max-w-[80%] object-contain" />
                 </div>
                 <span className="text-xs md:text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
                   {item.nome}
