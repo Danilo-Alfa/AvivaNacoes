@@ -299,7 +299,7 @@ export default function Videos() {
                     )}
                     <div className="flex items-center justify-between text-[10px] sm:text-xs text-muted-foreground">
                       <span className="truncate mr-2">
-                        {video.pregador || "AvivaNações"}
+                        {video.pregador || "Avivamento para as Nações"}
                       </span>
                       {video.data_publicacao && (
                         <span className="whitespace-nowrap">

@@ -35,7 +35,7 @@ export default function RedesSociais() {
       bgColor: "bg-gradient-to-br from-pink-500 via-purple-500 to-orange-400",
     },
     {
-      name: "Canal Aviva Nações",
+      name: "Canal Avivamento para as Nações",
       icon: Youtube,
       url: "https://www.youtube.com/@TvAvivaNacoes",
       handle: "@TvAvivaNacoes",

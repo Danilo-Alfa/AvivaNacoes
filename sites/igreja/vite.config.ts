@@ -18,10 +18,10 @@ export default defineConfig(({ mode }) => ({
       registerType: "autoUpdate",
       includeAssets: ["icons/favicon.ico", "backgrounds/hero-bg.jpg", "icons/apple-touch-icon.png"],
       manifest: {
-        name: "Aviva Nações Nações",
-        short_name: "Aviva Nações",
+        name: "Avivamento para as Nações",
+        short_name: "Avivamento para as Nações",
         description:
-          "Aviva Nações - Uma comunidade de fé comprometida em levar o amor de Cristo através da palavra, louvor e comunhão.",
+          "Avivamento para as Nações - Uma comunidade de fé comprometida em levar o amor de Cristo através da palavra, louvor e comunhão.",
         theme_color: "#1e3a5f",
         background_color: "#ffffff",
         display: "standalone",

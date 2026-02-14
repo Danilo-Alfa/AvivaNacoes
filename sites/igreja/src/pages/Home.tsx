@@ -185,7 +185,7 @@ export default function Home() {
           {/* Fallback JPG */}
           <img
             src={asset("backgrounds/hero-bg.jpg")}
-            alt="Igreja Aviva Nações"
+            alt="Igreja Avivamento para as Nações"
             width={1920}
             height={600}
             // @ts-expect-error fetchpriority is a valid HTML attribute
@@ -218,21 +218,21 @@ export default function Home() {
       {/* Próximo Culto */}
       <section className="container mx-auto px-4 pt-2 md:pt-0 md:-mt-4 relative z-10">
         <Card className="shadow-medium max-w-4xl mx-auto">
-          <CardContent className="p-4 md:p-8">
-            <div className="flex flex-row justify-around md:grid md:grid-cols-3 md:gap-6 text-center">
-              <div>
-                <p className="text-xs md:text-sm text-muted-foreground mb-0.5 md:mb-1">
+          <CardContent className="p-5 md:p-8">
+            <div className="grid grid-cols-3 gap-4 md:gap-6 text-center">
+              <div className="flex flex-col items-center">
+                <p className="text-[11px] md:text-sm text-muted-foreground mb-1 md:mb-1">
                   Próximo Culto
                 </p>
-                <p className="text-lg md:text-2xl font-bold">{proximoCulto.nome}</p>
+                <p className="text-sm md:text-2xl font-bold leading-tight">{proximoCulto.nome}</p>
               </div>
-              <div>
-                <p className="text-xs md:text-sm text-muted-foreground mb-0.5 md:mb-1">Horário</p>
-                <p className="text-lg md:text-2xl font-bold">{proximoCulto.horario}</p>
+              <div className="flex flex-col items-center border-x border-border/50">
+                <p className="text-[11px] md:text-sm text-muted-foreground mb-1 md:mb-1">Horário</p>
+                <p className="text-sm md:text-2xl font-bold leading-tight">{proximoCulto.horario}</p>
               </div>
-              <div>
-                <p className="text-xs md:text-sm text-muted-foreground mb-0.5 md:mb-1">Local</p>
-                <p className="text-lg md:text-2xl font-bold">{proximoCulto.local}</p>
+              <div className="flex flex-col items-center">
+                <p className="text-[11px] md:text-sm text-muted-foreground mb-1 md:mb-1">Local</p>
+                <p className="text-sm md:text-2xl font-bold leading-tight">{proximoCulto.local}</p>
               </div>
             </div>
           </CardContent>

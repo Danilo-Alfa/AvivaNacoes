@@ -308,7 +308,7 @@ export default function Live() {
                   <div className="flex-1 min-w-0">
                     <CardTitle className="text-xl sm:text-2xl md:text-3xl truncate">
                       {config?.titulo ||
-                        "Transmissão ao Vivo - Aviva NaçõesNações"}
+                        "Transmissão ao Vivo - Avivamento para as Nações"}
                     </CardTitle>
                     <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-1">
                       {config?.descricao ||
@@ -433,7 +433,7 @@ export default function Live() {
                 </CardTitle>
                 <p className="text-sm text-muted-foreground mt-1">
                   {config?.descricao ||
-                    "Assista aos cultos e eventos da Aviva Nações"}
+                    "Assista aos cultos e eventos do Avivamento para as Nações"}
                 </p>
               </div>
             </div>

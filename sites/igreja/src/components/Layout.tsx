@@ -317,7 +317,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                       <source srcSet={asset("logoheader.webp")} type="image/webp" />
                       <img
                         src={asset("logoheader.png")}
-                        alt="Logo Aviva Nações"
+                        alt="Logo Avivamento para as Nações"
                         width={56}
                         height={56}
                         decoding="async"
@@ -332,8 +332,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
                     Igreja Evangélica
                   </span>
-                  <span className="text-lg font-display font-bold text-primary dark:text-blue-400">
-                    Aviva Nações
+                  <span className="text-md font-display font-bold text-primary dark:text-blue-400">
+                    Avivamento para as Nações
                   </span>
                 </div>
               </Link>
@@ -460,7 +460,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <source srcSet={asset("logoheader.webp")} type="image/webp" />
                   <img
                     src={asset("logoheader.png")}
-                    alt="Logo Aviva Nações"
+                    alt="Logo Avivamento para as Nações"
                     width={64}
                     height={64}
                     loading="lazy"
@@ -470,7 +470,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </picture>
                 <div>
                   <h2 className="text-white font-display text-2xl font-bold">
-                    Aviva Nações
+                    Avivamento <br/>para as Nações
                   </h2>
                   <p className="text-white/60 text-sm font-medium">
                     Menu de Navegação
@@ -826,7 +826,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-foreground">
-                    Aviva Nações
+                    Avivamento para as Nações
                   </p>
                   <p className="text-[10px] text-muted-foreground">
                     Igreja Cristã • 2026
@@ -861,7 +861,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <source srcSet={asset("logoheader.webp")} type="image/webp" />
                   <img
                     src={asset("logoheader.png")}
-                    alt="Logo Aviva Nações"
+                    alt="Logo Avivamento para as Nações"
                     width={40}
                     height={40}
                     loading="lazy"
@@ -870,7 +870,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   />
                 </picture>
                 <h3 className="text-lg font-display font-bold text-foreground">
-                  Aviva Nações
+                  Avivamento para as Nações
                 </h3>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -889,7 +889,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
         <div className="border-t border-border">
           <div className="container mx-auto px-4 py-8 text-center text-sm text-muted-foreground">
-            © 2026 Aviva Nações. Todos os direitos reservados.
+            © 2026 Avivamento para as Nações. Todos os direitos reservados.
           </div>
         </div>
       </footer>

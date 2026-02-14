@@ -365,7 +365,7 @@ export default function QuemSomos() {
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[
-            { nome: "TV Aviva Nações", emoji: "📸", logo: logoTVAvivaNacoes, descricao: "Responsável por registrar e transmitir os momentos da igreja, levando a mensagem do Evangelho através das plataformas digitais." },
+            { nome: "TV Avivamento para as Nações", emoji: "📸", logo: logoTVAvivaNacoes, descricao: "Responsável por registrar e transmitir os momentos da igreja, levando a mensagem do Evangelho através das plataformas digitais." },
             { nome: "Web Rádio", emoji: "📻", logo: logoWebRadio, descricao: "Nossa rádio online que leva a Palavra de Deus, louvores e conteúdo edificante para ouvintes em qualquer lugar." },
             { nome: "JOAN - Jornal Online", emoji: "📰", logo: logoJOAN, descricao: "Jornal Online Aviva News — levando informação, edificação e as notícias do ministério para todos os lugares." },
             { nome: "Coreografia", emoji: "💃", descricao: "\"Louvem o seu nome com danças.\" - Salmos 149:3. Adoração ao Senhor através da expressão corporal e da dança." },
