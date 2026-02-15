@@ -313,19 +313,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     className="relative"
                   >
                     <div className="absolute -inset-1 bg-primary/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <picture>
-                      <source srcSet={asset("logoheader.webp")} type="image/webp" />
-                      <img
-                        src={asset("logoheader.png")}
-                        alt="Logo Avivamento para as Nações"
-                        width={56}
-                        height={56}
-                        decoding="async"
-                        // @ts-expect-error fetchpriority is a valid HTML attribute
-                        fetchpriority="high"
-                        className="relative w-12 h-12 md:w-14 md:h-14 object-contain"
-                      />
-                    </picture>
+                    <img
+                      src={asset("logos/logo nova sem bg.png")}
+                      alt="Logo Avivamento para as Nações"
+                      width={56}
+                      height={56}
+                      decoding="async"
+                      // @ts-expect-error fetchpriority is a valid HTML attribute
+                      fetchpriority="high"
+                      className="relative w-12 h-12 md:w-14 md:h-14 object-contain"
+                    />
                   </motion.div>
                 </div>
                 <div className="flex flex-col -space-y-1">

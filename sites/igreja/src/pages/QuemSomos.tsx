@@ -199,7 +199,7 @@ export default function QuemSomos() {
               </h2>
               <p className="text-muted-foreground">
                 Prestar culto a Deus, promover a pregação da Palavra de
-                Deus, ministrar aos seus membros os sacramentos que os levam a
+                Deus, ministrar aos seus discipulos como viver em santidade que os levam a
                 viver de conformidade com a vontade de Deus, fazer discípulos e
                 instruí-los no ensino e na prática de toda a doutrina bíblica,
                 batizando-os em nome do Pai, do Filho e do Espírito Santo,

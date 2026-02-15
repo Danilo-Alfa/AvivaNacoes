@@ -48,7 +48,7 @@ export function AppSidebar() {
             <source srcSet={`${import.meta.env.BASE_URL}logoheader.webp`} type="image/webp" />
             <img
               src={`${import.meta.env.BASE_URL}logoheader.png`}
-              alt="Logo Aviva Nações"
+              alt="Logo Avivamento para as Nações"
               width={40}
               height={40}
               className="w-16 h-16 object-contain flex-shrink-0"

@@ -85,7 +85,7 @@ export function MobileMenu() {
               <source srcSet={`${import.meta.env.BASE_URL}logoheader.webp`} type="image/webp" />
               <img
                 src={`${import.meta.env.BASE_URL}logoheader.png`}
-                alt="Logo Aviva Nações"
+                alt="Logo Avivamento para as Nações"
                 width={32}
                 height={32}
                 className="w-8 h-8 object-contain"
@@ -150,7 +150,7 @@ export function MobileMenu() {
                   <source srcSet={`${import.meta.env.BASE_URL}logoheader.webp`} type="image/webp" />
                   <img
                     src={`${import.meta.env.BASE_URL}logoheader.png`}
-                    alt="Logo Aviva Nações"
+                    alt="Logo Avivamento para as Nações"
                     width={36}
                     height={36}
                     className="w-9 h-9 object-contain"
