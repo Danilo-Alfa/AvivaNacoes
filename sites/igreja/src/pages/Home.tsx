@@ -284,7 +284,7 @@ export default function Home() {
                 </div>
               }>
                 <ReactPlayer
-                  url={`https://www.youtube.com/watch?v=${YOUTUBE_VIDEO_ID}`}
+                  src={`https://www.youtube.com/watch?v=${YOUTUBE_VIDEO_ID}`}
                   width="100%"
                   height="100%"
                   controls
