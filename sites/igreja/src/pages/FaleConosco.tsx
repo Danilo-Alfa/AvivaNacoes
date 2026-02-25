@@ -15,6 +15,13 @@ export default function FaleConosco() {
   const [email, setEmail] = useState("");
   const [telefone, setTelefone] = useState("");
   const [assunto, setAssunto] = useState("");
+
+  const formatarTelefone = (valor: string) => {
+    const nums = valor.replace(/\D/g, "").slice(0, 11);
+    if (nums.length <= 2) return nums.length ? `(${nums}` : "";
+    if (nums.length <= 7) return `(${nums.slice(0, 2)}) ${nums.slice(2)}`;
+    return `(${nums.slice(0, 2)}) ${nums.slice(2, 7)}-${nums.slice(7)}`;
+  };
   const [mensagem, setMensagem] = useState("");
   const [enviando, setEnviando] = useState(false);
 
@@ -109,7 +116,8 @@ export default function FaleConosco() {
                       placeholder="(00) 00000-0000"
                       className="h-11"
                       value={telefone}
-                      onChange={(e) => setTelefone(e.target.value)}
+                      onChange={(e) => setTelefone(formatarTelefone(e.target.value))}
+                      maxLength={15}
                       disabled={enviando}
                     />
                   </div>
