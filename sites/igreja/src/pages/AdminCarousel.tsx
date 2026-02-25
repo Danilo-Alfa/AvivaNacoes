@@ -14,6 +14,15 @@ import {
   type FotoCarousel,
 } from "@/services/carouselService";
 
+const DIAS_SEMANA = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+
+function formatarDataEvento(dataStr: string): string {
+  const [ano, mes, dia] = dataStr.split("-").map(Number);
+  const date = new Date(ano, mes - 1, dia);
+  const diaSemana = DIAS_SEMANA[date.getDay()];
+  return `${diaSemana} (${String(dia).padStart(2, "0")}/${String(mes).padStart(2, "0")})`;
+}
+
 function AdminCarouselContent() {
   const [fotos, setFotos] = useState<FotoCarousel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,6 +31,7 @@ function AdminCarouselContent() {
   // Formulário
   const [urlImagem, setUrlImagem] = useState("");
   const [titulo, setTitulo] = useState("");
+  const [dataEvento, setDataEvento] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
   const [ordem, setOrdem] = useState(0);
   const [ativo, setAtivo] = useState(true);
@@ -65,6 +75,7 @@ function AdminCarouselContent() {
           editando,
           urlImagem,
           titulo || null,
+          dataEvento || null,
           linkUrl || null,
           ordem,
           ativo
@@ -76,6 +87,7 @@ function AdminCarouselContent() {
         await criarFotoCarousel(
           urlImagem,
           titulo || null,
+          dataEvento || null,
           linkUrl || null,
           ordem,
           ativo
@@ -100,6 +112,7 @@ function AdminCarouselContent() {
     setEditando(null);
     setUrlImagem("");
     setTitulo("");
+    setDataEvento("");
     setLinkUrl("");
     setOrdem(0);
     setAtivo(true);
@@ -110,6 +123,7 @@ function AdminCarouselContent() {
     setEditando(foto.id);
     setUrlImagem(foto.url_imagem);
     setTitulo(foto.titulo || "");
+    setDataEvento(foto.data_evento || "");
     setLinkUrl(foto.link_url || "");
     setOrdem(foto.ordem);
     setAtivo(foto.ativo);
@@ -143,6 +157,7 @@ function AdminCarouselContent() {
         foto.id,
         foto.url_imagem,
         foto.titulo,
+        foto.data_evento,
         foto.link_url,
         foto.ordem,
         !foto.ativo
@@ -239,10 +254,28 @@ function AdminCarouselContent() {
               <Input
                 id="titulo"
                 type="text"
-                placeholder="Ex: Culto de Domingo - 23/02"
+                placeholder="Ex: Equipe Sul de Minas"
                 value={titulo}
                 onChange={(e) => setTitulo(e.target.value)}
               />
+            </div>
+
+            <div>
+              <Label htmlFor="dataEvento">Data do evento (opcional)</Label>
+              <Input
+                id="dataEvento"
+                type="date"
+                value={dataEvento}
+                onChange={(e) => setDataEvento(e.target.value)}
+              />
+              {dataEvento && (
+                <p className="text-xs text-primary mt-1 font-medium">
+                  {formatarDataEvento(dataEvento)}
+                </p>
+              )}
+              <p className="text-xs text-muted-foreground mt-1">
+                Aparece abaixo do título na legenda da foto
+              </p>
             </div>
 
             <div>
@@ -365,10 +398,12 @@ function AdminCarouselContent() {
                         {foto.ativo ? "Ativo" : "Inativo"}
                       </span>
                     </div>
+                    {foto.data_evento && (
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {formatarDataEvento(foto.data_evento)}
+                      </p>
+                    )}
                     <p className="text-xs text-muted-foreground truncate mt-0.5">
-                      {foto.url_imagem}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
                       Ordem: {foto.ordem}
                     </p>
                   </div>

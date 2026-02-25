@@ -1,6 +1,15 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState, useCallback, lazy, Suspense } from "react";
 import { asset } from "@/lib/image-utils";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import {
   ArrowRight,
   Users2Icon,
@@ -11,6 +20,19 @@ import {
   Play,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import {
+  getFotosAtivasCarousel,
+  type FotoCarousel,
+} from "@/services/carouselService";
+
+const DIAS_SEMANA = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+
+function formatarDataEvento(dataStr: string): string {
+  const [ano, mes, dia] = dataStr.split("-").map(Number);
+  const date = new Date(ano, mes - 1, dia);
+  const diaSemana = DIAS_SEMANA[date.getDay()];
+  return `${diaSemana} (${String(dia).padStart(2, "0")}/${String(mes).padStart(2, "0")})`;
+}
 
 // Logos dos ministérios e grupos (em public/logos/)
 const logoResgatandoCriancas = "/logos/resgatando (1).png";
@@ -141,9 +163,25 @@ export default function Home() {
   const [loadingVersiculo, setLoadingVersiculo] = useState(true);
   const [proximoCulto, setProximoCulto] = useState(getProximoCulto());
   const [videoStarted, setVideoStarted] = useState(false);
+  const [fotosCarousel, setFotosCarousel] = useState<FotoCarousel[]>([]);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const onCarouselSelect = useCallback(() => {
+    if (!carouselApi) return;
+    setCurrentSlide(carouselApi.selectedScrollSnap());
+  }, [carouselApi]);
+
+  useEffect(() => {
+    if (!carouselApi) return;
+    onCarouselSelect();
+    carouselApi.on("select", onCarouselSelect);
+    return () => { carouselApi.off("select", onCarouselSelect); };
+  }, [carouselApi, onCarouselSelect]);
 
   useEffect(() => {
     carregarVersiculoDoDia();
+    getFotosAtivasCarousel().then(setFotosCarousel);
 
     // Atualiza o próximo culto a cada minuto
     const interval = setInterval(() => {
@@ -344,6 +382,79 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Carrossel - Momentos da Semana */}
+      {fotosCarousel.length > 0 && (
+        <section className="container mx-auto px-4 py-12 md:py-20">
+          <h2 className="text-2xl md:text-4xl font-bold mb-8 md:mb-12 text-center">
+            Trabalhos da Semana
+          </h2>
+          <div className="max-w-3xl mx-auto">
+            <Carousel
+              opts={{ loop: true, skipSnaps: false, duration: 30 }}
+              plugins={[Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })]}
+              setApi={setCarouselApi}
+              className="w-full"
+            >
+              <CarouselContent>
+                {fotosCarousel.map((foto) => (
+                  <CarouselItem key={foto.id}>
+                    <div className="relative rounded-xl overflow-hidden">
+                      {foto.link_url ? (
+                        <a href={foto.link_url} target="_blank" rel="noopener noreferrer">
+                          <img
+                            src={foto.url_imagem}
+                            alt={foto.titulo || "Momento da semana"}
+                            className="w-full aspect-video object-cover hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                          />
+                        </a>
+                      ) : (
+                        <img
+                          src={foto.url_imagem}
+                          alt={foto.titulo || "Momento da semana"}
+                          className="w-full aspect-video object-cover"
+                          loading="lazy"
+                        />
+                      )}
+                      {(foto.titulo || foto.data_evento) && (
+                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
+                          <div className="bg-background/90 backdrop-blur-sm rounded-lg px-4 py-2 text-center shadow-md">
+                            {foto.titulo && (
+                              <p className="text-sm font-semibold text-foreground">{foto.titulo}</p>
+                            )}
+                            {foto.data_evento && (
+                              <p className="text-xs text-muted-foreground">{formatarDataEvento(foto.data_evento)}</p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="-left-4 md:-left-12" />
+              <CarouselNext className="-right-4 md:-right-12" />
+            </Carousel>
+            {fotosCarousel.length > 1 && (
+              <div className="flex justify-center items-center gap-1.5 mt-4">
+                {fotosCarousel.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => carouselApi?.scrollTo(i)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      i === currentSlide
+                        ? "w-5 bg-primary"
+                        : "w-2 bg-muted-foreground/40"
+                    }`}
+                    aria-label={`Ir para slide ${i + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Nossos Ministérios e Grupos */}
       <section className="container mx-auto px-4 py-12 md:py-20">

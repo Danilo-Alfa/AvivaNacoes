@@ -4,11 +4,30 @@ export interface FotoCarousel {
   id: string;
   url_imagem: string;
   titulo: string | null;
+  data_evento: string | null;
   link_url: string | null;
   ordem: number;
   ativo: boolean;
   created_at: string;
   updated_at: string;
+}
+
+/**
+ * Busca apenas as fotos ativas do carrossel (para exibição pública)
+ */
+export async function getFotosAtivasCarousel(): Promise<FotoCarousel[]> {
+  const { data, error } = await supabase
+    .from("fotos_carousel")
+    .select("*")
+    .eq("ativo", true)
+    .order("ordem", { ascending: true });
+
+  if (error) {
+    console.error("Erro ao buscar fotos ativas do carrossel:", error);
+    return [];
+  }
+
+  return data || [];
 }
 
 /**
@@ -34,6 +53,7 @@ export async function getTodasFotosCarousel(): Promise<FotoCarousel[]> {
 export async function criarFotoCarousel(
   urlImagem: string,
   titulo: string | null,
+  dataEvento: string | null,
   linkUrl: string | null,
   ordem: number,
   ativo: boolean
@@ -44,6 +64,7 @@ export async function criarFotoCarousel(
       {
         url_imagem: urlImagem,
         titulo: titulo,
+        data_evento: dataEvento,
         link_url: linkUrl,
         ordem: ordem,
         ativo: ativo,
@@ -67,6 +88,7 @@ export async function atualizarFotoCarousel(
   id: string,
   urlImagem: string,
   titulo: string | null,
+  dataEvento: string | null,
   linkUrl: string | null,
   ordem: number,
   ativo: boolean
@@ -76,6 +98,7 @@ export async function atualizarFotoCarousel(
     .update({
       url_imagem: urlImagem,
       titulo: titulo,
+      data_evento: dataEvento,
       link_url: linkUrl,
       ordem: ordem,
       ativo: ativo,
