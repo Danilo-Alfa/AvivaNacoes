@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { api } from "@/lib/api";
 
 export interface MensagemContato {
   id: string;
@@ -18,18 +19,13 @@ export async function salvarMensagemContato(
   assunto: string,
   mensagem: string
 ): Promise<MensagemContato> {
-  const { data, error } = await supabase
-    .from("mensagens_contato")
-    .insert([{ nome, email, telefone, assunto, mensagem }])
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Erro ao salvar mensagem de contato:", error);
-    throw error;
-  }
-
-  return data;
+  return api.post<MensagemContato>("/contato", {
+    nome,
+    email,
+    telefone,
+    assunto,
+    mensagem,
+  });
 }
 
 export async function getTodasMensagens(): Promise<MensagemContato[]> {
