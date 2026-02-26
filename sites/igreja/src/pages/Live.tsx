@@ -16,8 +16,28 @@ import {
   type LiveConfig,
 } from "@/services/liveService";
 import HlsPlayer from "@/components/HlsPlayer";
-import { Loader2, Radio, User, Users } from "lucide-react";
+import { Loader2, LogOut, Radio, User, Users } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+
+const PALAVRAS_PROIBIDAS = [
+  "puta", "puto", "viado", "buceta", "pau", "piroca", "cu", "merda",
+  "filho da puta", "fdp", "vadia", "vagabunda", "vagabundo", "corno",
+  "caralho", "porra", "foda", "foder", "desgraça", "lixo",
+  "nazi", "nazista", "racista", "negro", "nigga",
+  "shit", "fuck", "ass", "bitch", "damn",
+];
+
+function validarNome(nome: string): string | null {
+  const n = nome.trim();
+  if (n.length < 2) return "Nome deve ter pelo menos 2 caracteres.";
+  if (n.length > 50) return "Nome muito longo.";
+  if (/^[\d\s\W]+$/.test(n)) return "Nome deve conter letras.";
+  const lower = n.toLowerCase();
+  for (const palavra of PALAVRAS_PROIBIDAS) {
+    if (lower.includes(palavra)) return "Nome não permitido.";
+  }
+  return null;
+}
 
 // Declarar gtag para TypeScript
 declare global {
@@ -134,7 +154,9 @@ export default function Live() {
   const handleRegistrar = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!nome.trim()) {
+    const erro = validarNome(nome);
+    if (erro) {
+      toast.error(erro);
       return;
     }
 
@@ -149,7 +171,6 @@ export default function Live() {
       );
       setIsRegistered(true);
 
-      // Salvar nome no localStorage para próximas visitas
       localStorage.setItem("live_viewer_nome", nome.trim());
       if (email.trim()) {
         localStorage.setItem("live_viewer_email", email.trim());
@@ -159,18 +180,37 @@ export default function Live() {
     }
   };
 
-  // Carregar dados salvos do localStorage
+  // Auto-registrar com dados salvos quando live ficar ativa
   useEffect(() => {
-    const savedNome = localStorage.getItem("live_viewer_nome");
-    const savedEmail = localStorage.getItem("live_viewer_email");
+    if (!isLive || isRegistered) return;
 
-    if (savedNome) {
+    const savedNome = localStorage.getItem("live_viewer_nome");
+    const savedEmail = localStorage.getItem("live_viewer_email") || "";
+
+    if (!savedNome) return;
+
+    const autoRegistrar = async () => {
       setNome(savedNome);
-    }
-    if (savedEmail) {
       setEmail(savedEmail);
-    }
-  }, []);
+      const newSessionId = gerarSessionId();
+      setSessionId(newSessionId);
+      try {
+        await registrarViewer(newSessionId, savedNome, savedEmail || undefined);
+        setIsRegistered(true);
+      } catch (error) {
+        console.error("Erro ao auto-registrar:", error);
+      }
+    };
+
+    autoRegistrar();
+  }, [isLive, isRegistered]);
+
+  // Trocar nome / sair
+  const handleTrocarNome = () => {
+    if (sessionId) sairDaLive(sessionId);
+    setIsRegistered(false);
+    setSessionId("");
+  };
 
   // Google Analytics - Rastrear quando usuário começa a assistir
   useEffect(() => {
@@ -328,13 +368,15 @@ export default function Live() {
                         <span className="hidden sm:inline"> assistindo</span>
                       </Badge>
                     )}
-                    <Badge
-                      variant="outline"
-                      className="gap-1 text-xs shrink-0 max-w-[120px] sm:max-w-[150px]"
+                    <button
+                      onClick={handleTrocarNome}
+                      className="inline-flex items-center gap-1 text-xs shrink-0 max-w-[120px] sm:max-w-[150px] rounded-full border px-2.5 py-0.5 hover:bg-muted transition-colors"
+                      title="Trocar nome"
                     >
                       <User className="h-3 w-3 shrink-0" aria-hidden="true" />
                       <span className="truncate">{nome}</span>
-                    </Badge>
+                      <LogOut className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />
+                    </button>
                     <Badge
                       variant="destructive"
                       className="animate-pulse gap-1 text-xs shrink-0 whitespace-nowrap"

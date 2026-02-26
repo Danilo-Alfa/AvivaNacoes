@@ -891,8 +891,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </footer>
 
-      {/* Player de Rádio */}
-      {mobileMenuOpen === false && <AudioPlayer />}
+      {/* Player de Rádio - escondido na página de live para não sobrepor o chat */}
+      {mobileMenuOpen === false && location.pathname !== "/live" && <AudioPlayer />}
     </div>
   );
 }

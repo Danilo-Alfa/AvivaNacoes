@@ -44,10 +44,14 @@ class ChatClient {
     this.socket = io(`${API_BASE_URL}/chat`, {
       transports: ['websocket', 'polling'],
       autoConnect: true,
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 1000,
     });
 
     this.socket.on('connect', () => {
       console.log('Chat conectado');
+      this.emit('conectado', {});
       // Fazer join quando conectar
       this.socket?.emit('join', {
         sessionId: this.sessionId,
