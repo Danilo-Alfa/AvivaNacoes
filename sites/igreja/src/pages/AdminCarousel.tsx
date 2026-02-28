@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Trash2, Edit, ImageIcon, Eye, EyeOff, GripVertical } from "lucide-react";
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { toast } from "@/components/ui/sonner";
 import {
   getTodasFotosCarousel,
@@ -23,7 +22,7 @@ function formatarDataEvento(dataStr: string): string {
   return `${diaSemana} (${String(dia).padStart(2, "0")}/${String(mes).padStart(2, "0")})`;
 }
 
-function AdminCarouselContent() {
+export default function AdminCarouselContent() {
   const [fotos, setFotos] = useState<FotoCarousel[]>([]);
   const [loading, setLoading] = useState(true);
   const [editando, setEditando] = useState<string | null>(null);
@@ -447,10 +446,3 @@ function AdminCarouselContent() {
   );
 }
 
-export default function AdminCarousel() {
-  return (
-    <ProtectedAdmin>
-      <AdminCarouselContent />
-    </ProtectedAdmin>
-  );
-}

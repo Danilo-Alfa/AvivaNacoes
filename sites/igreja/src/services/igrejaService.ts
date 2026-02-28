@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase";
 export interface Igreja {
   id: string;
   nome: string;
+  pais: string | null;
   bairro: string | null;
   endereco: string;
   cidade: string | null;
@@ -60,6 +61,7 @@ export async function getTodasIgrejas(): Promise<Igreja[]> {
  */
 export async function criarIgreja(
   nome: string,
+  pais: string | null,
   bairro: string | null,
   endereco: string,
   cidade: string | null,
@@ -79,6 +81,7 @@ export async function criarIgreja(
     .insert([
       {
         nome,
+        pais,
         bairro,
         endereco,
         cidade,
@@ -111,6 +114,7 @@ export async function criarIgreja(
 export async function atualizarIgreja(
   id: string,
   nome: string,
+  pais: string | null,
   bairro: string | null,
   endereco: string,
   cidade: string | null,
@@ -129,6 +133,7 @@ export async function atualizarIgreja(
     .from("igrejas")
     .update({
       nome,
+      pais,
       bairro,
       endereco,
       cidade,

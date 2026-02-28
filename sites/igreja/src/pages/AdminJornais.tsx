@@ -1,4 +1,3 @@
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,7 +14,7 @@ import {
 import { Edit, FileText, Trash2, Upload, Link, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-function AdminJornaisContent() {
+export default function AdminJornaisContent() {
   const [jornais, setJornais] = useState<Jornal[]>([]);
   const [loading, setLoading] = useState(true);
   const [editando, setEditando] = useState<string | null>(null);
@@ -371,10 +370,3 @@ function AdminJornaisContent() {
   );
 }
 
-export default function AdminJornais() {
-  return (
-    <ProtectedAdmin>
-      <AdminJornaisContent />
-    </ProtectedAdmin>
-  );
-}

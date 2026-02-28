@@ -7,7 +7,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trash2, Edit, Video as VideoIcon, List, Eye, EyeOff } from "lucide-react";
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { toast } from "@/components/ui/sonner";
 import {
   getTodosVideos,
@@ -22,7 +21,7 @@ import {
   type Playlist,
 } from "@/services/videoService";
 
-function AdminVideosContent() {
+export default function AdminVideosContent() {
   // Estados para Vídeos
   const [videos, setVideos] = useState<Video[]>([]);
   const [loadingVideos, setLoadingVideos] = useState(true);
@@ -791,10 +790,3 @@ function AdminVideosContent() {
   );
 }
 
-export default function AdminVideos() {
-  return (
-    <ProtectedAdmin>
-      <AdminVideosContent />
-    </ProtectedAdmin>
-  );
-}

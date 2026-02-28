@@ -3,8 +3,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
+import AdminLayout from "./components/AdminLayout";
 import ScrollToTop from "./components/ScrollToTop";
 
 // Lazy loading das páginas para melhorar performance
@@ -51,9 +52,10 @@ const App = () => (
       <Sonner />
       <BrowserRouter basename="">
         <ScrollToTop />
-        <Layout>
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* Site público — renderiza dentro do Layout (header, sidebar, footer) */}
+            <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
               <Route path="/quem-somos" element={<QuemSomos />} />
               <Route path="/nossas-igrejas" element={<NossasIgrejas />} />
@@ -66,25 +68,31 @@ const App = () => (
               <Route path="/jornal" element={<Jornal />} />
               <Route path="/redes-sociais" element={<RedesSociais />} />
               <Route path="/versiculo-do-dia" element={<VersiculoDoDia />} />
-              <Route path="/admin/versiculo-do-dia" element={<AdminVersiculos />} />
-              <Route path="/admin/jornal" element={<AdminJornais />} />
-              <Route path="/admin/galerias" element={<AdminGalerias />} />
-              <Route path="/admin/eventos" element={<AdminEventos />} />
-              <Route path="/admin/videos" element={<AdminVideos />} />
-              <Route path="/admin/live" element={<AdminLive />} />
-              <Route path="/admin/programacao" element={<AdminProgramacao />} />
-              <Route path="/admin/igrejas" element={<AdminIgrejas />} />
-              <Route path="/admin/projetos" element={<AdminProjetos />} />
-              <Route path="/admin/mensagens" element={<AdminMensagens />} />
-              <Route path="/admin/fale-conosco" element={<AdminMensagens />} />
-              <Route path="/admin/carousel" element={<AdminCarousel />} />
               <Route path="/live" element={<Live />} />
               <Route path="/teste-live" element={<TesteLive />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </Layout>
+            </Route>
+
+            {/* Painel administrativo — layout próprio com sidebar admin */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Navigate to="/admin/videos" replace />} />
+              <Route path="versiculo-do-dia" element={<AdminVersiculos />} />
+              <Route path="jornal" element={<AdminJornais />} />
+              <Route path="galerias" element={<AdminGalerias />} />
+              <Route path="eventos" element={<AdminEventos />} />
+              <Route path="videos" element={<AdminVideos />} />
+              <Route path="live" element={<AdminLive />} />
+              <Route path="programacao" element={<AdminProgramacao />} />
+              <Route path="igrejas" element={<AdminIgrejas />} />
+              <Route path="projetos" element={<AdminProjetos />} />
+              <Route path="mensagens" element={<AdminMensagens />} />
+              <Route path="fale-conosco" element={<AdminMensagens />} />
+              <Route path="carousel" element={<AdminCarousel />} />
+            </Route>
+
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

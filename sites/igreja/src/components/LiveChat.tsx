@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { MessageCircle, Send, Users, Loader2 } from "lucide-react";
 import { chatClient, type ChatMensagem } from "@/services/chatService";
+import { censurarTexto, contemProfanidade } from "@/lib/profanityFilter";
 
 interface LiveChatProps {
   sessionId: string;
@@ -144,9 +145,14 @@ export default function LiveChat({
   const handleEnviar = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!novaMensagem.trim() || !isConnected) return;
+    const texto = novaMensagem.trim();
+    if (!texto || !isConnected) return;
 
-    chatClient.enviarMensagem(novaMensagem.trim());
+    if (contemProfanidade(texto)) {
+      chatClient.enviarMensagem(censurarTexto(texto));
+    } else {
+      chatClient.enviarMensagem(texto);
+    }
     setNovaMensagem("");
     chatClient.parouDigitar();
 

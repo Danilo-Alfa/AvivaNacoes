@@ -13,7 +13,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Trash2, Edit, Clock, EyeOff } from "lucide-react";
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { toast } from "@/components/ui/sonner";
 import {
   getTodaProgramacao,
@@ -25,7 +24,7 @@ import {
   type Programacao,
 } from "@/services/programacaoService";
 
-function AdminProgramacaoContent() {
+export default function AdminProgramacaoContent() {
   const [programacao, setProgramacao] = useState<Programacao[]>([]);
   const [loading, setLoading] = useState(true);
   const [editando, setEditando] = useState<string | null>(null);
@@ -339,10 +338,3 @@ function AdminProgramacaoContent() {
   );
 }
 
-export default function AdminProgramacao() {
-  return (
-    <ProtectedAdmin>
-      <AdminProgramacaoContent />
-    </ProtectedAdmin>
-  );
-}
