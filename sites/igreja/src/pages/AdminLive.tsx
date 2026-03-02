@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Radio, Power, PowerOff, Clock, Users, RefreshCw, User, Mail, Monitor } from "lucide-react";
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { toast } from "@/components/ui/sonner";
 import {
   getLiveConfig,
@@ -22,7 +21,7 @@ import {
   type LiveViewer,
 } from "@/services/liveService";
 
-function AdminLiveContent() {
+export default function AdminLiveContent() {
   const [config, setConfig] = useState<LiveConfig | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -612,10 +611,3 @@ function AdminLiveContent() {
   );
 }
 
-export default function AdminLive() {
-  return (
-    <ProtectedAdmin>
-      <AdminLiveContent />
-    </ProtectedAdmin>
-  );
-}

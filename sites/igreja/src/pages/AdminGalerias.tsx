@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Trash2, Edit, Images } from "lucide-react";
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { toast } from "@/components/ui/sonner";
 import {
   getTodasGalerias,
@@ -15,7 +14,7 @@ import {
   type Galeria,
 } from "@/services/galeriaService";
 
-function AdminGaleriasContent() {
+export default function AdminGaleriasContent() {
   const [galerias, setGalerias] = useState<Galeria[]>([]);
   const [loading, setLoading] = useState(true);
   const [editando, setEditando] = useState<string | null>(null);
@@ -305,10 +304,3 @@ function AdminGaleriasContent() {
   );
 }
 
-export default function AdminGalerias() {
-  return (
-    <ProtectedAdmin>
-      <AdminGaleriasContent />
-    </ProtectedAdmin>
-  );
-}

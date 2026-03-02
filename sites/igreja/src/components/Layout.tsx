@@ -25,7 +25,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 // Links principais - exibidos na barra superior desktop
 const primaryNavigation = [
@@ -155,7 +155,7 @@ const sidebarSections = [
   },
 ];
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout() {
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem("theme");
     if (saved) return saved === "dark";
@@ -840,7 +840,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             sidebarOpen ? "lg:ml-60" : "lg:ml-16"
           }`}
         >
-          {children}
+          <Outlet />
         </main>
       </div>
 

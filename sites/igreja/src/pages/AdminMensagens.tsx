@@ -1,4 +1,3 @@
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -25,7 +24,7 @@ import { useEffect, useState } from "react";
 
 type Filtro = "todas" | "nao_lidas" | "lidas";
 
-function AdminMensagensContent() {
+export default function AdminMensagensContent() {
   const [mensagens, setMensagens] = useState<MensagemContato[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState<Filtro>("todas");
@@ -334,10 +333,3 @@ function AdminMensagensContent() {
   );
 }
 
-export default function AdminMensagens() {
-  return (
-    <ProtectedAdmin>
-      <AdminMensagensContent />
-    </ProtectedAdmin>
-  );
-}

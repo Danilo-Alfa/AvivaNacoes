@@ -16,10 +16,9 @@ import {
 } from "lucide-react";
 import { versiculoService } from "@/services/versiculoService";
 import { Versiculo } from "@/lib/supabase";
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { toast } from "@/components/ui/sonner";
 
-function AdminVersiculosContent() {
+export default function AdminVersiculosContent() {
   const [versiculos, setVersiculos] = useState<Versiculo[]>([]);
   const [loading, setLoading] = useState(true);
   const [salvando, setSalvando] = useState(false);
@@ -355,10 +354,3 @@ function AdminVersiculosContent() {
   );
 }
 
-export default function AdminVersiculos() {
-  return (
-    <ProtectedAdmin>
-      <AdminVersiculosContent />
-    </ProtectedAdmin>
-  );
-}

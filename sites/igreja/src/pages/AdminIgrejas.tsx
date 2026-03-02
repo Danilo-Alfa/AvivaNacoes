@@ -5,8 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2, Edit, MapPin, EyeOff } from "lucide-react";
-import ProtectedAdmin from "@/components/ProtectedAdmin";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Trash2, Edit, MapPin, EyeOff, Globe } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import {
   getTodasIgrejas,
@@ -16,12 +22,15 @@ import {
   type Igreja,
 } from "@/services/igrejaService";
 
-function AdminIgrejasContent() {
+const PAISES = ["Brasil", "Argentina", "África", "EUA"] as const;
+
+export default function AdminIgrejasContent() {
   const [igrejas, setIgrejas] = useState<Igreja[]>([]);
   const [loading, setLoading] = useState(true);
   const [editando, setEditando] = useState<string | null>(null);
 
   // Formulário
+  const [pais, setPais] = useState("Brasil");
   const [nome, setNome] = useState("");
   const [bairro, setBairro] = useState("");
   const [endereco, setEndereco] = useState("");
@@ -72,6 +81,7 @@ function AdminIgrejasContent() {
         await atualizarIgreja(
           editando,
           nome,
+          pais || null,
           bairro || null,
           endereco,
           cidade || null,
@@ -90,6 +100,7 @@ function AdminIgrejasContent() {
       } else {
         await criarIgreja(
           nome,
+          pais || null,
           bairro || null,
           endereco,
           cidade || null,
@@ -116,6 +127,7 @@ function AdminIgrejasContent() {
   };
 
   const limparFormulario = () => {
+    setPais("Brasil");
     setNome("");
     setBairro("");
     setEndereco("");
@@ -135,6 +147,7 @@ function AdminIgrejasContent() {
 
   const handleEditar = (item: Igreja) => {
     setEditando(item.id);
+    setPais(item.pais || "Brasil");
     setNome(item.nome);
     setBairro(item.bairro || "");
     setEndereco(item.endereco);
@@ -191,6 +204,23 @@ function AdminIgrejasContent() {
                   placeholder="Ex: Sede Central"
                   required
                 />
+              </div>
+
+              <div>
+                <Label htmlFor="pais">País</Label>
+                <Select value={pais} onValueChange={setPais}>
+                  <SelectTrigger id="pais">
+                    <Globe className="w-4 h-4 mr-2 text-muted-foreground" />
+                    <SelectValue placeholder="Selecione o país" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PAISES.map((p) => (
+                      <SelectItem key={p} value={p}>
+                        {p}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div>
@@ -371,6 +401,12 @@ function AdminIgrejasContent() {
                           - {item.bairro}
                         </span>
                       )}
+                      {item.pais && (
+                        <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <Globe className="w-3 h-3" />
+                          {item.pais}
+                        </span>
+                      )}
                       {!item.ativo && (
                         <span className="text-xs bg-gray-500/20 text-gray-600 dark:text-gray-400 px-2 py-0.5 rounded-full flex items-center gap-1">
                           <EyeOff className="w-3 h-3" />
@@ -414,10 +450,3 @@ function AdminIgrejasContent() {
   );
 }
 
-export default function AdminIgrejas() {
-  return (
-    <ProtectedAdmin>
-      <AdminIgrejasContent />
-    </ProtectedAdmin>
-  );
-}

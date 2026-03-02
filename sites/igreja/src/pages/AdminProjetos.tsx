@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Trash2, Edit, Folder, EyeOff } from "lucide-react";
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { toast } from "@/components/ui/sonner";
 import {
   getTodosProjetos,
@@ -16,7 +15,7 @@ import {
   type Projeto,
 } from "@/services/projetoService";
 
-function AdminProjetosContent() {
+export default function AdminProjetosContent() {
   const [projetos, setProjetos] = useState<Projeto[]>([]);
   const [loading, setLoading] = useState(true);
   const [editando, setEditando] = useState<string | null>(null);
@@ -352,10 +351,3 @@ function AdminProjetosContent() {
   );
 }
 
-export default function AdminProjetos() {
-  return (
-    <ProtectedAdmin>
-      <AdminProjetosContent />
-    </ProtectedAdmin>
-  );
-}

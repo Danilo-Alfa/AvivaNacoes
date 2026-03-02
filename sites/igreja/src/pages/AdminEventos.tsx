@@ -1,4 +1,3 @@
-import ProtectedAdmin from "@/components/ProtectedAdmin";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -16,7 +15,7 @@ import {
 import { Calendar, Edit, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-function AdminEventosContent() {
+export default function AdminEventosContent() {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [loading, setLoading] = useState(true);
   const [editando, setEditando] = useState<string | null>(null);
@@ -533,10 +532,3 @@ function AdminEventosContent() {
   );
 }
 
-export default function AdminEventos() {
-  return (
-    <ProtectedAdmin>
-      <AdminEventosContent />
-    </ProtectedAdmin>
-  );
-}
