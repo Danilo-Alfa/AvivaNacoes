@@ -37,6 +37,13 @@ class ChatClient {
       return;
     }
 
+    // Clean up old disconnected socket before creating a new one
+    if (this.socket) {
+      this.socket.removeAllListeners();
+      this.socket.disconnect();
+      this.socket = null;
+    }
+
     this.sessionId = sessionId;
     this.nome = nome;
     this.email = email || '';

@@ -4,14 +4,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { MessageCircle, Send, Users, Loader2 } from "lucide-react";
+import { MessageCircle, Send, User, Users, Loader2 } from "lucide-react";
 import { chatClient, type ChatMensagem } from "@/services/chatService";
+
+const PALAVRAS_PROIBIDAS = [
+  "puta", "puto", "viado", "buceta", "pau", "piroca", "cu", "merda",
+  "filho da puta", "fdp", "vadia", "vagabunda", "vagabundo", "corno",
+  "caralho", "porra", "foda", "foder", "desgraça", "lixo",
+  "nazi", "nazista", "racista", "negro", "nigga",
+  "shit", "fuck", "ass", "bitch", "damn",
+];
+
+function validarNome(nome: string): string | null {
+  const n = nome.trim();
+  if (n.length < 2) return "Nome deve ter pelo menos 2 caracteres.";
+  if (n.length > 50) return "Nome muito longo.";
+  if (/^[\d\s\W]+$/.test(n)) return "Nome deve conter letras.";
+  const lower = n.toLowerCase();
+  for (const palavra of PALAVRAS_PROIBIDAS) {
+    if (lower.includes(palavra)) return "Nome não permitido.";
+  }
+  return null;
+}
 
 interface LiveChatProps {
   sessionId: string;
   nome: string;
   email?: string;
   isLive: boolean;
+  onNomeSet?: (nome: string) => void;
 }
 
 export default function LiveChat({
@@ -19,6 +40,7 @@ export default function LiveChat({
   nome,
   email,
   isLive,
+  onNomeSet,
 }: LiveChatProps) {
   const [mensagens, setMensagens] = useState<ChatMensagem[]>([]);
   const [novaMensagem, setNovaMensagem] = useState("");
@@ -26,6 +48,8 @@ export default function LiveChat({
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [digitando, setDigitando] = useState<string[]>([]);
+  const [nomeInput, setNomeInput] = useState("");
+  const [nomeError, setNomeError] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const digitandoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -55,7 +79,7 @@ export default function LiveChat({
 
   // Conectar ao chat
   useEffect(() => {
-    if (!isLive || !sessionId || !nome) return;
+    if (!isLive || !sessionId) return;
 
     setIsConnecting(true);
 
@@ -121,8 +145,18 @@ export default function LiveChat({
       setIsConnecting(false);
     }, 2000);
 
+    // Reconnect when tab becomes visible again
+    const handleVisibilityChange = () => {
+      if (!document.hidden && !chatClient.isConnected()) {
+        setIsConnecting(true);
+        chatClient.connect(sessionId, nome, email);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
       clearTimeout(checkConnection);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       // Limpar timeout de digitação para evitar memory leak
       if (digitandoTimeoutRef.current) {
         clearTimeout(digitandoTimeoutRef.current);
@@ -139,6 +173,17 @@ export default function LiveChat({
       chatClient.disconnect();
     };
   }, [isLive, sessionId, nome, email, filtrarMensagensDeHoje]);
+
+  const handleNomeSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    const erro = validarNome(nomeInput);
+    if (erro) {
+      setNomeError(erro);
+      return;
+    }
+    setNomeError("");
+    onNomeSet?.(nomeInput.trim());
+  }, [nomeInput, onNomeSet]);
 
   // Enviar mensagem
   const handleEnviar = (e: React.FormEvent) => {
@@ -266,28 +311,59 @@ export default function LiveChat({
           </div>
         </ScrollArea>
 
-        {/* Input de mensagem */}
-        <form
-          onSubmit={handleEnviar}
-          className="p-3 border-t flex gap-2"
-        >
-          <Input
-            ref={inputRef}
-            placeholder="Digite sua mensagem..."
-            value={novaMensagem}
-            onChange={handleInputChange}
-            maxLength={500}
-            disabled={!isConnected}
-            className="flex-1"
-          />
-          <Button
-            type="submit"
-            size="icon"
-            disabled={!novaMensagem.trim() || !isConnected}
+        {/* Input */}
+        {nome ? (
+          <form
+            onSubmit={handleEnviar}
+            className="p-3 border-t flex gap-2"
           >
-            <Send className="w-4 h-4" />
-          </Button>
-        </form>
+            <Input
+              ref={inputRef}
+              placeholder="Digite sua mensagem..."
+              value={novaMensagem}
+              onChange={handleInputChange}
+              maxLength={500}
+              disabled={!isConnected}
+              className="flex-1"
+            />
+            <Button
+              type="submit"
+              size="icon"
+              disabled={!novaMensagem.trim() || !isConnected}
+            >
+              <Send className="w-4 h-4" />
+            </Button>
+          </form>
+        ) : (
+          <div className="border-t">
+            <div className="bg-muted/50 px-3 py-2.5 flex items-center gap-2">
+              <User className="w-3.5 h-3.5 text-primary shrink-0" />
+              <span className="text-sm">Para enviar mensagens, informe seu nome:</span>
+            </div>
+            {nomeError && (
+              <p className="text-xs text-destructive px-3 pt-1.5">{nomeError}</p>
+            )}
+            <form
+              onSubmit={handleNomeSubmit}
+              className="p-3 flex gap-2"
+            >
+              <Input
+                placeholder="Digite seu nome..."
+                value={nomeInput}
+                onChange={(e) => { setNomeInput(e.target.value); setNomeError(""); }}
+                maxLength={50}
+                className="flex-1"
+              />
+              <Button
+                type="submit"
+                size="icon"
+                disabled={!nomeInput.trim()}
+              >
+                <Send className="w-4 h-4" />
+              </Button>
+            </form>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

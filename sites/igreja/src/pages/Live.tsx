@@ -1,10 +1,7 @@
 import LiveChat from "@/components/LiveChat";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/sonner";
 import {
   atualizarHeartbeat,
@@ -18,26 +15,6 @@ import {
 import HlsPlayer from "@/components/HlsPlayer";
 import { Loader2, LogOut, Radio, User, Users } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-
-const PALAVRAS_PROIBIDAS = [
-  "puta", "puto", "viado", "buceta", "pau", "piroca", "cu", "merda",
-  "filho da puta", "fdp", "vadia", "vagabunda", "vagabundo", "corno",
-  "caralho", "porra", "foda", "foder", "desgraça", "lixo",
-  "nazi", "nazista", "racista", "negro", "nigga",
-  "shit", "fuck", "ass", "bitch", "damn",
-];
-
-function validarNome(nome: string): string | null {
-  const n = nome.trim();
-  if (n.length < 2) return "Nome deve ter pelo menos 2 caracteres.";
-  if (n.length > 50) return "Nome muito longo.";
-  if (/^[\d\s\W]+$/.test(n)) return "Nome deve conter letras.";
-  const lower = n.toLowerCase();
-  for (const palavra of PALAVRAS_PROIBIDAS) {
-    if (lower.includes(palavra)) return "Nome não permitido.";
-  }
-  return null;
-}
 
 // Declarar gtag para TypeScript
 declare global {
@@ -57,9 +34,8 @@ export default function Live() {
   const [watchStartTime, setWatchStartTime] = useState<number>(0);
 
   // Estados para verificação de usuário
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
+  const [nome, setNome] = useState(localStorage.getItem("live_viewer_nome") || "");
+  const [email, setEmail] = useState(localStorage.getItem("live_viewer_email") || "");
   const [sessionId, setSessionId] = useState<string>("");
 
   const streamUrl = config?.url_stream || import.meta.env.VITE_STREAM_URL || "";
@@ -107,110 +83,85 @@ export default function Live() {
     return () => clearInterval(interval);
   }, []);
 
+  // Register anonymous viewer when live starts
+  useEffect(() => {
+    if (!isLive) return;
+    const sid = gerarSessionId();
+    setSessionId(sid);
+    registrarViewer(sid, nome || undefined, email || undefined).catch(() => {});
+  }, [isLive]);
+
   // Atualizar contador de viewers reais
   const atualizarContadorViewers = useCallback(async () => {
-    if (isLive && isRegistered) {
+    if (isLive) {
       const count = await contarViewersAtivos();
       setViewers(count);
     }
-  }, [isLive, isRegistered]);
+  }, [isLive]);
 
   useEffect(() => {
-    if (isLive && isRegistered) {
+    if (isLive) {
       atualizarContadorViewers();
-      const interval = setInterval(atualizarContadorViewers, 15000); // A cada 15 segundos
+      const interval = setInterval(atualizarContadorViewers, 15000);
       return () => clearInterval(interval);
     }
-  }, [isLive, isRegistered, atualizarContadorViewers]);
+  }, [isLive, atualizarContadorViewers]);
 
   // Heartbeat para manter o viewer registrado
   useEffect(() => {
-    if (isRegistered && sessionId && isLive) {
+    if (sessionId && isLive) {
       const heartbeatInterval = setInterval(() => {
         atualizarHeartbeat(sessionId);
-      }, 30000); // A cada 30 segundos
+      }, 30000);
 
       return () => clearInterval(heartbeatInterval);
     }
-  }, [isRegistered, sessionId, isLive]);
+  }, [sessionId, isLive]);
 
   // Registrar saída quando o usuário fecha a página
   useEffect(() => {
-    if (isRegistered && sessionId) {
+    if (sessionId) {
       const handleBeforeUnload = () => {
         sairDaLive(sessionId);
       };
 
       window.addEventListener("beforeunload", handleBeforeUnload);
 
+      // Handle visibilitychange for tab switching
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          sairDaLive(sessionId);
+        } else if (isLive) {
+          registrarViewer(sessionId, nome || undefined, email || undefined).catch(() => {});
+          atualizarHeartbeat(sessionId).catch(() => {});
+        }
+      };
+
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+
       return () => {
         window.removeEventListener("beforeunload", handleBeforeUnload);
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
         sairDaLive(sessionId);
       };
     }
-  }, [isRegistered, sessionId]);
-
-  // Função para registrar o usuário
-  const handleRegistrar = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const erro = validarNome(nome);
-    if (erro) {
-      toast.error(erro);
-      return;
-    }
-
-    try {
-      const newSessionId = gerarSessionId();
-      setSessionId(newSessionId);
-
-      await registrarViewer(
-        newSessionId,
-        nome.trim(),
-        email.trim() || undefined
-      );
-      setIsRegistered(true);
-
-      localStorage.setItem("live_viewer_nome", nome.trim());
-      if (email.trim()) {
-        localStorage.setItem("live_viewer_email", email.trim());
-      }
-    } catch (error) {
-      console.error("Erro ao registrar:", error);
-    }
-  };
-
-  // Auto-registrar com dados salvos quando live ficar ativa
-  useEffect(() => {
-    if (!isLive || isRegistered) return;
-
-    const savedNome = localStorage.getItem("live_viewer_nome");
-    const savedEmail = localStorage.getItem("live_viewer_email") || "";
-
-    if (!savedNome) return;
-
-    const autoRegistrar = async () => {
-      setNome(savedNome);
-      setEmail(savedEmail);
-      const newSessionId = gerarSessionId();
-      setSessionId(newSessionId);
-      try {
-        await registrarViewer(newSessionId, savedNome, savedEmail || undefined);
-        setIsRegistered(true);
-      } catch (error) {
-        console.error("Erro ao auto-registrar:", error);
-      }
-    };
-
-    autoRegistrar();
-  }, [isLive, isRegistered]);
+  }, [sessionId, isLive, nome, email]);
 
   // Trocar nome / sair
   const handleTrocarNome = () => {
-    if (sessionId) sairDaLive(sessionId);
-    setIsRegistered(false);
-    setSessionId("");
+    localStorage.removeItem("live_viewer_nome");
+    localStorage.removeItem("live_viewer_email");
+    setNome("");
+    setEmail("");
   };
+
+  const handleNomeSet = useCallback((newNome: string) => {
+    setNome(newNome);
+    localStorage.setItem("live_viewer_nome", newNome);
+    if (sessionId) {
+      registrarViewer(sessionId, newNome, email || undefined).catch(() => {});
+    }
+  }, [sessionId, email]);
 
   // Google Analytics - Rastrear quando usuário começa a assistir
   useEffect(() => {
@@ -264,80 +215,10 @@ export default function Live() {
     );
   }
 
-  // Formulário de registro quando a live está ativa mas usuário não está registrado
-  if (isLive && !isRegistered) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <Card className="max-w-md mx-auto">
-          <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                <User className="w-8 h-8 text-primary" aria-hidden="true" />
-              </div>
-            </div>
-            <CardTitle className="text-2xl">Bem-vindo(a) a Live!</CardTitle>
-            <p className="text-sm text-muted-foreground mt-2">
-              Para assistir a transmissão, por favor informe seus dados
-            </p>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleRegistrar} className="space-y-4">
-              <div>
-                <Label htmlFor="nome">Nome *</Label>
-                <Input
-                  id="nome"
-                  type="text"
-                  placeholder="Seu nome"
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
-                  required
-                  autoFocus
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="email">E-mail (opcional)</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="seu@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Usado apenas para notificações futuras
-                </p>
-              </div>
-
-              <Button type="submit" className="w-full">
-                <Radio className="w-4 h-4 mr-2" aria-hidden="true" />
-                Assistir Live
-              </Button>
-            </form>
-
-            <div className="mt-6 p-4 bg-primary/5 rounded-lg flex items-center gap-3">
-              <Badge
-                variant="destructive"
-                className="animate-pulse gap-1.5"
-                style={{ backgroundColor: config?.cor_badge || "#ef4444" }}
-              >
-                <Radio className="h-3 w-3" aria-hidden="true" />
-                AO VIVO
-              </Badge>
-              <span className="text-sm font-medium">
-                {config?.titulo || "Transmissão ao Vivo"}
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 min-h-[calc(100vh-200px)]">
       {/* Layout com Chat quando ao vivo */}
-      {isLive && isRegistered ? (
+      {isLive ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
           {/* Coluna principal - Player */}
           <div className="lg:col-span-2">
@@ -368,15 +249,17 @@ export default function Live() {
                         <span className="hidden sm:inline"> assistindo</span>
                       </Badge>
                     )}
-                    <button
-                      onClick={handleTrocarNome}
-                      className="inline-flex items-center gap-1 text-xs shrink-0 max-w-[120px] sm:max-w-[150px] rounded-full border px-2.5 py-0.5 hover:bg-muted transition-colors"
-                      title="Trocar nome"
-                    >
-                      <User className="h-3 w-3 shrink-0" aria-hidden="true" />
-                      <span className="truncate">{nome}</span>
-                      <LogOut className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />
-                    </button>
+                    {nome ? (
+                      <button
+                        onClick={handleTrocarNome}
+                        className="inline-flex items-center gap-1 text-xs shrink-0 max-w-[120px] sm:max-w-[150px] rounded-full border px-2.5 py-0.5 hover:bg-muted transition-colors"
+                        title="Trocar nome"
+                      >
+                        <User className="h-3 w-3 shrink-0" aria-hidden="true" />
+                        <span className="truncate">{nome}</span>
+                        <LogOut className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />
+                      </button>
+                    ) : null}
                     <Badge
                       variant="destructive"
                       className="animate-pulse gap-1 text-xs shrink-0 whitespace-nowrap"
@@ -461,6 +344,7 @@ export default function Live() {
               nome={nome}
               email={email}
               isLive={isLive}
+              onNomeSet={handleNomeSet}
             />
           </div>
         </div>
