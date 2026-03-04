@@ -7,11 +7,21 @@ import {
   getEventosDestaque,
   type Evento,
 } from "@/services/eventoService";
+import {
+  getProgramacaoAtiva,
+  type Programacao,
+} from "@/services/programacaoService";
+import {
+  getDiasSemCultoDoMes,
+  type DiaSemCulto,
+} from "@/services/diasSemCultoService";
 
 export default function Eventos() {
   const [eventosFuturos, setEventosFuturos] = useState<Evento[]>([]);
   const [eventosDestaque, setEventosDestaque] = useState<Evento[]>([]);
   const [eventosDoMes, setEventosDoMes] = useState<Evento[]>([]);
+  const [programacao, setProgramacao] = useState<Programacao[]>([]);
+  const [diasSemCulto, setDiasSemCulto] = useState<DiaSemCulto[]>([]);
   const [loading, setLoading] = useState(true);
   const [mesAtual, setMesAtual] = useState(new Date());
   const [diaSelecionado, setDiaSelecionado] = useState<number | null>(null);
@@ -28,12 +38,14 @@ export default function Eventos() {
   const carregarEventos = async () => {
     try {
       setLoading(true);
-      const [futuros, destaques] = await Promise.all([
+      const [futuros, destaques, prog] = await Promise.all([
         getEventosFuturos(),
         getEventosDestaque(),
+        getProgramacaoAtiva(),
       ]);
       setEventosFuturos(futuros);
       setEventosDestaque(destaques);
+      setProgramacao(prog);
     } catch (error) {
       console.error("Erro ao carregar eventos:", error);
     } finally {
@@ -43,11 +55,12 @@ export default function Eventos() {
 
   const carregarEventosDoMes = async () => {
     try {
-      const eventos = await getEventosDoMes(
-        mesAtual.getFullYear(),
-        mesAtual.getMonth()
-      );
+      const [eventos, diasBloqueados] = await Promise.all([
+        getEventosDoMes(mesAtual.getFullYear(), mesAtual.getMonth()),
+        getDiasSemCultoDoMes(mesAtual.getFullYear(), mesAtual.getMonth()),
+      ]);
       setEventosDoMes(eventos);
+      setDiasSemCulto(diasBloqueados);
     } catch (error) {
       console.error("Erro ao carregar eventos do mês:", error);
     }
@@ -208,22 +221,55 @@ export default function Eventos() {
     };
   };
 
-  const getEventosDoDia = (dia: number) => {
+  const getEventosDoDia = (dia: number): Evento[] => {
     const anoAlvo = mesAtual.getFullYear();
     const mesAlvo = mesAtual.getMonth();
 
-    return eventosDoMes.filter((evento) => {
+    const eventosReais = eventosDoMes.filter((evento) => {
       const inicio = extrairDataISO(evento.data_inicio);
       const fim = evento.data_fim ? extrairDataISO(evento.data_fim) : inicio;
 
-      // Criar datas normalizadas para comparação (usando apenas ano/mês/dia)
       const dataAlvo = new Date(anoAlvo, mesAlvo, dia);
       const dataInicio = new Date(inicio.ano, inicio.mes, inicio.dia);
       const dataFim = new Date(fim.ano, fim.mes, fim.dia);
 
-      // Verificar se a data alvo está entre início e fim (inclusive)
       return dataAlvo >= dataInicio && dataAlvo <= dataFim;
     });
+
+    // Se tem eventos especiais, mostra só eles
+    if (eventosReais.length > 0) {
+      return eventosReais;
+    }
+
+    // Verificar se é um dia marcado como "sem culto"
+    const dataStr = `${anoAlvo}-${String(mesAlvo + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+    const isDiaSemCulto = diasSemCulto.some((d) => d.data === dataStr);
+    if (isDiaSemCulto) {
+      return [];
+    }
+
+    // Senão, preenche com os cultos regulares da programação
+    const dataAlvo = new Date(anoAlvo, mesAlvo, dia);
+    const diaSemana = dataAlvo.getDay(); // 0=Domingo, 1=Segunda, ...
+
+    const dataBase = `${anoAlvo}-${String(mesAlvo + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+    const cultosDoDia = programacao
+      .filter((p) => p.dia_semana === diaSemana)
+      .map((p): Evento => ({
+        id: `prog-${p.id}`,
+        titulo: p.titulo,
+        descricao: p.descricao,
+        data_inicio: `${dataBase}T01:23:00`,
+        data_fim: `${dataBase}T01:23:00`,
+        local: p.local,
+        tipo: p.horario,
+        destaque: false,
+        imagem_url: null,
+        cor: "#8b5cf6",
+        created_at: p.created_at,
+      }));
+
+    return cultosDoDia;
   };
 
   const temEventoNoDia = (dia: number) => {
@@ -630,7 +676,7 @@ export default function Eventos() {
                                     )}
                                     <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-600 dark:text-gray-300">
                                       <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-                                      <span>{formatarHorario(evento.data_inicio, evento.data_fim)}</span>
+                                      <span>{evento.id.startsWith("prog-") ? evento.tipo : formatarHorario(evento.data_inicio, evento.data_fim)}</span>
                                     </div>
                                   </div>
                                 ))}
@@ -760,7 +806,7 @@ export default function Eventos() {
                   )}
                   <div className="flex items-center gap-2 mt-3 text-sm text-gray-600 dark:text-gray-300">
                     <Clock className="w-4 h-4" aria-hidden="true" />
-                    <span>{formatarHorario(evento.data_inicio, evento.data_fim)}</span>
+                    <span>{evento.id.startsWith("prog-") ? evento.tipo : formatarHorario(evento.data_inicio, evento.data_fim)}</span>
                   </div>
                   {evento.local && (
                     <div className="flex items-center gap-2 mt-1 text-sm text-gray-600 dark:text-gray-300">

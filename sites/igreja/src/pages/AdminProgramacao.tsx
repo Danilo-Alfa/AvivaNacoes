@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash2, Edit, Clock, EyeOff } from "lucide-react";
+import { Trash2, Edit, Clock, EyeOff, CalendarOff } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import {
   getTodaProgramacao,
@@ -23,6 +23,12 @@ import {
   getNomeDiaSemana,
   type Programacao,
 } from "@/services/programacaoService";
+import {
+  getDiasSemCulto,
+  adicionarDiaSemCulto,
+  removerDiaSemCulto,
+  type DiaSemCulto,
+} from "@/services/diasSemCultoService";
 
 export default function AdminProgramacaoContent() {
   const [programacao, setProgramacao] = useState<Programacao[]>([]);
@@ -38,8 +44,14 @@ export default function AdminProgramacaoContent() {
   const [ordem, setOrdem] = useState(0);
   const [ativo, setAtivo] = useState(true);
 
+  // Dias sem culto
+  const [diasSemCulto, setDiasSemCulto] = useState<DiaSemCulto[]>([]);
+  const [novaDataSemCulto, setNovaDataSemCulto] = useState("");
+  const [novoMotivo, setNovoMotivo] = useState("");
+
   useEffect(() => {
     carregarProgramacao();
+    carregarDiasSemCulto();
   }, []);
 
   const carregarProgramacao = async () => {
@@ -132,6 +144,48 @@ export default function AdminProgramacaoContent() {
     } catch (error) {
       console.error("Erro ao deletar:", error);
       toast.error("Erro ao deletar atividade");
+    }
+  };
+
+  // Dias sem culto
+  const carregarDiasSemCulto = async () => {
+    try {
+      const data = await getDiasSemCulto();
+      setDiasSemCulto(data);
+    } catch (error) {
+      console.error("Erro ao carregar dias sem culto:", error);
+    }
+  };
+
+  const handleAdicionarDiaSemCulto = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!novaDataSemCulto) {
+      toast.error("Selecione uma data");
+      return;
+    }
+
+    try {
+      await adicionarDiaSemCulto(novaDataSemCulto, novoMotivo || null);
+      toast.success("Dia sem culto adicionado!");
+      setNovaDataSemCulto("");
+      setNovoMotivo("");
+      carregarDiasSemCulto();
+    } catch (error) {
+      console.error("Erro ao adicionar dia sem culto:", error);
+      toast.error("Erro ao adicionar dia sem culto");
+    }
+  };
+
+  const handleRemoverDiaSemCulto = async (id: string, data: string) => {
+    if (!confirm(`Remover o dia ${data} da lista de dias sem culto?`)) return;
+
+    try {
+      await removerDiaSemCulto(id);
+      toast.success("Dia sem culto removido!");
+      carregarDiasSemCulto();
+    } catch (error) {
+      console.error("Erro ao remover:", error);
+      toast.error("Erro ao remover dia sem culto");
     }
   };
 
@@ -255,6 +309,83 @@ export default function AdminProgramacaoContent() {
               )}
             </div>
           </form>
+        </CardContent>
+      </Card>
+
+      {/* Dias sem Culto */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CalendarOff className="w-5 h-5" />
+            Dias sem Culto
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            Marque datas específicas onde não haverá cultos regulares (ex: volta de congresso, feriados especiais).
+            Nesses dias, o calendário ficará vazio.
+          </p>
+
+          <form onSubmit={handleAdicionarDiaSemCulto} className="flex flex-col sm:flex-row gap-3 mb-6">
+            <div className="flex-1">
+              <Label htmlFor="dataSemCulto">Data</Label>
+              <Input
+                id="dataSemCulto"
+                type="date"
+                value={novaDataSemCulto}
+                onChange={(e) => setNovaDataSemCulto(e.target.value)}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <Label htmlFor="motivoSemCulto">Motivo (opcional)</Label>
+              <Input
+                id="motivoSemCulto"
+                value={novoMotivo}
+                onChange={(e) => setNovoMotivo(e.target.value)}
+                placeholder="Ex: Volta do congresso"
+              />
+            </div>
+            <div className="flex items-end">
+              <Button type="submit">Adicionar</Button>
+            </div>
+          </form>
+
+          {diasSemCulto.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-4">
+              Nenhum dia sem culto cadastrado
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {diasSemCulto.map((dia) => {
+                const [ano, mes, d] = dia.data.split("-");
+                const dataFormatada = `${d}/${mes}/${ano}`;
+                return (
+                  <div
+                    key={dia.id}
+                    className="border rounded-lg p-3 flex items-center justify-between gap-4 hover:bg-accent/50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <CalendarOff className="w-4 h-4 text-destructive" />
+                      <span className="font-medium">{dataFormatada}</span>
+                      {dia.motivo && (
+                        <span className="text-sm text-muted-foreground">
+                          — {dia.motivo}
+                        </span>
+                      )}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleRemoverDiaSemCulto(dia.id, dataFormatada)}
+                    >
+                      <Trash2 className="w-4 h-4 text-destructive" />
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </CardContent>
       </Card>
 
