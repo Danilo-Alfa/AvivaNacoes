@@ -34,6 +34,7 @@ interface LiveChatProps {
   email?: string;
   isLive: boolean;
   onNomeSet?: (nome: string) => void;
+  viewerCount?: number;
 }
 
 export default function LiveChat({
@@ -42,18 +43,16 @@ export default function LiveChat({
   email,
   isLive,
   onNomeSet,
+  viewerCount,
 }: LiveChatProps) {
   const [mensagens, setMensagens] = useState<ChatMensagem[]>([]);
   const [novaMensagem, setNovaMensagem] = useState("");
-  const [usersOnline, setUsersOnline] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
-  const [digitando, setDigitando] = useState<string[]>([]);
   const [nomeInput, setNomeInput] = useState("");
   const [nomeError, setNomeError] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const digitandoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Filtrar apenas mensagens de hoje
   const filtrarMensagensDeHoje = useCallback((msgs: ChatMensagem[]) => {
@@ -93,22 +92,6 @@ export default function LiveChat({
       setMensagens(filtrarMensagensDeHoje(msgs));
     };
 
-    const handleUsersOnline = (count: number) => {
-      setUsersOnline(count);
-    };
-
-    const handleUsuarioDigitando = (data: { nome: string }) => {
-      if (data.nome !== nome) {
-        setDigitando((prev) =>
-          prev.includes(data.nome) ? prev : [...prev, data.nome]
-        );
-      }
-    };
-
-    const handleUsuarioParouDigitar = (data: { nome: string }) => {
-      setDigitando((prev) => prev.filter((n) => n !== data.nome));
-    };
-
     const handleMensagemDeletada = (data: { mensagemId: string }) => {
       setMensagens((prev) => prev.filter((m) => m.id !== data.mensagemId));
     };
@@ -130,9 +113,6 @@ export default function LiveChat({
     chatClient.on("conectado", handleConectado);
     chatClient.on("mensagem", handleMensagem);
     chatClient.on("mensagens_anteriores", handleMensagensAnteriores);
-    chatClient.on("users_online", handleUsersOnline);
-    chatClient.on("usuario_digitando", handleUsuarioDigitando);
-    chatClient.on("usuario_parou_digitar", handleUsuarioParouDigitar);
     chatClient.on("mensagem_deletada", handleMensagemDeletada);
     chatClient.on("chat_limpo", handleChatLimpo);
     chatClient.on("desconectado", handleDesconectado);
@@ -158,16 +138,9 @@ export default function LiveChat({
     return () => {
       clearTimeout(checkConnection);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      // Limpar timeout de digitação para evitar memory leak
-      if (digitandoTimeoutRef.current) {
-        clearTimeout(digitandoTimeoutRef.current);
-      }
       chatClient.off("conectado", handleConectado);
       chatClient.off("mensagem", handleMensagem);
       chatClient.off("mensagens_anteriores", handleMensagensAnteriores);
-      chatClient.off("users_online", handleUsersOnline);
-      chatClient.off("usuario_digitando", handleUsuarioDigitando);
-      chatClient.off("usuario_parou_digitar", handleUsuarioParouDigitar);
       chatClient.off("mensagem_deletada", handleMensagemDeletada);
       chatClient.off("chat_limpo", handleChatLimpo);
       chatClient.off("desconectado", handleDesconectado);
@@ -199,27 +172,11 @@ export default function LiveChat({
       chatClient.enviarMensagem(texto);
     }
     setNovaMensagem("");
-    chatClient.parouDigitar();
-
     inputRef.current?.focus();
   };
 
-  // Indicador de digitação
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNovaMensagem(e.target.value);
-
-    // Emitir que está digitando
-    chatClient.digitando();
-
-    // Limpar timeout anterior
-    if (digitandoTimeoutRef.current) {
-      clearTimeout(digitandoTimeoutRef.current);
-    }
-
-    // Parar de digitar após 2 segundos sem atividade
-    digitandoTimeoutRef.current = setTimeout(() => {
-      chatClient.parouDigitar();
-    }, 2000);
   };
 
   // Formatar hora da mensagem
@@ -242,10 +199,12 @@ export default function LiveChat({
             <MessageCircle className="w-5 h-5" />
             Chat ao Vivo
           </CardTitle>
-          <Badge variant="secondary" className="gap-1">
-            <Users className="w-3 h-3" />
-            {usersOnline}
-          </Badge>
+          {viewerCount !== undefined && (
+            <Badge variant="secondary" className="gap-1">
+              <Users className="w-3 h-3" />
+              {viewerCount}
+            </Badge>
+          )}
         </div>
       </CardHeader>
 
@@ -306,14 +265,6 @@ export default function LiveChat({
               })
             )}
 
-            {/* Indicador de digitação */}
-            {digitando.length > 0 && (
-              <div className="text-xs text-muted-foreground italic">
-                {digitando.length === 1
-                  ? `${digitando[0]} está digitando...`
-                  : `${digitando.slice(0, 2).join(", ")}${digitando.length > 2 ? ` e mais ${digitando.length - 2}` : ""} estão digitando...`}
-              </div>
-            )}
           </div>
         </ScrollArea>
 

@@ -1,7 +1,7 @@
 import { Switch } from "@/components/ui/switch";
 import { getLiveStatus } from "@/services/liveService";
 import { asset } from "@/lib/image-utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import AudioPlayer from "@/components/AudioPlayer";
 import {
   BookOpen,
@@ -196,7 +196,7 @@ export default function Layout() {
   // Fecha menu mobile ao mudar de rota
   useEffect(() => {
     setMobileMenuOpen(false);
-  }, [location.pathname]);
+  }, [location.key]);
 
   // Bloqueia scroll do body quando menu mobile está aberto
   useEffect(() => {
@@ -234,59 +234,6 @@ export default function Layout() {
       }
     }
   }, [isDark]);
-
-  // Animações do Framer Motion
-  const menuVariants = {
-    closed: {
-      x: "100%",
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 40,
-      },
-    },
-    open: {
-      x: 0,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 40,
-      },
-    },
-  };
-
-  const overlayVariants = {
-    closed: { opacity: 0 },
-    open: { opacity: 1 },
-  };
-
-  const itemVariants = {
-    closed: { x: 20, opacity: 0 },
-    open: (i: number) => ({
-      x: 0,
-      opacity: 1,
-      transition: {
-        delay: i * 0.05,
-        type: "spring",
-        stiffness: 300,
-        damping: 24,
-      },
-    }),
-  };
-
-  const sectionVariants = {
-    closed: { y: 10, opacity: 0 },
-    open: (i: number) => ({
-      y: 0,
-      opacity: 1,
-      transition: {
-        delay: i * 0.1,
-        type: "spring",
-        stiffness: 300,
-        damping: 24,
-      },
-    }),
-  };
 
   return (
     <div className="min-h-screen bg-background font-sans">
@@ -406,30 +353,20 @@ export default function Layout() {
         </nav>
       </header>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            variants={overlayVariants}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden"
-          />
-        )}
-      </AnimatePresence>
+      {/* Mobile Menu Overlay - CSS puro para confiabilidade no mobile */}
+      <div
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden transition-opacity duration-300 ${
+          mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setMobileMenuOpen(false)}
+      />
 
-      {/* Mobile Menu Panel */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            variants={menuVariants}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            className="fixed top-0 right-0 bottom-0 w-[320px] sm:w-[380px] bg-white dark:bg-[#0e1219] z-50 lg:hidden flex flex-col overflow-hidden"
-          >
+      {/* Mobile Menu Panel - CSS puro para confiabilidade no mobile */}
+      <div
+        className={`fixed top-0 right-0 bottom-0 w-[320px] sm:w-[380px] bg-white dark:bg-[#0e1219] z-50 lg:hidden flex flex-col overflow-hidden transition-transform duration-300 ease-in-out ${
+          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
             {/* Header com gradiente azul profundo e elementos decorativos */}
             <div className="relative bg-gradient-to-br from-[#1a3352] via-[#1e3a5f] to-[#2d5a8a] pt-8 pb-20 px-6 overflow-hidden">
               {/* Círculos decorativos blur */}
@@ -442,14 +379,13 @@ export default function Layout() {
               </div>
 
               {/* Botão fechar */}
-              <motion.button
+              <button
                 onClick={() => setMobileMenuOpen(false)}
-                whileTap={{ scale: 0.9 }}
                 aria-label="Fechar menu de navegação"
                 className="absolute top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm transition-colors border border-white/20"
               >
                 <X className="w-5 h-5 text-white" aria-hidden="true" />
-              </motion.button>
+              </button>
 
               {/* Logo e mensagem de boas-vindas */}
               <div className="flex items-center gap-4 mb-4">
@@ -498,12 +434,8 @@ export default function Layout() {
             {/* Conteúdo scrollável */}
             <div className="flex-1 overflow-y-auto px-4 py-2">
               {mobileNavigationSections.map((section, sectionIndex) => (
-                <motion.div
+                <div
                   key={section.title}
-                  custom={sectionIndex}
-                  variants={sectionVariants}
-                  initial="closed"
-                  animate="open"
                   className="mb-5"
                 >
                   {/* Título da seção */}
@@ -513,88 +445,74 @@ export default function Layout() {
 
                   {/* Items da seção */}
                   <div className="space-y-1">
-                    {section.items.map((item, itemIndex) => {
+                    {section.items.map((item) => {
                       const Icon = item.icon;
                       const isActive = location.pathname === item.href;
-                      const globalIndex = sectionIndex * 10 + itemIndex;
                       const isLiveItem =
                         "isLiveItem" in item && item.isLiveItem;
                       const hasNewBadge =
                         "hasNewBadge" in item && item.hasNewBadge;
 
                       return (
-                        <motion.div
+                        <Link
                           key={item.href}
-                          custom={globalIndex}
-                          variants={itemVariants}
-                          initial="closed"
-                          animate="open"
+                          to={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${
+                            isActive
+                              ? "bg-primary/10 dark:bg-primary/20"
+                              : "hover:bg-secondary/50"
+                          }`}
                         >
-                          <Link
-                            to={item.href}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${
+                          {/* Ícone em container colorido */}
+                          <div
+                            className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center shadow-md`}
+                          >
+                            <Icon className="w-5 h-5 text-white" aria-hidden="true" />
+                          </div>
+
+                          {/* Nome do item */}
+                          <span
+                            className={`flex-1 font-medium ${
                               isActive
-                                ? "bg-primary/10 dark:bg-primary/20"
-                                : "hover:bg-secondary/50"
+                                ? "text-primary dark:text-blue-400"
+                                : "text-foreground"
                             }`}
                           >
-                            {/* Ícone em container colorido */}
-                            <div
-                              className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center shadow-md`}
-                            >
-                              <Icon className="w-5 h-5 text-white" aria-hidden="true" />
-                            </div>
+                            {item.name}
+                          </span>
 
-                            {/* Nome do item */}
-                            <span
-                              className={`flex-1 font-medium ${
-                                isActive
-                                  ? "text-primary dark:text-blue-400"
-                                  : "text-foreground"
-                              }`}
-                            >
-                              {item.name}
+                          {/* Badge AO VIVO pulsante */}
+                          {isLiveItem && isLiveActive && (
+                            <span className="px-2 py-1 text-[10px] font-bold text-white bg-red-500 rounded-full flex items-center gap-1.5 shadow-md shadow-red-500/30">
+                              <span className="relative flex h-1.5 w-1.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white" />
+                              </span>
+                              AO VIVO
                             </span>
+                          )}
 
-                            {/* Badge AO VIVO pulsante */}
-                            {isLiveItem && isLiveActive && (
-                              <span className="px-2 py-1 text-[10px] font-bold text-white bg-red-500 rounded-full flex items-center gap-1.5 shadow-md shadow-red-500/30">
-                                <span className="relative flex h-1.5 w-1.5">
-                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-                                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white" />
-                                </span>
-                                AO VIVO
-                              </span>
-                            )}
+                          {/* Badge NOVO */}
+                          {hasNewBadge && (
+                            <span className="px-2 py-1 text-[10px] font-bold text-white bg-gradient-to-r from-accent to-amber-500 rounded-full shadow-md shadow-accent/30">
+                              NOVO
+                            </span>
+                          )}
 
-                            {/* Badge NOVO */}
-                            {hasNewBadge && (
-                              <span className="px-2 py-1 text-[10px] font-bold text-white bg-gradient-to-r from-accent to-amber-500 rounded-full shadow-md shadow-accent/30">
-                                NOVO
-                              </span>
-                            )}
-
-                            {/* Indicador ativo */}
-                            {isActive && (
-                              <div className="w-2 h-2 rounded-full bg-primary dark:bg-blue-400" />
-                            )}
-                          </Link>
-                        </motion.div>
+                          {/* Indicador ativo */}
+                          {isActive && (
+                            <div className="w-2 h-2 rounded-full bg-primary dark:bg-blue-400" />
+                          )}
+                        </Link>
                       );
                     })}
                   </div>
-                </motion.div>
+                </div>
               ))}
 
               {/* Card CTA decorativo */}
-              <motion.div
-                custom={50}
-                variants={itemVariants}
-                initial="closed"
-                animate="open"
-                className="mt-4 mb-6"
-              >
+              <div className="mt-4 mb-6">
                 <div className="relative overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-5 border border-amber-200/50 dark:border-amber-700/30">
                   {/* Decoração de fundo */}
                   <div className="absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-br from-accent/20 to-amber-400/20 rounded-full blur-2xl" />
@@ -613,7 +531,7 @@ export default function Layout() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
 
             {/* Footer com toggle de tema estilo switch */}
@@ -642,9 +560,7 @@ export default function Layout() {
                 />
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
 
       {/* Layout com Sidebar */}
       <div className="flex pt-[68px]">

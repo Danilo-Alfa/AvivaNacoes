@@ -98,7 +98,7 @@ export default function AudioPlayer() {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0, opacity: 0 }}
         onClick={() => setIsMinimized(false)}
-        className="fixed bottom-4 right-4 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg shadow-primary/30 flex items-center justify-center hover:scale-105 transition-transform"
+        className="fixed bottom-4 right-4 z-40 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg shadow-primary/30 flex items-center justify-center hover:scale-105 transition-transform"
         aria-label="Abrir player de rádio"
       >
         <Radio className="w-6 h-6" />
@@ -117,7 +117,7 @@ export default function AudioPlayer() {
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
-        className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 z-50"
+        className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 z-40"
       >
         <div className="relative bg-white dark:bg-[#1a1f2e] rounded-2xl shadow-2xl shadow-black/20 dark:shadow-black/40 border border-border/50 overflow-hidden">
           {/* Barra decorativa no topo */}

@@ -22,6 +22,9 @@ export default function HlsPlayer({
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(false);
   const [showControls, setShowControls] = useState(true);
+  const [showQualityMenu, setShowQualityMenu] = useState(false);
+  const [qualityLevels, setQualityLevels] = useState<{ height: number; index: number }[]>([]);
+  const [currentQuality, setCurrentQuality] = useState(-1); // -1 = auto
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Refs para callbacks (evitar re-criação do hls)
@@ -77,6 +80,14 @@ export default function HlsPlayer({
     }
   }, []);
 
+  const setQuality = useCallback((levelIndex: number) => {
+    const hls = hlsRef.current;
+    if (!hls) return;
+    hls.currentLevel = levelIndex; // -1 = auto
+    setCurrentQuality(levelIndex);
+    setShowQualityMenu(false);
+  }, []);
+
   // Auto-hide controles
   const resetHideTimer = useCallback(() => {
     setShowControls(true);
@@ -84,6 +95,7 @@ export default function HlsPlayer({
     hideTimerRef.current = setTimeout(() => {
       if (!videoRef.current?.paused) {
         setShowControls(false);
+        setShowQualityMenu(false);
       }
     }, 3000);
   }, []);
@@ -125,6 +137,20 @@ export default function HlsPlayer({
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         setLoading(false);
         console.log("[HlsPlayer] Manifest parsed, stream pronto");
+
+        // Capturar níveis de qualidade disponíveis
+        const levels = hls.levels
+          .map((level, index) => ({ height: level.height, index }))
+          .filter((l) => l.height > 0);
+        // Remover duplicatas por altura
+        const unique = levels.filter(
+          (l, i, arr) => arr.findIndex((x) => x.height === l.height) === i
+        );
+        unique.sort((a, b) => b.height - a.height);
+        setQualityLevels(unique);
+        setCurrentQuality(-1);
+        console.log("[HlsPlayer] Qualidades disponíveis:", unique);
+
         onReadyRef.current?.();
         if (autoPlay) {
           video.play().catch((e) => {
@@ -324,16 +350,56 @@ export default function HlsPlayer({
               </button>
             </div>
 
-            {/* Direita: Fullscreen */}
-            <button
-              onClick={toggleFullscreen}
-              className="text-white hover:text-white/80 transition-colors"
-              aria-label="Tela cheia"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
-              </svg>
-            </button>
+            {/* Direita: Qualidade + Fullscreen */}
+            <div className="flex items-center gap-3">
+              {/* Seletor de qualidade */}
+              {qualityLevels.length > 1 && (
+                <div className="relative">
+                  <button
+                    onClick={() => setShowQualityMenu((v) => !v)}
+                    className="text-white hover:text-white/80 transition-colors text-xs font-bold px-1.5 py-0.5 border border-white/40 rounded"
+                    aria-label="Qualidade"
+                  >
+                    {currentQuality === -1
+                      ? "Auto"
+                      : `${qualityLevels.find((l) => l.index === currentQuality)?.height}p`}
+                  </button>
+                  {showQualityMenu && (
+                    <div className="absolute bottom-full right-0 mb-2 bg-black/90 rounded-lg overflow-hidden min-w-[100px] shadow-lg">
+                      <button
+                        onClick={() => setQuality(-1)}
+                        className={`w-full text-left px-3 py-2 text-xs text-white hover:bg-white/20 transition-colors ${
+                          currentQuality === -1 ? "bg-white/10 font-bold" : ""
+                        }`}
+                      >
+                        Auto
+                      </button>
+                      {qualityLevels.map((level) => (
+                        <button
+                          key={level.index}
+                          onClick={() => setQuality(level.index)}
+                          className={`w-full text-left px-3 py-2 text-xs text-white hover:bg-white/20 transition-colors ${
+                            currentQuality === level.index ? "bg-white/10 font-bold" : ""
+                          }`}
+                        >
+                          {level.height}p
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <button
+                onClick={toggleFullscreen}
+                className="text-white hover:text-white/80 transition-colors"
+                aria-label="Tela cheia"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       )}

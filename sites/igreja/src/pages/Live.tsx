@@ -366,6 +366,7 @@ export default function Live() {
               email={email}
               isLive={isLive}
               onNomeSet={handleNomeSet}
+              viewerCount={viewers}
             />
           </div>
         </div>

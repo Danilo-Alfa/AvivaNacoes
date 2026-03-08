@@ -13,3 +13,4 @@ const updateSW = registerSW({
 });
 
 createRoot(document.getElementById("root")!).render(<App />);
+
