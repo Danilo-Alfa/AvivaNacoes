@@ -208,19 +208,20 @@ export default function Home() {
   return (
     <div className="min-h-[calc(100vh-200px)]">
       {/* Hero Section - Banner */}
-      <section className="relative min-h-[300px] md:min-h-[75vh] md:max-h-[800px] overflow-hidden">
+      <section className="relative md:min-h-[75vh] md:max-h-[800px] overflow-hidden">
         <picture>
-          {/* WebP para navegadores modernos */}
+          {/* Mobile: banner dos apóstolos (imagem inteira, sem corte) */}
           <source
             media="(max-width: 768px)"
-            srcSet={asset("backgrounds/hero-bg-mobile.webp")}
-            type="image/webp"
+            srcSet={asset("backgrounds/hero-bg-apostolos-mobile.png")}
+            type="image/png"
           />
+          {/* Desktop: WebP */}
           <source
             srcSet={asset("backgrounds/hero-bg.webp")}
             type="image/webp"
           />
-          {/* Fallback JPG */}
+          {/* Fallback JPG (desktop) */}
           <img
             src={asset("backgrounds/hero-bg.jpg")}
             alt="Igreja Avivamento para as Nações"
@@ -229,7 +230,7 @@ export default function Home() {
             // @ts-expect-error fetchpriority is a valid HTML attribute
             fetchpriority="high"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-[60%_top] md:object-[center_top]"
+            className="w-full h-auto md:absolute md:inset-0 md:h-full md:object-cover md:object-[center_top]"
           />
         </picture>
       </section>
