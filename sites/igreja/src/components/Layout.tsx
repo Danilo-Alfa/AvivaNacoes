@@ -808,7 +808,7 @@ export default function Layout() {
       </footer>
 
       {/* Player de Rádio - escondido na página de live para não sobrepor o chat */}
-      {mobileMenuOpen === false && location.pathname !== "/live" && <AudioPlayer />}
+      {location.pathname !== "/live" && <AudioPlayer />}
     </div>
   );
 }
