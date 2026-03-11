@@ -101,17 +101,23 @@ rtmp {
 
         application live {
             live on;
-            record off;
+
+            # Gravar lives automaticamente
+            record all;
+            record_path /var/www/html/recordings;
+            record_unique on;
+            record_suffix _%Y%m%d_%H%M%S.flv;
+            exec_record_done /usr/local/bin/convert-recording.sh $path;
 
             # Permitir apenas de IPs específicos (adicione o IP do pastor)
             # allow publish 192.168.1.100;
             # deny publish all;
 
-            # Converter para HLS
+            # Converter para HLS (low latency)
             hls on;
             hls_path /var/www/html/live;
-            hls_fragment 3;
-            hls_playlist_length 60;
+            hls_fragment 1;
+            hls_playlist_length 4;
 
             # Habilitar DASH (opcional)
             dash on;
@@ -164,6 +170,17 @@ http {
             add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS' always;
             add_header Access-Control-Allow-Headers 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range' always;
             add_header Access-Control-Expose-Headers 'Content-Length,Content-Range' always;
+        }
+
+        # Listar e servir gravações
+        location /recordings {
+            root /var/www/html;
+            autoindex on;
+            autoindex_format json;
+            add_header Cache-Control no-cache;
+            add_header Access-Control-Allow-Origin * always;
+            add_header Access-Control-Allow-Methods 'GET, OPTIONS' always;
+            add_header Access-Control-Allow-Headers '*' always;
         }
 
         # Servir streams DASH (opcional)

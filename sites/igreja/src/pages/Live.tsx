@@ -14,8 +14,28 @@ import {
 } from "@/services/liveService";
 import HlsPlayer from "@/components/HlsPlayer";
 import { contemProfanidade } from "@/lib/profanityFilter";
-import { Loader2, LogOut, Radio, User, Users } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { Loader2, LogOut, Play, Radio, User, Users, Video } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+interface Recording {
+  name: string;
+  mtime: string;
+  size: number;
+}
+
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(0)} MB`;
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+}
+
+function formatRecordingDate(filename: string): string {
+  // stream_20260311_193000.mp4 → "11/03/2026 às 19:30"
+  const match = filename.match(/(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/);
+  if (!match) return filename;
+  const [, year, month, day, hour, min] = match;
+  return `${day}/${month}/${year} às ${hour}:${min}`;
+}
 
 const PALAVRAS_PROIBIDAS = [
   "puta", "puto", "viado", "buceta", "pau", "piroca", "cu", "merda",
@@ -59,12 +79,34 @@ export default function Live() {
   const [email, setEmail] = useState(localStorage.getItem("live_viewer_email") || "");
   const [sessionId, setSessionId] = useState<string>("");
 
+  const [recordings, setRecordings] = useState<Recording[]>([]);
+  const [loadingRecordings, setLoadingRecordings] = useState(false);
+  const [playingVideo, setPlayingVideo] = useState<string | null>(null);
+  const videoPlayerRef = useRef<HTMLVideoElement>(null);
+
   const streamUrl = config?.url_stream || import.meta.env.VITE_STREAM_URL || "";
+  const serverBaseUrl = streamUrl.replace(/\/live\/.*$/, "");
 
   // Log para debug
   console.log("Stream URL:", streamUrl);
   console.log("Config:", config);
   console.log("Env VITE_STREAM_URL:", import.meta.env.VITE_STREAM_URL);
+
+  // Carregar gravações quando offline
+  useEffect(() => {
+    if (isLive || !serverBaseUrl) return;
+    setLoadingRecordings(true);
+    fetch(`${serverBaseUrl}/recordings/`)
+      .then((res) => res.json())
+      .then((files: { name: string; mtime: string; size: number }[]) => {
+        const mp4s = files
+          .filter((f) => f.name.endsWith(".mp4"))
+          .sort((a, b) => new Date(b.mtime).getTime() - new Date(a.mtime).getTime());
+        setRecordings(mp4s);
+      })
+      .catch(() => setRecordings([]))
+      .finally(() => setLoadingRecordings(false));
+  }, [isLive, serverBaseUrl]);
 
   // Detectar se está em HTTPS e stream é HTTP (mixed content)
   const isHttps = window.location.protocol === "https:";
@@ -451,6 +493,71 @@ export default function Live() {
                 </div>
               </div>
             </div>
+
+            {/* Gravações anteriores */}
+            {loadingRecordings ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              </div>
+            ) : recordings.length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Video className="h-5 w-5 text-primary" />
+                  <h3 className="text-lg font-semibold">Transmissões Anteriores</h3>
+                </div>
+
+                {/* Player da gravação selecionada */}
+                {playingVideo && (
+                  <div className="space-y-2">
+                    <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                      <video
+                        ref={videoPlayerRef}
+                        src={`${serverBaseUrl}/recordings/${playingVideo}`}
+                        controls
+                        autoPlay
+                        className="w-full h-full"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-muted-foreground">
+                        {formatRecordingDate(playingVideo)}
+                      </p>
+                      <button
+                        onClick={() => setPlayingVideo(null)}
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        Fechar player
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Lista de gravações */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {recordings.map((rec) => (
+                    <button
+                      key={rec.name}
+                      onClick={() => setPlayingVideo(rec.name)}
+                      className={`flex items-center gap-3 p-3 rounded-lg border text-left transition-colors hover:bg-accent ${
+                        playingVideo === rec.name ? "border-primary bg-primary/5" : ""
+                      }`}
+                    >
+                      <div className="shrink-0 h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Play className="h-4 w-4 text-primary" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium truncate">
+                          {formatRecordingDate(rec.name)}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {formatFileSize(rec.size)}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Seção de informações adicionais */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

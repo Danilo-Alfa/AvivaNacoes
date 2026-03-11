@@ -116,18 +116,19 @@ export default function HlsPlayer({
       const hls = new Hls({
         enableWorker: true,
         lowLatencyMode: true,
-        liveSyncDurationCount: 3,
-        liveMaxLatencyDurationCount: 10,
+        liveSyncDurationCount: 2,
+        liveMaxLatencyDurationCount: 3,
         liveDurationInfinity: true,
-        maxBufferLength: 30,
-        maxMaxBufferLength: 60,
-        maxBufferHole: 0.5,
+        maxBufferLength: 4,
+        maxMaxBufferLength: 8,
+        maxBufferHole: 0.3,
+        backBufferLength: 0,
         manifestLoadingMaxRetry: 10,
-        manifestLoadingRetryDelay: 1000,
+        manifestLoadingRetryDelay: 500,
         levelLoadingMaxRetry: 10,
-        levelLoadingRetryDelay: 1000,
+        levelLoadingRetryDelay: 500,
         fragLoadingMaxRetry: 10,
-        fragLoadingRetryDelay: 1000,
+        fragLoadingRetryDelay: 500,
       });
 
       hlsRef.current = hls;
