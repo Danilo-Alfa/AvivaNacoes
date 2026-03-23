@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Church,
   FolderKanban,
+  GraduationCap,
   Heart,
   Home,
   Image,
@@ -89,6 +90,18 @@ const mobileNavigationSections = [
     ],
   },
   {
+    title: "Formação",
+    items: [
+      {
+        name: "Escola Aviva",
+        href: "https://escola-aviva-nacoes.vercel.app",
+        icon: GraduationCap,
+        color: "bg-violet-600",
+        isExternal: true,
+      },
+    ],
+  },
+  {
     title: "Devocional",
     items: [
       {
@@ -138,6 +151,12 @@ const sidebarSections = [
       { name: "FOTOS", href: "/galerias", icon: Image },
       { name: "EVENTOS", href: "/eventos", icon: Calendar, hasNewBadge: true },
       { name: "VÍDEOS", href: "/videos", icon: Video },
+    ],
+  },
+  {
+    title: "FORMAÇÃO",
+    items: [
+      { name: "ESCOLA AVIVA", href: "https://escola-aviva-nacoes.vercel.app", icon: GraduationCap, isExternal: true },
     ],
   },
   {
@@ -452,18 +471,17 @@ export default function Layout() {
                         "isLiveItem" in item && item.isLiveItem;
                       const hasNewBadge =
                         "hasNewBadge" in item && item.hasNewBadge;
+                      const isExternal =
+                        "isExternal" in item && item.isExternal;
 
-                      return (
-                        <Link
-                          key={item.href}
-                          to={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${
-                            isActive
-                              ? "bg-primary/10 dark:bg-primary/20"
-                              : "hover:bg-secondary/50"
-                          }`}
-                        >
+                      const linkClass = `flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${
+                        isActive
+                          ? "bg-primary/10 dark:bg-primary/20"
+                          : "hover:bg-secondary/50"
+                      }`;
+
+                      const linkContent = (
+                        <>
                           {/* Ícone em container colorido */}
                           <div
                             className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center shadow-md`}
@@ -504,6 +522,28 @@ export default function Layout() {
                           {isActive && (
                             <div className="w-2 h-2 rounded-full bg-primary dark:bg-blue-400" />
                           )}
+                        </>
+                      );
+
+                      return isExternal ? (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={linkClass}
+                        >
+                          {linkContent}
+                        </a>
+                      ) : (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={linkClass}
+                        >
+                          {linkContent}
                         </Link>
                       );
                     })}
@@ -621,12 +661,18 @@ export default function Layout() {
                     const isLiveItem = "isLiveItem" in item && item.isLiveItem;
                     const hasNewBadge =
                       "hasNewBadge" in item && item.hasNewBadge;
-                    const isActive = location.pathname === item.href;
+                    const isExternal = "isExternal" in item && item.isExternal;
+                    const isActive = !isExternal && location.pathname === item.href;
+
+                    const SidebarLink = isExternal ? "a" : Link;
+                    const linkProps = isExternal
+                      ? { href: item.href, target: "_blank", rel: "noopener noreferrer" }
+                      : { to: item.href };
 
                     return (
-                      <Link
+                      <SidebarLink
                         key={item.name}
-                        to={item.href}
+                        {...linkProps as any}
                         className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${
                           !sidebarOpen && "justify-center px-0"
                         } ${
@@ -710,7 +756,7 @@ export default function Layout() {
                             <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 w-2 h-2 bg-foreground rotate-45" />
                           </div>
                         )}
-                      </Link>
+                      </SidebarLink>
                     );
                   })}
                 </div>

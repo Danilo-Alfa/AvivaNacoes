@@ -1,8 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Pause, Play, Volume2, VolumeX, Radio, X } from "lucide-react";
+import { Pause, Play, Volume2, VolumeX, Radio, X, MessageCircle } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 const STREAM_URL = "https://cast4.hoost.com.br:8207/stream";
+const WHATSAPP_NUMBER = "5511930008592";
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Olá! Estou ouvindo a Rádio Aviva! 📻")}`;
 
 export default function AudioPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -10,7 +12,7 @@ export default function AudioPlayer() {
   const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
   const [isMinimized, setIsMinimized] = useState(true);
-  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -212,7 +214,6 @@ export default function AudioPlayer() {
               <div className="flex-1 flex items-center gap-2">
                 <button
                   onClick={toggleMute}
-                  onMouseEnter={() => setShowVolumeSlider(true)}
                   className="w-10 h-10 rounded-xl bg-secondary/50 hover:bg-secondary flex items-center justify-center transition-colors"
                   aria-label={isMuted ? "Ativar som" : "Silenciar"}
                 >
@@ -224,38 +225,34 @@ export default function AudioPlayer() {
                 </button>
 
                 {/* Slider de volume */}
-                <div
-                  className="flex-1 relative"
-                  onMouseEnter={() => setShowVolumeSlider(true)}
-                  onMouseLeave={() => setShowVolumeSlider(false)}
-                >
-                  <AnimatePresence>
-                    {(showVolumeSlider || isPlaying) && (
-                      <motion.div
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "100%" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        className="overflow-hidden"
-                      >
-                        <input
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.01"
-                          value={isMuted ? 0 : volume}
-                          onChange={handleVolumeChange}
-                          className="w-full h-2 bg-secondary rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-primary [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
-                          style={{
-                            background: `linear-gradient(to right, hsl(var(--primary)) ${(isMuted ? 0 : volume) * 100}%, hsl(var(--secondary)) ${(isMuted ? 0 : volume) * 100}%)`,
-                          }}
-                          aria-label="Volume"
-                        />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                <div className="flex-1">
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={isMuted ? 0 : volume}
+                    onChange={handleVolumeChange}
+                    className="w-full h-2 bg-secondary rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-primary [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
+                    style={{
+                      background: `linear-gradient(to right, hsl(var(--primary)) ${(isMuted ? 0 : volume) * 100}%, hsl(var(--secondary)) ${(isMuted ? 0 : volume) * 100}%)`,
+                    }}
+                    aria-label="Volume"
+                  />
                 </div>
               </div>
             </div>
+
+            {/* Botão WhatsApp */}
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 mt-3 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-sm font-semibold rounded-xl transition-colors shadow-md shadow-[#25D366]/30"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Enviar mensagem para a rádio
+            </a>
           </div>
         </div>
       </motion.div>
