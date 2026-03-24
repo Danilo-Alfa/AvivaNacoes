@@ -200,11 +200,11 @@ export default function DesktopSidebar({
               AN
             </div>
             <div>
+              <p className="text-xs text-muted-foreground">
+                Igreja Evangelica
+              </p>
               <p className="text-xs font-semibold text-foreground">
                 Avivamento para as Nações
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Igreja Cristã • 2026
               </p>
             </div>
           </div>
