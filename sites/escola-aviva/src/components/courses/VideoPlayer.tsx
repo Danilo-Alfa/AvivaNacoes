@@ -222,14 +222,14 @@ export function VideoPlayer({
         <div className="space-y-1">
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>Progresso de visualização</span>
-            <span className={isComplete ? "text-green-600 font-medium" : ""}>
+            <span className={isComplete ? "text-green-500 font-medium" : ""}>
               {Math.round(currentPercentage)}% {isComplete && "✓ Completo"}
             </span>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 bg-muted rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-300 ${
-                isComplete ? 'bg-green-500' : 'bg-blue-500'
+                isComplete ? 'bg-green-500' : 'bg-primary'
               }`}
               style={{ width: `${Math.min(currentPercentage, 100)}%` }}
             />

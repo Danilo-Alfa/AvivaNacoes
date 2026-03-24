@@ -65,12 +65,12 @@ export function QuizModal({
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <Loader2 className="w-8 h-8 animate-spin text-aviva-blue" />
-              <p className="text-sm text-gray-500 mt-2">Carregando perguntas...</p>
+              <p className="text-sm text-muted-foreground mt-2">Carregando perguntas...</p>
             </div>
           ) : error ? (
             <div className="text-center py-12">
-              <p className="text-red-600">Erro ao carregar perguntas.</p>
-              <p className="text-sm text-gray-500">
+              <p className="text-destructive">Erro ao carregar perguntas.</p>
+              <p className="text-sm text-muted-foreground">
                 Tente fechar e abrir novamente.
               </p>
             </div>
@@ -84,7 +84,7 @@ export function QuizModal({
             />
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 Nenhuma pergunta encontrada para esta aula.
               </p>
             </div>

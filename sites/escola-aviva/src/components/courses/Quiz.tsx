@@ -64,7 +64,7 @@ export function Quiz({
     <div className="space-y-4 sm:space-y-6">
       {/* Header com progresso */}
       <div className="space-y-2">
-        <div className="flex justify-between text-xs sm:text-sm text-gray-600">
+        <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
           <span>Progresso do Quiz</span>
           <span>
             {answeredCount} de {questions.length} respondidas
@@ -78,34 +78,34 @@ export function Quiz({
         <div
           className={`p-4 sm:p-6 rounded-lg border-2 ${
             result.passed
-              ? 'bg-green-50 border-green-200'
-              : 'bg-red-50 border-red-200'
+              ? 'bg-green-500/10 border-green-500/20'
+              : 'bg-destructive/10 border-destructive/20'
           }`}
         >
           <div className="flex items-start sm:items-center gap-3 sm:gap-4">
             {result.passed ? (
-              <CheckCircle2 className="w-8 h-8 sm:w-12 sm:h-12 text-green-600 flex-shrink-0" />
+              <CheckCircle2 className="w-8 h-8 sm:w-12 sm:h-12 text-green-500 flex-shrink-0" />
             ) : (
-              <XCircle className="w-8 h-8 sm:w-12 sm:h-12 text-red-600 flex-shrink-0" />
+              <XCircle className="w-8 h-8 sm:w-12 sm:h-12 text-destructive flex-shrink-0" />
             )}
             <div className="min-w-0">
               <h3
                 className={`text-lg sm:text-xl font-bold ${
-                  result.passed ? 'text-green-800' : 'text-red-800'
+                  result.passed ? 'text-green-600 dark:text-green-400' : 'text-destructive'
                 }`}
               >
                 {result.passed ? 'Parabens!' : 'Quase la!'}
               </h3>
               <p
                 className={`text-xs sm:text-sm ${
-                  result.passed ? 'text-green-700' : 'text-red-700'
+                  result.passed ? 'text-green-600 dark:text-green-400' : 'text-destructive/80'
                 }`}
               >
                 Voce acertou {result.correct_answers} de {result.total_questions}{' '}
                 perguntas ({result.percentage}%)
               </p>
               {!result.passed && (
-                <p className="text-xs sm:text-sm text-red-600 mt-1">
+                <p className="text-xs sm:text-sm text-destructive mt-1">
                   Voce precisa de pelo menos 70% para avancar. Tente novamente!
                 </p>
               )}

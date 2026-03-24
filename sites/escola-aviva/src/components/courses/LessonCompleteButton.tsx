@@ -52,7 +52,7 @@ export function LessonCompleteButton({
       <Button
         variant="outline"
         disabled
-        className="gap-2 text-green-600 border-green-200 bg-green-50"
+        className="gap-2 text-green-600 dark:text-green-400 border-green-500/20 bg-green-500/10"
       >
         <CheckCircle2 className="w-4 h-4" />
         Aula Concluida

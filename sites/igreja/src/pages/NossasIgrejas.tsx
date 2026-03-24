@@ -79,23 +79,23 @@ function groupByCountry(igrejas: Igreja[]): IgrejaSection[] {
 
 function IgrejaCardSkeleton() {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-      <div className="aspect-video bg-gray-200 dark:bg-gray-700 animate-pulse" />
+    <div className="bg-card rounded-lg shadow overflow-hidden">
+      <div className="aspect-video bg-muted animate-pulse" />
       <div className="p-6 space-y-4">
-        <div className="h-6 w-3/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        <div className="h-6 w-3/4 bg-muted rounded animate-pulse" />
         <div className="space-y-3">
           <div className="flex items-start gap-3">
-            <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse flex-shrink-0" />
+            <div className="w-5 h-5 bg-muted rounded animate-pulse flex-shrink-0" />
             <div className="flex-1 space-y-1">
-              <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-              <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              <div className="h-4 w-20 bg-muted rounded animate-pulse" />
+              <div className="h-3 w-full bg-muted rounded animate-pulse" />
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse flex-shrink-0" />
+            <div className="w-5 h-5 bg-muted rounded animate-pulse flex-shrink-0" />
             <div className="flex-1 space-y-1">
-              <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-              <div className="h-3 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              <div className="h-4 w-20 bg-muted rounded animate-pulse" />
+              <div className="h-3 w-32 bg-muted rounded animate-pulse" />
             </div>
           </div>
         </div>

@@ -264,8 +264,8 @@ export default function Layout() {
         <nav
           className={`transition-all duration-300 ${
             scrolled
-              ? "bg-white/95 dark:bg-[#0e1219]/95 backdrop-blur-lg shadow-[0_4px_20px_-5px_hsl(var(--primary)/0.15)]"
-              : "bg-white dark:bg-[#0e1219]"
+              ? "bg-nav/95 dark:bg-nav-dark/95 backdrop-blur-lg shadow-medium"
+              : "bg-nav dark:bg-nav-dark"
           }`}
         >
           <div className="container mx-auto px-4">
@@ -382,12 +382,12 @@ export default function Layout() {
 
       {/* Mobile Menu Panel - CSS puro para confiabilidade no mobile */}
       <div
-        className={`fixed top-0 right-0 bottom-0 w-[320px] sm:w-[380px] bg-white dark:bg-[#0e1219] z-50 lg:hidden flex flex-col overflow-hidden transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 bottom-0 w-80 sm:w-96 bg-nav dark:bg-nav-dark z-50 lg:hidden flex flex-col overflow-hidden transition-transform duration-300 ease-in-out ${
           mobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
             {/* Header com gradiente azul profundo e elementos decorativos */}
-            <div className="relative bg-gradient-to-br from-[#1a3352] via-[#1e3a5f] to-[#2d5a8a] pt-8 pb-20 px-6 overflow-hidden">
+            <div className="relative bg-gradient-to-br from-[hsl(var(--menu-gradient-from))] via-[hsl(var(--menu-gradient-via))] to-[hsl(var(--menu-gradient-to))] pt-8 pb-20 px-6 overflow-hidden">
               {/* Círculos decorativos blur */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-400/20 rounded-full blur-3xl" />
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-accent/20 rounded-full blur-2xl" />

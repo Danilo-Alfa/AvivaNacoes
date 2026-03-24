@@ -6,27 +6,27 @@ import { getProjetosAtivos, type Projeto } from "@/services/projetoService";
 // Skeleton para um card de projeto - mantém o mesmo tamanho do card real
 function ProjetoCardSkeleton({ index }: { index: number }) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+    <div className="bg-card rounded-lg shadow overflow-hidden">
       <div className={`grid md:grid-cols-2 gap-0 ${index % 2 === 1 ? "md:grid-flow-dense" : ""}`}>
         {/* Imagem Skeleton */}
         <div
-          className={`aspect-video md:aspect-auto min-h-[200px] md:min-h-[300px] bg-gray-200 dark:bg-gray-700 animate-pulse ${index % 2 === 1 ? "md:col-start-2" : ""}`}
+          className={`aspect-video md:aspect-auto min-h-[200px] md:min-h-[300px] bg-muted animate-pulse ${index % 2 === 1 ? "md:col-start-2" : ""}`}
         />
         {/* Conteúdo Skeleton */}
         <div
           className={`p-8 flex flex-col justify-center space-y-4 ${index % 2 === 1 ? "md:col-start-1 md:row-start-1" : ""}`}
         >
-          <div className="h-6 w-24 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
-          <div className="h-10 w-3/4 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+          <div className="h-6 w-24 bg-muted rounded-full animate-pulse" />
+          <div className="h-10 w-3/4 bg-muted rounded-lg animate-pulse" />
           <div className="space-y-2">
-            <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-            <div className="h-4 w-5/6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-            <div className="h-4 w-4/6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+            <div className="h-4 w-full bg-muted rounded animate-pulse" />
+            <div className="h-4 w-5/6 bg-muted rounded animate-pulse" />
+            <div className="h-4 w-4/6 bg-muted rounded animate-pulse" />
           </div>
           <div className="space-y-2 pt-4">
-            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-            <div className="h-4 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-            <div className="h-4 w-36 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+            <div className="h-4 w-48 bg-muted rounded animate-pulse" />
+            <div className="h-4 w-40 bg-muted rounded animate-pulse" />
+            <div className="h-4 w-36 bg-muted rounded animate-pulse" />
           </div>
         </div>
       </div>

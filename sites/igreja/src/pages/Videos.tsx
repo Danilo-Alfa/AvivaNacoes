@@ -53,7 +53,7 @@ function YouTubeVideo({ url, className }: { url: string; className?: string }) {
         />
         <div className="absolute inset-0 flex items-center justify-center">
           {/* Botão de play estilo YouTube */}
-          <div className="w-16 h-11 bg-[#212121]/80 group-hover:bg-[#ff0000] rounded-xl flex items-center justify-center transition-colors">
+          <div className="w-16 h-11 bg-youtube-overlay/80 group-hover:bg-youtube-red rounded-xl flex items-center justify-center transition-colors">
             <Play className="w-7 h-7 text-white fill-white" aria-hidden="true" />
           </div>
         </div>

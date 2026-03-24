@@ -121,7 +121,7 @@ export default function AudioPlayer() {
         exit={{ y: 100, opacity: 0 }}
         className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 z-40"
       >
-        <div className="relative bg-white dark:bg-[#1a1f2e] rounded-2xl shadow-2xl shadow-black/20 dark:shadow-black/40 border border-border/50 overflow-hidden">
+        <div className="relative bg-white dark:bg-player-bg rounded-2xl shadow-2xl shadow-black/20 dark:shadow-black/40 border border-border/50 overflow-hidden">
           {/* Barra decorativa no topo */}
           <div className="h-1 w-full bg-gradient-to-r from-primary via-accent to-primary" />
 
@@ -135,7 +135,7 @@ export default function AudioPlayer() {
                     <Radio className="w-6 h-6 text-white" />
                   </div>
                   {isPlaying && (
-                    <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-[#1a1f2e] flex items-center justify-center">
+                    <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-player-bg flex items-center justify-center">
                       <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
                     </span>
                   )}
@@ -248,7 +248,7 @@ export default function AudioPlayer() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 mt-3 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-sm font-semibold rounded-xl transition-colors shadow-md shadow-[#25D366]/30"
+              className="flex items-center justify-center gap-2 mt-3 py-2.5 bg-whatsapp hover:bg-whatsapp-hover text-white text-sm font-semibold rounded-xl transition-colors shadow-md shadow-whatsapp/30"
             >
               <MessageCircle className="w-4 h-4" />
               Enviar mensagem para a rádio

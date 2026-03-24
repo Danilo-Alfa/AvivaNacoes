@@ -67,6 +67,17 @@ All colors MUST be HSL.
     );
     --shadow-soft: 0 2px 20px -5px hsl(215 75% 28% / 0.1);
     --shadow-medium: 0 8px 30px -5px hsl(215 75% 28% / 0.15);
+
+    --nav-bg: 0 0% 100%;
+    --nav-bg-dark: 215 30% 7%;
+    --player-bg: 215 25% 14%;
+    --menu-gradient-from: 210 40% 20%;
+    --menu-gradient-via: 210 38% 24%;
+    --menu-gradient-to: 210 35% 34%;
+    --whatsapp: 142 70% 49%;
+    --whatsapp-hover: 142 70% 44%;
+    --youtube-overlay: 0 0% 13%;
+    --youtube-red: 0 100% 50%;
   }
 
   .dark {
@@ -119,6 +130,17 @@ All colors MUST be HSL.
     );
     --shadow-soft: 0 2px 20px -5px hsl(0 0% 0% / 0.3);
     --shadow-medium: 0 8px 30px -5px hsl(0 0% 0% / 0.4);
+
+    --nav-bg: 215 30% 8%;
+    --nav-bg-dark: 215 30% 7%;
+    --player-bg: 215 25% 14%;
+    --menu-gradient-from: 210 40% 20%;
+    --menu-gradient-via: 210 38% 24%;
+    --menu-gradient-to: 210 35% 34%;
+    --whatsapp: 142 70% 49%;
+    --whatsapp-hover: 142 70% 44%;
+    --youtube-overlay: 0 0% 13%;
+    --youtube-red: 0 100% 50%;
   }
 }
 

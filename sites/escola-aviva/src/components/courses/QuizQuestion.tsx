@@ -29,7 +29,7 @@ export function QuizQuestion({
         <span className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-aviva-blue/10 text-aviva-blue flex items-center justify-center font-semibold text-xs sm:text-sm">
           {questionNumber}
         </span>
-        <h3 className="text-sm sm:text-base font-medium text-gray-900 pt-0.5 sm:pt-1 leading-snug">
+        <h3 className="text-sm sm:text-base font-medium text-foreground pt-0.5 sm:pt-1 leading-snug">
           {question.texto_pergunta}
         </h3>
       </div>
@@ -49,11 +49,11 @@ export function QuizQuestion({
 
           if (showResult) {
             if (isCorrectOption) {
-              optionStyle = 'border-green-500 bg-green-50';
-              icon = <CheckCircle2 className="w-5 h-5 text-green-600" />;
+              optionStyle = 'border-green-500/50 bg-green-500/10';
+              icon = <CheckCircle2 className="w-5 h-5 text-green-500" />;
             } else if (isSelected && !isCorrectOption) {
-              optionStyle = 'border-red-500 bg-red-50';
-              icon = <XCircle className="w-5 h-5 text-red-600" />;
+              optionStyle = 'border-destructive/50 bg-destructive/10';
+              icon = <XCircle className="w-5 h-5 text-destructive" />;
             }
           } else if (isSelected) {
             optionStyle = 'border-aviva-blue bg-aviva-blue/5';
@@ -64,7 +64,7 @@ export function QuizQuestion({
               key={option.id}
               className={cn(
                 'flex items-center space-x-2 sm:space-x-3 rounded-lg border p-3 sm:p-4 transition-all cursor-pointer hover:border-aviva-blue/50',
-                optionStyle || 'border-gray-200'
+                optionStyle || 'border-border'
               )}
               onClick={() => !showResult && onAnswerSelect(option.id)}
             >
@@ -77,8 +77,8 @@ export function QuizQuestion({
                 htmlFor={option.id}
                 className={cn(
                   'flex-1 cursor-pointer text-xs sm:text-sm leading-snug',
-                  showResult && isCorrectOption && 'font-medium text-green-700',
-                  showResult && isSelected && !isCorrectOption && 'text-red-700'
+                  showResult && isCorrectOption && 'font-medium text-green-600 dark:text-green-400',
+                  showResult && isSelected && !isCorrectOption && 'text-destructive'
                 )}
               >
                 {option.texto_opcao}
@@ -92,12 +92,12 @@ export function QuizQuestion({
       </RadioGroup>
 
       {showResult && question.explicacao && (
-        <div className="ml-0 sm:ml-10 mt-3 sm:mt-4 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="ml-0 sm:ml-10 mt-3 sm:mt-4 p-3 sm:p-4 bg-primary/10 border border-primary/20 rounded-lg">
           <div className="flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary flex-shrink-0 mt-0.5" />
             <div className="min-w-0">
-              <p className="text-xs sm:text-sm font-medium text-blue-800">Explicacao</p>
-              <p className="text-xs sm:text-sm text-blue-700 mt-1 leading-relaxed">{question.explicacao}</p>
+              <p className="text-xs sm:text-sm font-medium text-primary">Explicacao</p>
+              <p className="text-xs sm:text-sm text-primary/80 mt-1 leading-relaxed">{question.explicacao}</p>
             </div>
           </div>
         </div>

@@ -62,6 +62,21 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        nav: {
+          DEFAULT: "hsl(var(--nav-bg))",
+          dark: "hsl(var(--nav-bg-dark))",
+        },
+        player: {
+          bg: "hsl(var(--player-bg))",
+        },
+        whatsapp: {
+          DEFAULT: "hsl(var(--whatsapp))",
+          hover: "hsl(var(--whatsapp-hover))",
+        },
+        youtube: {
+          overlay: "hsl(var(--youtube-overlay))",
+          red: "hsl(var(--youtube-red))",
+        },
       },
       backgroundImage: {
         "gradient-hero": "var(--gradient-hero)",

@@ -42,7 +42,7 @@ const Cursos = () => {
           animate={{ opacity: 1 }}
           className="text-center py-20"
         >
-          <p className="text-red-600 mb-2">Erro ao carregar cursos.</p>
+          <p className="text-destructive mb-2">Erro ao carregar cursos.</p>
           <p className="text-muted-foreground text-sm">
             Verifique sua conexao e tente novamente.
           </p>
