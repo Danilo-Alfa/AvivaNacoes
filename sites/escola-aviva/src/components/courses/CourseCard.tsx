@@ -32,7 +32,7 @@ export function CourseCard({
         whileHover={{ y: -4 }}
         transition={{ duration: 0.2 }}
       >
-        <Card className="overflow-hidden card-hover bg-card border-border group">
+        <Card className="overflow-hidden card-hover bg-card border-border group focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
           {/* Thumbnail */}
           <div className="relative aspect-video overflow-hidden">
             <img

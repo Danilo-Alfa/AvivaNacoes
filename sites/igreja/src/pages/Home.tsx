@@ -238,15 +238,11 @@ export default function Home() {
       {/* Botões centralizados abaixo do banner */}
       <div className="container mx-auto px-4 mt-4 md:mt-6">
         <div className="flex flex-row gap-3 md:gap-4 justify-center">
-          <Link to="/quem-somos">
-            <button className="px-4 py-3 md:px-8 md:py-4 min-h-[44px] md:min-h-[48px] text-sm md:text-base bg-background text-foreground font-semibold rounded-lg hover:bg-muted transition-all border-2 border-border shadow-lg">
-              Nossa História
-            </button>
+          <Link to="/quem-somos" className="px-4 py-3 md:px-8 md:py-4 min-h-[44px] md:min-h-[48px] text-sm md:text-base bg-background text-foreground font-semibold rounded-lg hover:bg-muted transition-all border-2 border-border shadow-lg inline-flex items-center justify-center">
+              Nossa Historia
           </Link>
-          <Link to="/programacao">
-            <button className="px-4 py-3 md:px-8 md:py-4 min-h-[44px] md:min-h-[48px] text-sm md:text-base bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg">
-              Programação
-            </button>
+          <Link to="/programacao" className="px-4 py-3 md:px-8 md:py-4 min-h-[44px] md:min-h-[48px] text-sm md:text-base bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg inline-flex items-center justify-center">
+              Programacao
           </Link>
         </div>
       </div>
@@ -303,11 +299,9 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <Link to="/quem-somos">
-              <button className="flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all hover:-translate-y-0.5">
+            <Link to="/quem-somos" className="flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all hover:-translate-y-0.5">
                 Saiba Mais
                 <ArrowRight className="w-5 h-5" aria-hidden="true" />
-              </button>
             </Link>
           </div>
           <div className="aspect-video bg-black rounded-lg shadow-medium overflow-hidden">

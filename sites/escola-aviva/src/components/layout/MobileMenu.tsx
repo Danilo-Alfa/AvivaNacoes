@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -34,6 +34,11 @@ export function MobileMenu() {
   const { user, profile, signOut, isAdmin, loading } = useAuth();
 
   const filteredNavItems = navItems.filter(item => !item.adminOnly || isAdmin);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isOpen]);
 
   const menuVariants = {
     closed: {
