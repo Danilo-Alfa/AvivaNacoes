@@ -340,7 +340,7 @@ export default function Eventos() {
   );
 
   return (
-    <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
+    <div className="container mx-auto px-4 py-12 min-h-[var(--content-min-height)]">
       {/* Hero Section */}
       <div className="mb-16 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">
@@ -586,7 +586,7 @@ export default function Eventos() {
                           {dia}
                         </span>
                         {eventosExtras > 0 && (
-                          <span className="text-[8px] sm:text-[10px] font-medium bg-indigo-50 dark:bg-indigo-900/50 text-indigo-500 dark:text-indigo-400 px-1 sm:px-1.5 py-0.5 rounded-full">
+                          <span className="text-xs font-medium bg-indigo-50 dark:bg-indigo-900/50 text-indigo-500 dark:text-indigo-400 px-1 sm:px-1.5 py-0.5 rounded-full">
                             +{eventosExtras}
                           </span>
                         )}
@@ -599,7 +599,7 @@ export default function Eventos() {
                           return (
                             <div
                               key={evento.id}
-                              className="text-[8px] sm:text-[10px] font-medium pl-2 sm:pl-2.5 pr-1.5 py-1 sm:py-1.5 rounded-r-md truncate cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-all bg-gray-50/80 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 border-l-[3px]"
+                              className="text-xs font-medium pl-2 sm:pl-2.5 pr-1.5 py-1 sm:py-1.5 rounded-r-md truncate cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-all bg-gray-50/80 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 border-l-[3px]"
                               style={{
                                 borderLeftColor: cor
                               }}

@@ -100,7 +100,7 @@ export default function Jornal() {
   const jornalMaisRecente = jornais[0];
 
   return (
-    <div className="min-h-[calc(100vh-200px)]">
+    <div className="min-h-[var(--content-min-height)]">
       {/* Hero Banner */}
       <div className="bg-background">
         <div className="container mx-auto flex items-center justify-center px-4 py-4 md:py-6">

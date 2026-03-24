@@ -253,7 +253,7 @@ export default function LiveChat({
                       )}
                       <p className="text-sm break-words">{msg.mensagem}</p>
                       <p
-                        className={`text-[10px] mt-1 ${
+                        className={`text-xs mt-1 ${
                           isOwnMessage ? "text-primary-foreground/70" : "text-muted-foreground"
                         }`}
                       >

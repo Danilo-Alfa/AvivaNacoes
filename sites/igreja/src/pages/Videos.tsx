@@ -180,7 +180,7 @@ export default function Videos() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12 min-h-[calc(100vh-200px)]">
+      <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12 min-h-[var(--content-min-height)]">
         {/* Hero Section Skeleton */}
         <div className="mb-6 sm:mb-8 md:mb-16 text-center">
           <div className="h-10 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto mb-3" />
@@ -218,7 +218,7 @@ export default function Videos() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12 min-h-[calc(100vh-200px)]">
+    <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12 min-h-[var(--content-min-height)]">
       {/* Hero Section */}
       <div className="mb-6 sm:mb-8 md:mb-16 text-center">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">
@@ -246,7 +246,7 @@ export default function Videos() {
                     {videoDestaque.descricao}
                   </p>
                 )}
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 text-[10px] sm:text-xs md:text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 text-xs sm:text-xs md:text-sm text-muted-foreground">
                   {videoDestaque.duracao && (
                     <span className="flex items-center gap-1">
                       <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" aria-hidden="true" />
@@ -297,7 +297,7 @@ export default function Videos() {
                         {video.descricao}
                       </p>
                     )}
-                    <div className="flex items-center justify-between text-[10px] sm:text-xs text-muted-foreground">
+                    <div className="flex items-center justify-between text-xs sm:text-xs text-muted-foreground">
                       <span className="truncate mr-2">
                         {video.pregador || "Avivamento para as Nações"}
                       </span>
@@ -338,7 +338,7 @@ export default function Videos() {
                           <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 transition-transform duration-300 group-hover:scale-110">
                             {playlist.quantidade_videos}
                           </div>
-                          <div className="text-[10px] sm:text-xs opacity-90">vídeos</div>
+                          <div className="text-xs sm:text-xs opacity-90">vídeos</div>
                         </div>
                       </div>
                       <div className="flex-1 p-4 sm:p-5 md:p-6 flex flex-col justify-center min-w-0">
@@ -346,11 +346,11 @@ export default function Videos() {
                           {playlist.nome}
                         </h3>
                         {playlist.descricao && (
-                          <p className="text-[11px] sm:text-xs md:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2">
+                          <p className="text-xs sm:text-xs md:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2">
                             {playlist.descricao}
                           </p>
                         )}
-                        <div className="text-[11px] sm:text-xs md:text-sm font-semibold text-primary flex items-center gap-1 w-fit transition-all duration-300 group-hover:gap-2">
+                        <div className="text-xs sm:text-xs md:text-sm font-semibold text-primary flex items-center gap-1 w-fit transition-all duration-300 group-hover:gap-2">
                           Ver Playlist
                           <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
                         </div>

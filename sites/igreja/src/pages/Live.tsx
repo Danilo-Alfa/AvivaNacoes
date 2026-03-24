@@ -258,7 +258,7 @@ export default function Live() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8 min-h-[calc(100vh-200px)]">
+      <div className="container mx-auto px-4 py-8 min-h-[var(--content-min-height)]">
         <Card>
           <CardContent className="flex items-center justify-center min-h-[400px]">
             <div className="flex flex-col items-center gap-4">
@@ -274,7 +274,7 @@ export default function Live() {
   }
 
   return (
-    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 min-h-[calc(100vh-200px)]">
+    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 min-h-[var(--content-min-height)]">
       {/* Layout com Chat quando ao vivo */}
       {isLive ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">

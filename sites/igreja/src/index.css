@@ -78,6 +78,9 @@ All colors MUST be HSL.
     --whatsapp-hover: 142 70% 44%;
     --youtube-overlay: 0 0% 13%;
     --youtube-red: 0 100% 50%;
+
+    --header-height: 68px;
+    --content-min-height: calc(100vh - 200px);
   }
 
   .dark {

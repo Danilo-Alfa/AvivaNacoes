@@ -79,7 +79,7 @@ export function UserMenu({ collapsed = false }: UserMenuProps) {
                     <Sparkles className="w-3 h-3 text-amber-500" />
                   )}
                 </div>
-                <p className="text-[11px] text-muted-foreground font-medium">
+                <p className="text-xs text-muted-foreground font-medium">
                   {isAdmin ? 'Administrador' : 'Aluno'}
                 </p>
               </div>
@@ -106,7 +106,7 @@ export function UserMenu({ collapsed = false }: UserMenuProps) {
             <p className="font-semibold text-foreground truncate">{profile?.nome}</p>
             <p className="text-xs text-muted-foreground truncate">{profile?.email}</p>
             {isAdmin && (
-              <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 text-[10px] font-semibold">
+              <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 text-xs font-semibold">
                 <Sparkles className="w-2.5 h-2.5" />
                 Admin
               </span>
@@ -124,7 +124,7 @@ export function UserMenu({ collapsed = false }: UserMenuProps) {
             </div>
             <div>
               <p className="font-medium text-sm">Meu Perfil</p>
-              <p className="text-[11px] text-muted-foreground">Veja e edite seus dados</p>
+              <p className="text-xs text-muted-foreground">Veja e edite seus dados</p>
             </div>
           </Link>
         </DropdownMenuItem>
@@ -137,7 +137,7 @@ export function UserMenu({ collapsed = false }: UserMenuProps) {
               </div>
               <div>
                 <p className="font-medium text-sm">Painel Admin</p>
-                <p className="text-[11px] text-muted-foreground">Gerencie a plataforma</p>
+                <p className="text-xs text-muted-foreground">Gerencie a plataforma</p>
               </div>
             </Link>
           </DropdownMenuItem>
@@ -155,7 +155,7 @@ export function UserMenu({ collapsed = false }: UserMenuProps) {
             </div>
             <div>
               <p className="font-medium text-sm">Sair</p>
-              <p className="text-[11px] opacity-70">Encerrar sessão</p>
+              <p className="text-xs opacity-70">Encerrar sessão</p>
             </div>
           </div>
         </DropdownMenuItem>

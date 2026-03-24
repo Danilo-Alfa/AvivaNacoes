@@ -388,7 +388,7 @@ export default function AdminCarouselContent() {
                         {foto.titulo || "Sem título"}
                       </h3>
                       <span
-                        className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                        className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
                           foto.ativo
                             ? "bg-green-500/10 text-green-600"
                             : "bg-red-500/10 text-red-500"

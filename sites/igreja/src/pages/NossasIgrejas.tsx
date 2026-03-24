@@ -257,7 +257,7 @@ export default function NossasIgrejas() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 min-h-[calc(100vh-200px)]">
+    <div className="container mx-auto px-4 py-12 min-h-[var(--content-min-height)]">
       {/* Hero */}
       <div className="mb-12 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 pb-2 bg-gradient-hero bg-clip-text text-transparent">

@@ -292,7 +292,7 @@ export default function Layout() {
                   </motion.div>
                 </div>
                 <div className="flex flex-col -space-y-1">
-                  <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     Igreja Evangélica
                   </span>
                   <span className="text-md font-display font-bold text-primary dark:text-blue-400">
@@ -458,7 +458,7 @@ export default function Layout() {
                   className="mb-5"
                 >
                   {/* Título da seção */}
-                  <h3 className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-2.5 px-2">
+                  <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2.5 px-2">
                     {section.title}
                   </h3>
 
@@ -502,7 +502,7 @@ export default function Layout() {
 
                           {/* Badge AO VIVO pulsante */}
                           {isLiveItem && isLiveActive && (
-                            <span className="px-2 py-1 text-[10px] font-bold text-white bg-red-500 rounded-full flex items-center gap-1.5 shadow-md shadow-red-500/30">
+                            <span className="px-2 py-1 text-xs font-bold text-white bg-red-500 rounded-full flex items-center gap-1.5 shadow-md shadow-red-500/30">
                               <span className="relative flex h-1.5 w-1.5">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
                                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white" />
@@ -513,7 +513,7 @@ export default function Layout() {
 
                           {/* Badge NOVO */}
                           {hasNewBadge && (
-                            <span className="px-2 py-1 text-[10px] font-bold text-white bg-gradient-to-r from-accent to-amber-500 rounded-full shadow-md shadow-accent/30">
+                            <span className="px-2 py-1 text-xs font-bold text-white bg-gradient-to-r from-accent to-amber-500 rounded-full shadow-md shadow-accent/30">
                               NOVO
                             </span>
                           )}
@@ -603,10 +603,10 @@ export default function Layout() {
       </div>
 
       {/* Layout com Sidebar */}
-      <div className="flex pt-[68px]">
+      <div className="flex pt-[var(--header-height)]">
         {/* Sidebar - Desktop apenas - Fixed */}
         <aside
-          className={`hidden lg:flex flex-col fixed left-0 top-[68px] h-[calc(100vh-68px)] bg-background/98 backdrop-blur-sm transition-all duration-300 z-30 border-r border-border/50 ${
+          className={`hidden lg:flex flex-col fixed left-0 top-[var(--header-height)] h-[calc(100vh-var(--header-height))] bg-background/98 backdrop-blur-sm transition-all duration-300 z-30 border-r border-border/50 ${
             sidebarOpen ? "w-60" : "w-16"
           }`}
         >
@@ -642,7 +642,7 @@ export default function Layout() {
                 {/* Título da seção com divisor gradiente */}
                 {sidebarOpen && (
                   <div className="flex items-center gap-2 mb-3 px-3">
-                    <span className="text-[10px] font-bold text-muted-foreground tracking-wider">
+                    <span className="text-xs font-bold text-muted-foreground tracking-wider">
                       {section.title}
                     </span>
                     <div className="flex-1 h-px bg-gradient-to-r from-primary/30 via-primary/10 to-transparent" />
@@ -724,7 +724,7 @@ export default function Layout() {
 
                         {/* Badge Live na sidebar */}
                         {isLiveItem && isLiveActive && sidebarOpen && (
-                          <span className="relative z-10 px-1.5 py-0.5 text-[9px] font-bold text-white bg-red-500 rounded flex items-center gap-1 shadow-md shadow-red-500/30">
+                          <span className="relative z-10 px-1.5 py-0.5 text-xs font-bold text-white bg-red-500 rounded flex items-center gap-1 shadow-md shadow-red-500/30">
                             <span className="w-1 h-1 bg-white rounded-full animate-pulse" />
                             LIVE
                           </span>
@@ -732,7 +732,7 @@ export default function Layout() {
 
                         {/* Badge NOVO na sidebar */}
                         {hasNewBadge && sidebarOpen && (
-                          <span className="relative z-10 px-1.5 py-0.5 text-[9px] font-bold text-white bg-gradient-to-r from-accent to-amber-500 rounded shadow-md shadow-accent/30">
+                          <span className="relative z-10 px-1.5 py-0.5 text-xs font-bold text-white bg-gradient-to-r from-accent to-amber-500 rounded shadow-md shadow-accent/30">
                             NOVO
                           </span>
                         )}
@@ -742,13 +742,13 @@ export default function Layout() {
                           <div className="absolute left-full ml-3 px-3 py-2 bg-foreground text-background text-xs font-medium rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-xl flex items-center gap-2">
                             {item.name}
                             {isLiveItem && isLiveActive && (
-                              <span className="px-1.5 py-0.5 text-[8px] font-bold text-white bg-red-500 rounded flex items-center gap-1">
+                              <span className="px-1.5 py-0.5 text-xs font-bold text-white bg-red-500 rounded flex items-center gap-1">
                                 <span className="w-1 h-1 bg-white rounded-full animate-pulse" />
                                 LIVE
                               </span>
                             )}
                             {hasNewBadge && (
-                              <span className="px-1.5 py-0.5 text-[8px] font-bold text-white bg-gradient-to-r from-accent to-amber-500 rounded">
+                              <span className="px-1.5 py-0.5 text-xs font-bold text-white bg-gradient-to-r from-accent to-amber-500 rounded">
                                 NOVO
                               </span>
                             )}
@@ -771,7 +771,7 @@ export default function Layout() {
               <div className="p-3 rounded-xl bg-secondary/30 mb-4">
                 <div className="flex items-start gap-2">
                   <Sparkles className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" aria-hidden="true" />
-                  <p className="text-[11px] italic text-muted-foreground leading-relaxed">
+                  <p className="text-xs italic text-muted-foreground leading-relaxed">
                     "Porque onde estiverem dois ou três reunidos em meu nome, aí
                     estou eu no meio deles"
                   </p>
@@ -787,7 +787,7 @@ export default function Layout() {
                   <p className="text-xs font-semibold text-foreground">
                     Avivamento para as Nações
                   </p>
-                  <p className="text-[10px] text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     Igreja Cristã • 2026
                   </p>
                 </div>
@@ -798,7 +798,7 @@ export default function Layout() {
 
         {/* Main Content - Com margin-left para compensar a sidebar fixa */}
         <main
-          className={`flex-1 min-h-[calc(100vh-68px)] lg:transition-[margin-left] lg:duration-300 ${
+          className={`flex-1 min-h-[calc(100vh-var(--header-height))] lg:transition-[margin-left] lg:duration-300 ${
             sidebarOpen ? "lg:ml-60" : "lg:ml-16"
           }`}
         >
