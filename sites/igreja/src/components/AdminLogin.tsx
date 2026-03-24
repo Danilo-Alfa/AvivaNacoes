@@ -10,16 +10,19 @@ export default function AdminLogin() {
   const { login } = useAdminAuth();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    const result = login(password);
+    const result = await login(password);
     if (!result.success) {
       setError(result.error || "Erro ao autenticar");
       setPassword("");
     }
+    setLoading(false);
   };
 
   return (
@@ -58,9 +61,9 @@ export default function AdminLogin() {
                 </div>
               )}
 
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={loading}>
                 <Lock className="w-4 h-4 mr-2" />
-                Entrar
+                {loading ? "Verificando..." : "Entrar"}
               </Button>
             </form>
 

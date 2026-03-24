@@ -16,6 +16,7 @@ import HlsPlayer from "@/components/HlsPlayer";
 import { contemProfanidade } from "@/lib/profanityFilter";
 import { Loader2, LogOut, Play, Radio, User, Users, Video } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { validarNome } from "@/lib/profanityFilter";
 
 interface Recording {
   name: string;
@@ -35,26 +36,6 @@ function formatRecordingDate(filename: string): string {
   if (!match) return filename;
   const [, year, month, day, hour, min] = match;
   return `${day}/${month}/${year} às ${hour}:${min}`;
-}
-
-const PALAVRAS_PROIBIDAS = [
-  "puta", "puto", "viado", "buceta", "pau", "piroca", "cu", "merda",
-  "filho da puta", "fdp", "vadia", "vagabunda", "vagabundo", "corno",
-  "caralho", "porra", "foda", "foder", "desgraça", "lixo",
-  "nazi", "nazista", "racista", "negro", "nigga",
-  "shit", "fuck", "ass", "bitch", "damn",
-];
-
-function validarNome(nome: string): string | null {
-  const n = nome.trim();
-  if (n.length < 2) return "Nome deve ter pelo menos 2 caracteres.";
-  if (n.length > 50) return "Nome muito longo.";
-  if (/^[\d\s\W]+$/.test(n)) return "Nome deve conter letras.";
-  const lower = n.toLowerCase();
-  for (const palavra of PALAVRAS_PROIBIDAS) {
-    if (lower.includes(palavra)) return "Nome não permitido.";
-  }
-  return null;
 }
 
 // Declarar gtag para TypeScript

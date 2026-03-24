@@ -6,27 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { MessageCircle, Send, User, Users, Loader2 } from "lucide-react";
 import { chatClient, type ChatMensagem } from "@/services/chatService";
-import { censurarTexto, contemProfanidade } from "@/lib/profanityFilter";
-
-const PALAVRAS_PROIBIDAS = [
-  "puta", "puto", "viado", "buceta", "pau", "piroca", "cu", "merda",
-  "filho da puta", "fdp", "vadia", "vagabunda", "vagabundo", "corno",
-  "caralho", "porra", "foda", "foder", "desgraça", "lixo",
-  "nazi", "nazista", "racista", "negro", "nigga",
-  "shit", "fuck", "ass", "bitch", "damn",
-];
-
-function validarNome(nome: string): string | null {
-  const n = nome.trim();
-  if (n.length < 2) return "Nome deve ter pelo menos 2 caracteres.";
-  if (n.length > 50) return "Nome muito longo.";
-  if (/^[\d\s\W]+$/.test(n)) return "Nome deve conter letras.";
-  const lower = n.toLowerCase();
-  for (const palavra of PALAVRAS_PROIBIDAS) {
-    if (lower.includes(palavra)) return "Nome não permitido.";
-  }
-  return null;
-}
+import { censurarTexto, contemProfanidade, validarNome } from "@/lib/profanityFilter";
 
 interface LiveChatProps {
   sessionId: string;

@@ -5,7 +5,7 @@ const profanity = new Profanity({
   wholeWord: false,
 });
 
-// Palavras extras que a lib pode não cobrir
+// Palavras extras que a lib pode nao cobrir
 profanity.addWords([
   "fdp",
   "viado",
@@ -27,4 +27,13 @@ export function contemProfanidade(texto: string): boolean {
 
 export function censurarTexto(texto: string): string {
   return profanity.censor(texto);
+}
+
+export function validarNome(nome: string): string | null {
+  const n = nome.trim();
+  if (n.length < 2) return "Nome deve ter pelo menos 2 caracteres.";
+  if (n.length > 50) return "Nome muito longo.";
+  if (/^[\d\s\W]+$/.test(n)) return "Nome deve conter letras.";
+  if (contemProfanidade(n)) return "Nome nao permitido.";
+  return null;
 }

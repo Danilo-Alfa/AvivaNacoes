@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Lock, LogOut } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 interface ProtectedAdminProps {
   children: React.ReactNode;
@@ -13,25 +14,37 @@ export default function ProtectedAdmin({ children }: ProtectedAdminProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+    try {
+      const { data, error: rpcError } = await supabase.rpc("verify_admin_password", {
+        password_input: password,
+      });
 
-    if (!adminPassword) {
-      setError("Senha de admin não configurada. Verifique o arquivo .env");
-      return;
-    }
+      if (rpcError) {
+        setError("Servico de autenticacao indisponivel.");
+        setPassword("");
+        setLoading(false);
+        return;
+      }
 
-    if (password === adminPassword) {
-      setIsAuthenticated(true);
+      if (data === true) {
+        setIsAuthenticated(true);
+        setPassword("");
+      } else {
+        setError("Senha incorreta!");
+        setPassword("");
+      }
+    } catch {
+      setError("Erro ao conectar com o servidor.");
       setPassword("");
-    } else {
-      setError("Senha incorreta!");
-      setPassword("");
     }
+    setLoading(false);
   };
 
   const handleLogout = () => {
@@ -77,9 +90,9 @@ export default function ProtectedAdmin({ children }: ProtectedAdminProps) {
                   </div>
                 )}
 
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={loading}>
                   <Lock className="w-4 h-4 mr-2" />
-                  Entrar
+                  {loading ? "Verificando..." : "Entrar"}
                 </Button>
               </form>
 

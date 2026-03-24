@@ -7,6 +7,7 @@ interface RequestOptions {
   body?: unknown;
   headers?: Record<string, string>;
   useApiKey?: boolean;
+  /** @deprecated Usar Supabase RPC para autenticacao admin */
   useAdminPassword?: boolean;
 }
 
