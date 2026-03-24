@@ -38,7 +38,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Escutar mudancas de autenticacao
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('🔄 Auth state changed:', event);
       setSession(session);
       setUser(session?.user ?? null);
 
@@ -55,13 +54,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const fetchProfile = async (userId: string) => {
-    console.log('🔍 Buscando perfil para userId:', userId);
     setProfileLoaded(false);
 
     try {
-      // Teste com fetch direto
       const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=*`;
-      console.log('🌐 Fazendo fetch para:', url);
 
       const response = await fetch(url, {
         headers: {
@@ -70,22 +66,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       });
 
-      console.log('📡 Response status:', response.status);
       const data = await response.json();
-      console.log('📦 Dados recebidos:', data);
 
       if (data && data.length > 0) {
-        console.log('✅ Perfil carregado:', data[0]);
         setProfile(data[0] as UserProfile);
       } else {
-        console.error('❌ Perfil nao encontrado');
         setProfile(null);
       }
     } catch (err: any) {
-      console.error('❌ Erro:', err.message);
+      console.error('Erro ao buscar perfil:', err.message);
       setProfile(null);
     } finally {
-      console.log('🏁 Finalizando loading...');
       setLoading(false);
       setProfileLoaded(true);
     }

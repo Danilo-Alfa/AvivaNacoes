@@ -54,7 +54,7 @@ export function AppSidebar() {
               className="w-16 h-16 object-contain flex-shrink-0"
             />
           </picture>
-          <AnimatePresence>3'
+          <AnimatePresence>
             {!isCollapsed && (
               <motion.div
                 initial={{ opacity: 0, width: 0 }}

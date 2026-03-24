@@ -137,7 +137,6 @@ export default function HlsPlayer({
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         setLoading(false);
-        console.log("[HlsPlayer] Manifest parsed, stream pronto");
 
         // Capturar níveis de qualidade disponíveis
         const levels = hls.levels
@@ -168,13 +167,11 @@ export default function HlsPlayer({
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              console.log("[HlsPlayer] Erro de rede, tentando recuperar...");
               setTimeout(() => {
                 if (hlsRef.current) hlsRef.current.startLoad();
               }, 2000);
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
-              console.log("[HlsPlayer] Erro de mídia, tentando recuperar...");
               hls.recoverMediaError();
               break;
             default:

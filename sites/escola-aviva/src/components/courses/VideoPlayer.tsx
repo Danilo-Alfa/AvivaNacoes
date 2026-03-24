@@ -183,9 +183,7 @@ export function VideoPlayer({
     }
   }, [videoId]);
 
-  // TODO: Descomentar após os testes
-  // const isComplete = currentPercentage >= requiredPercentage;
-  const isComplete = true; // Temporário para testes - ignorar verificação de 80%
+  const isComplete = currentPercentage >= requiredPercentage;
 
   return (
     <div className="space-y-2">

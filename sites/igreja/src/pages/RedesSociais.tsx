@@ -54,7 +54,7 @@ export default function RedesSociais() {
       bgColor: "bg-purple-600",
     },
     {
-      name: "Associação Benificiente EL Roi",
+      name: "Associação Beneficente EL Roi",
       icon: Heart,
       url: "https://www.facebook.com/share/194jRRsrGp/",
       description:

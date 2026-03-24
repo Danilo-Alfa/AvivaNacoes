@@ -87,11 +87,6 @@ export default function Live() {
   const streamUrl = config?.url_stream || import.meta.env.VITE_STREAM_URL || "";
   const serverBaseUrl = streamUrl.replace(/\/live\/.*$/, "");
 
-  // Log para debug
-  console.log("Stream URL:", streamUrl);
-  console.log("Config:", config);
-  console.log("Env VITE_STREAM_URL:", import.meta.env.VITE_STREAM_URL);
-
   // Carregar gravações quando offline
   useEffect(() => {
     if (isLive || !serverBaseUrl) return;
@@ -378,7 +373,7 @@ export default function Live() {
                 <div className="aspect-video bg-black rounded-lg overflow-hidden">
                   <HlsPlayer
                     url={streamUrl}
-                    onReady={() => console.log("Player pronto!")}
+                    onReady={() => {}}
                     onError={(e) => {
                       console.error("Erro no player:", e);
                       toast.error(

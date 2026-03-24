@@ -279,7 +279,7 @@ export function MobileMenu() {
             {/* Footer */}
             <div className="p-4 border-t border-border">
               <p className="text-xs text-center text-muted-foreground">
-                Escola Aviva © 2025
+                Escola Aviva © 2026
               </p>
             </div>
           </motion.div>

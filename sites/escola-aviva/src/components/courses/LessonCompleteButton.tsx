@@ -60,24 +60,22 @@ export function LessonCompleteButton({
     );
   }
 
-  // TODO: Descomentar após os testes
-  // Se o vídeo não foi assistido, mostrar botão desabilitado
-  // if (!videoWatched) {
-  //   return (
-  //     <div className="space-y-2">
-  //       <Button
-  //         disabled
-  //         className="gap-2 bg-gray-400 text-white cursor-not-allowed"
-  //       >
-  //         <Play className="w-4 h-4" />
-  //         Assista o vídeo para liberar
-  //       </Button>
-  //       <p className="text-xs text-muted-foreground">
-  //         Você precisa assistir pelo menos 80% do vídeo para concluir a aula
-  //       </p>
-  //     </div>
-  //   );
-  // }
+  if (!videoWatched) {
+    return (
+      <div className="space-y-2">
+        <Button
+          disabled
+          className="gap-2 bg-muted text-muted-foreground cursor-not-allowed"
+        >
+          <Play className="w-4 h-4" />
+          Assista o video para liberar
+        </Button>
+        <p className="text-xs text-muted-foreground">
+          Voce precisa assistir pelo menos 80% do video para concluir a aula
+        </p>
+      </div>
+    );
+  }
 
   return (
     <Button
