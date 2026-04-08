@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import HlsPlayer from "@/components/HlsPlayer";
 import { basePath } from "@/lib/image-utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Radio, Power, PowerOff, Clock, Users, RefreshCw, User, Mail, Monitor } from "lucide-react";
+import { Radio, Power, PowerOff, Clock, Users, RefreshCw, User, Mail, Monitor, Video, Trash2, Play, Download, HardDrive } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import {
   getLiveConfig,
@@ -17,9 +18,28 @@ import {
   getViewersAtivos,
   getTodosViewers,
   limparViewersInativos,
+  getRecordings,
+  deleteRecording,
+  getDiskUsage,
   type LiveConfig,
   type LiveViewer,
+  type DiskUsage,
 } from "@/services/liveService";
+
+function formatRecordingDate(filename: string): string {
+  const match = filename.match(/_(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/);
+  if (!match) return "Live";
+  const [, year, month, day, hour, min, sec] = match;
+  // Timestamp do servidor esta em fuso +0200 (CEST), converter para UTC subtraindo 2h
+  const serverDate = new Date(Date.UTC(+year, +month - 1, +day, +hour - 2, +min, +sec));
+  return `Live do dia ${serverDate.toLocaleDateString("pt-BR")}`;
+}
+
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(0)} MB`;
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+}
 
 export default function AdminLiveContent() {
   const [config, setConfig] = useState<LiveConfig | null>(null);
@@ -30,6 +50,15 @@ export default function AdminLiveContent() {
   const [viewersAtivos, setViewersAtivos] = useState<LiveViewer[]>([]);
   const [mostrarTodosViewers, setMostrarTodosViewers] = useState(false);
   const [loadingViewers, setLoadingViewers] = useState(false);
+
+  // Gravações
+  const [recordings, setRecordings] = useState<Recording[]>([]);
+  const [loadingRecordings, setLoadingRecordings] = useState(false);
+  const [deletingRecording, setDeletingRecording] = useState<string | null>(null);
+  const [playingVideo, setPlayingVideo] = useState<string | null>(null);
+
+  // Armazenamento
+  const [diskUsage, setDiskUsage] = useState<DiskUsage | null>(null);
 
   // Formulário
   const [ativa, setAtiva] = useState(false);
@@ -68,6 +97,52 @@ export default function AdminLiveContent() {
     const interval = setInterval(carregarViewers, 30000);
     return () => clearInterval(interval);
   }, [carregarViewers]);
+
+  const streamUrl = config?.url_stream || import.meta.env.VITE_STREAM_URL || "";
+  const serverBaseUrl = streamUrl.replace(/\/live\/.*$/, "").replace(/^http:\/\//, "https://");
+
+  const carregarRecordings = useCallback(async () => {
+    if (!streamUrl) return;
+    setLoadingRecordings(true);
+    try {
+      const [recs, disk] = await Promise.all([
+        getRecordings(streamUrl),
+        getDiskUsage(streamUrl),
+      ]);
+      setRecordings(recs);
+      setDiskUsage(disk);
+    } catch {
+      setRecordings([]);
+    } finally {
+      setLoadingRecordings(false);
+    }
+  }, [streamUrl]);
+
+  const handleDeleteRecording = async (filename: string) => {
+    if (!confirm(`Tem certeza que deseja apagar a gravação "${formatRecordingDate(filename)}"?`)) {
+      return;
+    }
+    setDeletingRecording(filename);
+    try {
+      await deleteRecording(streamUrl, filename);
+      toast.success("Gravação apagada!");
+      if (playingVideo === filename) {
+        setPlayingVideo(null);
+      }
+      setRecordings((prev) => prev.filter((r) => r.name !== filename));
+    } catch {
+      toast.error("Erro ao apagar gravação");
+    } finally {
+      setDeletingRecording(null);
+    }
+  };
+
+  // Carregar gravações quando config estiver disponível
+  useEffect(() => {
+    if (streamUrl) {
+      carregarRecordings();
+    }
+  }, [streamUrl, carregarRecordings]);
 
   const handleLimparInativos = async () => {
     try {
@@ -418,6 +493,246 @@ export default function AdminLiveContent() {
           </p>
         </CardContent>
       </Card>
+
+      {/* Gerenciamento de Gravações */}
+      <Card className="mb-6">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Video className="w-5 h-5" />
+                Gravações
+              </CardTitle>
+              <CardDescription>
+                Transmissões anteriores gravadas no servidor
+              </CardDescription>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={carregarRecordings}
+              disabled={loadingRecordings || !streamUrl}
+            >
+              <RefreshCw className={`w-4 h-4 mr-1 ${loadingRecordings ? "animate-spin" : ""}`} />
+              Atualizar
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {!streamUrl ? (
+            <p className="text-sm text-muted-foreground text-center py-4">
+              Configure a URL do stream para ver as gravações
+            </p>
+          ) : loadingRecordings ? (
+            <p className="text-sm text-muted-foreground text-center py-4">
+              Carregando gravações...
+            </p>
+          ) : recordings.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-4">
+              Nenhuma gravação encontrada
+            </p>
+          ) : (
+            <div className="space-y-4">
+              {/* Player da gravação selecionada */}
+              {playingVideo && (() => {
+                const currentRec = recordings.find((r) => r.name === playingVideo);
+                const useHls = currentRec?.hasHls;
+                const hlsUrl = `${serverBaseUrl}/recordings/${playingVideo.replace(".mp4", "")}/master.m3u8`;
+                return (
+                  <div className="space-y-2">
+                    <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                      {useHls ? (
+                        <HlsPlayer url={hlsUrl} autoPlay live={false} />
+                      ) : (
+                        <video
+                          src={`${serverBaseUrl}/recordings/${playingVideo}`}
+                          controls
+                          autoPlay
+                          className="w-full h-full"
+                        />
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-muted-foreground">
+                        {formatRecordingDate(playingVideo)}
+                      </p>
+                      <button
+                        onClick={() => setPlayingVideo(null)}
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        Fechar player
+                      </button>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Lista de gravações */}
+              <div className="border rounded-lg overflow-hidden">
+                <div className="bg-muted/50 px-4 py-2 border-b">
+                  <div className="grid grid-cols-12 gap-2 text-xs font-medium text-muted-foreground">
+                    <div className="col-span-4">Data da Gravação</div>
+                    <div className="col-span-2">Tamanho</div>
+                    <div className="col-span-2">Qualidade</div>
+                    <div className="col-span-4 text-right">Ações</div>
+                  </div>
+                </div>
+                <div className="max-h-[400px] overflow-y-auto">
+                  {recordings.map((rec) => (
+                    <div
+                      key={rec.name}
+                      className={`px-4 py-3 border-b last:border-b-0 hover:bg-muted/30 ${
+                        playingVideo === rec.name ? "bg-primary/5" : ""
+                      }`}
+                    >
+                      <div className="grid grid-cols-12 gap-2 items-center text-sm">
+                        <div className="col-span-4 font-medium">
+                          {formatRecordingDate(rec.name)}
+                        </div>
+                        <div className="col-span-2 text-muted-foreground">
+                          {formatFileSize(rec.size)}
+                        </div>
+                        <div className="col-span-2">
+                          {rec.hasHls ? (
+                            <Badge variant="default" className="text-xs">HLS Multi</Badge>
+                          ) : (
+                            <Badge variant="secondary" className="text-xs">MP4</Badge>
+                          )}
+                        </div>
+                        <div className="col-span-4 flex items-center justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setPlayingVideo(
+                              playingVideo === rec.name ? null : rec.name
+                            )}
+                          >
+                            <Play className="w-4 h-4 mr-1" />
+                            {playingVideo === rec.name ? "Parar" : "Assistir"}
+                          </Button>
+                          <a
+                            href={`${serverBaseUrl}/recordings/${rec.name}`}
+                            download
+                            className="inline-flex"
+                          >
+                            <Button variant="ghost" size="sm">
+                              <Download className="w-4 h-4 mr-1" />
+                              Baixar
+                            </Button>
+                          </a>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-destructive hover:text-destructive"
+                            onClick={() => handleDeleteRecording(rec.name)}
+                            disabled={deletingRecording === rec.name}
+                          >
+                            <Trash2 className="w-4 h-4 mr-1" />
+                            {deletingRecording === rec.name ? "Apagando..." : "Apagar"}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <p className="text-xs text-muted-foreground">
+                {recordings.length} gravação(ões) encontrada(s). Gravações com "HLS Multi" permitem seleção de qualidade ao assistir.
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Armazenamento do Servidor */}
+      {diskUsage && (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <HardDrive className="w-5 h-5" />
+              Armazenamento do Servidor
+            </CardTitle>
+            <CardDescription>
+              Uso de disco do servidor de streaming
+              {diskUsage.updated_at && (
+                <span className="ml-2 text-xs">
+                  (atualizado em {new Date(diskUsage.updated_at).toLocaleString("pt-BR")})
+                </span>
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {/* Barra de progresso */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-sm">
+                <span>
+                  {formatFileSize(diskUsage.disk_used)} usado de {formatFileSize(diskUsage.disk_total)}
+                </span>
+                <span className={`font-semibold ${
+                  diskUsage.disk_percent >= 90
+                    ? "text-red-500"
+                    : diskUsage.disk_percent >= 75
+                      ? "text-yellow-500"
+                      : "text-green-500"
+                }`}>
+                  {diskUsage.disk_percent}% usado
+                </span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-4 overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all ${
+                    diskUsage.disk_percent >= 90
+                      ? "bg-red-500"
+                      : diskUsage.disk_percent >= 75
+                        ? "bg-yellow-500"
+                        : "bg-green-500"
+                  }`}
+                  style={{ width: `${diskUsage.disk_percent}%` }}
+                />
+              </div>
+
+              {/* Detalhes */}
+              <div className="grid grid-cols-3 gap-4 pt-2">
+                <div className="bg-muted/50 rounded-lg p-3 text-center">
+                  <p className="text-lg font-bold text-green-600 dark:text-green-400">
+                    {formatFileSize(diskUsage.disk_available)}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Disponivel</p>
+                </div>
+                <div className="bg-muted/50 rounded-lg p-3 text-center">
+                  <p className="text-lg font-bold">
+                    {formatFileSize(diskUsage.recordings_size)}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Gravações</p>
+                </div>
+                <div className="bg-muted/50 rounded-lg p-3 text-center">
+                  <p className="text-lg font-bold">
+                    {diskUsage.recordings_count}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Arquivos</p>
+                </div>
+              </div>
+
+              {/* Alerta de disco cheio */}
+              {diskUsage.disk_percent >= 90 && (
+                <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                  <p className="text-sm text-red-600 dark:text-red-400 font-semibold">
+                    Disco quase cheio! Apague gravações antigas para liberar espaço.
+                  </p>
+                </div>
+              )}
+              {diskUsage.disk_percent >= 75 && diskUsage.disk_percent < 90 && (
+                <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                  <p className="text-sm text-yellow-600 dark:text-yellow-400">
+                    Atenção: o disco está com {diskUsage.disk_percent}% de uso. Considere apagar gravações antigas.
+                  </p>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Formulário de Configurações */}
       <Card>

@@ -22,6 +22,7 @@ interface Recording {
   name: string;
   mtime: string;
   size: number;
+  hasHls: boolean;
 }
 
 function formatFileSize(bytes: number): string {
@@ -31,11 +32,12 @@ function formatFileSize(bytes: number): string {
 }
 
 function formatRecordingDate(filename: string): string {
-  // stream_20260311_193000.mp4 → "11/03/2026 às 19:30"
-  const match = filename.match(/(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/);
-  if (!match) return filename;
-  const [, year, month, day, hour, min] = match;
-  return `${day}/${month}/${year} às ${hour}:${min}`;
+  const match = filename.match(/_(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/);
+  if (!match) return "Live";
+  const [, year, month, day, hour, min, sec] = match;
+  // Timestamp do servidor esta em fuso +0200 (CEST), converter para UTC subtraindo 2h
+  const serverDate = new Date(Date.UTC(+year, +month - 1, +day, +hour - 2, +min, +sec));
+  return `Live do dia ${serverDate.toLocaleDateString("pt-BR")}`;
 }
 
 // Declarar gtag para TypeScript
@@ -66,7 +68,7 @@ export default function Live() {
   const videoPlayerRef = useRef<HTMLVideoElement>(null);
 
   const streamUrl = config?.url_stream || import.meta.env.VITE_STREAM_URL || "";
-  const serverBaseUrl = streamUrl.replace(/\/live\/.*$/, "");
+  const serverBaseUrl = streamUrl.replace(/\/live\/.*$/, "").replace(/^http:\/\//, "https://");
 
   // Carregar gravações quando offline
   useEffect(() => {
@@ -74,11 +76,18 @@ export default function Live() {
     setLoadingRecordings(true);
     fetch(`${serverBaseUrl}/recordings/`)
       .then((res) => res.json())
-      .then((files: { name: string; mtime: string; size: number }[]) => {
-        const mp4s = files
-          .filter((f) => f.name.endsWith(".mp4"))
+      .then((files: { name: string; mtime: string; size: number; type: string }[]) => {
+        const mp4s = files.filter((f) => f.name.endsWith(".mp4"));
+        const dirs = new Set(files.filter((f) => f.type === "directory").map((f) => f.name));
+        const recs: Recording[] = mp4s
+          .map((f) => ({
+            name: f.name,
+            mtime: f.mtime,
+            size: f.size,
+            hasHls: dirs.has(f.name.replace(".mp4", "")),
+          }))
           .sort((a, b) => new Date(b.mtime).getTime() - new Date(a.mtime).getTime());
-        setRecordings(mp4s);
+        setRecordings(recs);
       })
       .catch(() => setRecordings([]))
       .finally(() => setLoadingRecordings(false));
@@ -483,30 +492,44 @@ export default function Live() {
                 </div>
 
                 {/* Player da gravação selecionada */}
-                {playingVideo && (
-                  <div className="space-y-2">
-                    <div className="aspect-video bg-black rounded-lg overflow-hidden">
-                      <video
-                        ref={videoPlayerRef}
-                        src={`${serverBaseUrl}/recordings/${playingVideo}`}
-                        controls
-                        autoPlay
-                        className="w-full h-full"
-                      />
+                {playingVideo && (() => {
+                  const currentRec = recordings.find((r) => r.name === playingVideo);
+                  const useHls = currentRec?.hasHls;
+                  const hlsUrl = `${serverBaseUrl}/recordings/${playingVideo.replace(".mp4", "")}/master.m3u8`;
+                  return (
+                    <div className="space-y-2">
+                      <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                        {useHls ? (
+                          <HlsPlayer url={hlsUrl} autoPlay live={false} />
+                        ) : (
+                          <video
+                            ref={videoPlayerRef}
+                            src={`${serverBaseUrl}/recordings/${playingVideo}`}
+                            controls
+                            autoPlay
+                            className="w-full h-full"
+                          />
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-muted-foreground">
+                          {formatRecordingDate(playingVideo)}
+                          {useHls && (
+                            <span className="ml-2 text-xs text-primary">
+                              Selecione a qualidade no player
+                            </span>
+                          )}
+                        </p>
+                        <button
+                          onClick={() => setPlayingVideo(null)}
+                          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          Fechar player
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm text-muted-foreground">
-                        {formatRecordingDate(playingVideo)}
-                      </p>
-                      <button
-                        onClick={() => setPlayingVideo(null)}
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        Fechar player
-                      </button>
-                    </div>
-                  </div>
-                )}
+                  );
+                })()}
 
                 {/* Lista de gravações */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -527,6 +550,7 @@ export default function Live() {
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {formatFileSize(rec.size)}
+                          {rec.hasHls && " - Multi qualidade"}
                         </p>
                       </div>
                     </button>

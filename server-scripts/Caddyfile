@@ -1,0 +1,51 @@
+avivanacoes.duckdns.org {
+    handle /socket.io/* {
+        reverse_proxy localhost:3001 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+        }
+    }
+
+    handle /api/* {
+        reverse_proxy localhost:3001
+    }
+
+    handle /disk-usage.json {
+        header Access-Control-Allow-Origin *
+        header Access-Control-Allow-Methods "GET, OPTIONS"
+        header Access-Control-Allow-Headers *
+        @options method OPTIONS
+        respond @options 204
+        reverse_proxy localhost:8080
+    }
+
+    handle /delete-recording/* {
+        header Access-Control-Allow-Origin *
+        header Access-Control-Allow-Methods "DELETE, OPTIONS"
+        header Access-Control-Allow-Headers *
+        @options method OPTIONS
+        respond @options 204
+        reverse_proxy localhost:8090
+    }
+
+    handle /recordings/* {
+        header Access-Control-Allow-Origin *
+        header Access-Control-Allow-Methods "GET, OPTIONS"
+        header Access-Control-Allow-Headers *
+        @options method OPTIONS
+        respond @options 204
+        reverse_proxy localhost:8080
+    }
+
+    handle /live/* {
+        header Access-Control-Allow-Origin *
+        header Access-Control-Allow-Methods "GET, OPTIONS"
+        header Access-Control-Allow-Headers *
+        header Access-Control-Expose-Headers "Content-Length,Content-Range"
+        reverse_proxy localhost:8080
+    }
+
+    handle {
+        reverse_proxy localhost:8080
+    }
+}

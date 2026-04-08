@@ -251,6 +251,89 @@ export async function getTodosViewers(): Promise<LiveViewer[]> {
   }
 }
 
+// =====================================================
+// FUNÇÕES PARA GRAVAÇÕES (RECORDINGS)
+// =====================================================
+
+export interface Recording {
+  name: string;
+  mtime: string;
+  size: number;
+  /** true se tem versao HLS com multiplas qualidades */
+  hasHls: boolean;
+}
+
+/**
+ * Deriva a URL base do servidor de streaming a partir da URL do stream
+ */
+function getStreamingServerUrl(streamUrl: string): string {
+  const base = streamUrl.replace(/\/live\/.*$/, "");
+  // Caddy redireciona http para https, usar https diretamente evita 308
+  return base.replace(/^http:\/\//, "https://");
+}
+
+/**
+ * Busca a lista de gravações do servidor de streaming
+ * Detecta se cada gravacao tem versao HLS (pasta com master.m3u8)
+ */
+export async function getRecordings(streamUrl: string): Promise<Recording[]> {
+  const serverBaseUrl = getStreamingServerUrl(streamUrl);
+  const response = await fetch(`${serverBaseUrl}/recordings/`);
+  const files: { name: string; mtime: string; size: number; type: string }[] = await response.json();
+
+  const mp4s = files.filter((f) => f.name.endsWith(".mp4"));
+  const dirs = new Set(files.filter((f) => f.type === "directory").map((f) => f.name));
+
+  return mp4s
+    .map((f) => {
+      const baseName = f.name.replace(".mp4", "");
+      return {
+        name: f.name,
+        mtime: f.mtime,
+        size: f.size,
+        hasHls: dirs.has(baseName),
+      };
+    })
+    .sort((a, b) => new Date(b.mtime).getTime() - new Date(a.mtime).getTime());
+}
+
+/**
+ * Deleta uma gravação (MP4 + pasta HLS se existir)
+ */
+export async function deleteRecording(streamUrl: string, filename: string): Promise<void> {
+  const serverBaseUrl = getStreamingServerUrl(streamUrl);
+  const response = await fetch(`${serverBaseUrl}/delete-recording/${filename}`, {
+    method: "DELETE",
+  });
+  if (!response.ok && response.status !== 404) {
+    throw new Error(`Erro ao deletar gravação: ${response.status}`);
+  }
+}
+
+/**
+ * Busca informações de uso de disco do servidor de streaming
+ */
+export interface DiskUsage {
+  disk_total: number;
+  disk_used: number;
+  disk_available: number;
+  disk_percent: number;
+  recordings_size: number;
+  recordings_count: number;
+  updated_at: string;
+}
+
+export async function getDiskUsage(streamUrl: string): Promise<DiskUsage | null> {
+  try {
+    const serverBaseUrl = getStreamingServerUrl(streamUrl);
+    const response = await fetch(`${serverBaseUrl}/disk-usage.json`);
+    if (!response.ok) return null;
+    return response.json();
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Busca apenas viewers ativos - Para admin
  */

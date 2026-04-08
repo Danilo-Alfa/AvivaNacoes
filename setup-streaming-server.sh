@@ -172,6 +172,16 @@ http {
             add_header Access-Control-Expose-Headers 'Content-Length,Content-Range' always;
         }
 
+        # Info de uso de disco (gerado por cron)
+        location = /disk-usage.json {
+            root /var/www/html;
+            add_header Cache-Control no-cache;
+            add_header Access-Control-Allow-Origin * always;
+            add_header Access-Control-Allow-Methods 'GET, OPTIONS' always;
+            add_header Access-Control-Allow-Headers '*' always;
+            default_type application/json;
+        }
+
         # Listar e servir gravações
         location /recordings {
             root /var/www/html;

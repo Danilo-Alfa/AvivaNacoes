@@ -4,13 +4,24 @@ import Hls from "hls.js";
 interface HlsPlayerProps {
   url: string;
   autoPlay?: boolean;
+  /** true = modo ao vivo (sem seekbar, com badge AO VIVO). false = modo gravacao */
+  live?: boolean;
   onReady?: () => void;
   onError?: (error: string) => void;
+}
+
+function formatTime(seconds: number): string {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  return `${m}:${String(s).padStart(2, "0")}`;
 }
 
 export default function HlsPlayer({
   url,
   autoPlay = true,
+  live = true,
   onReady,
   onError,
 }: HlsPlayerProps) {
@@ -25,6 +36,9 @@ export default function HlsPlayer({
   const [showQualityMenu, setShowQualityMenu] = useState(false);
   const [qualityLevels, setQualityLevels] = useState<{ height: number; index: number }[]>([]);
   const [currentQuality, setCurrentQuality] = useState(-1); // -1 = auto
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [seeking, setSeeking] = useState(false);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Refs para callbacks (evitar re-criação do hls)
@@ -46,13 +60,12 @@ export default function HlsPlayer({
     }
   }, []);
 
-  // Play/Pause com seek to live ao despausar
   const togglePlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
 
     if (video.paused) {
-      seekToLive();
+      if (live) seekToLive();
       video.play().catch(() => {
         video.muted = true;
         video.play().catch(() => {});
@@ -60,7 +73,15 @@ export default function HlsPlayer({
     } else {
       video.pause();
     }
-  }, [seekToLive]);
+  }, [seekToLive, live]);
+
+  const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const video = videoRef.current;
+    if (!video) return;
+    const time = Number(e.target.value);
+    video.currentTime = time;
+    setCurrentTime(time);
+  }, []);
 
   const toggleMute = useCallback(() => {
     const video = videoRef.current;
@@ -113,7 +134,7 @@ export default function HlsPlayer({
     setLoading(true);
 
     if (Hls.isSupported()) {
-      const hls = new Hls({
+      const hls = new Hls(live ? {
         enableWorker: true,
         lowLatencyMode: true,
         liveSyncDurationCount: 2,
@@ -129,6 +150,13 @@ export default function HlsPlayer({
         levelLoadingRetryDelay: 500,
         fragLoadingMaxRetry: 10,
         fragLoadingRetryDelay: 500,
+      } : {
+        enableWorker: true,
+        maxBufferLength: 30,
+        maxMaxBufferLength: 60,
+        manifestLoadingMaxRetry: 5,
+        levelLoadingMaxRetry: 5,
+        fragLoadingMaxRetry: 5,
       });
 
       hlsRef.current = hls;
@@ -213,7 +241,7 @@ export default function HlsPlayer({
       setLoading(false);
       onErrorRef.current?.("hls-not-supported");
     }
-  }, [url, autoPlay]);
+  }, [url, autoPlay, live]);
 
   useEffect(() => {
     initHls();
@@ -225,26 +253,48 @@ export default function HlsPlayer({
     };
   }, [initHls]);
 
-  // Sincronizar estado de pausa
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     const onPlay = () => setPaused(false);
     const onPause = () => setPaused(true);
+    const onTimeUpdate = () => {
+      if (!seeking) setCurrentTime(video.currentTime);
+    };
+    const onDurationChange = () => {
+      if (isFinite(video.duration)) setDuration(video.duration);
+    };
 
     video.addEventListener("play", onPlay);
     video.addEventListener("pause", onPause);
+    video.addEventListener("timeupdate", onTimeUpdate);
+    video.addEventListener("durationchange", onDurationChange);
     return () => {
       video.removeEventListener("play", onPlay);
       video.removeEventListener("pause", onPause);
+      video.removeEventListener("timeupdate", onTimeUpdate);
+      video.removeEventListener("durationchange", onDurationChange);
     };
-  }, []);
+  }, [seeking]);
 
   const handleRetry = useCallback(() => {
     setError(null);
     initHls();
   }, [initHls]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (live) return;
+    const video = videoRef.current;
+    if (!video) return;
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      video.currentTime = Math.min(video.currentTime + 5, video.duration);
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      video.currentTime = Math.max(video.currentTime - 5, 0);
+    }
+  }, [live]);
 
   return (
     <div
@@ -253,6 +303,8 @@ export default function HlsPlayer({
       onMouseMove={resetHideTimer}
       onTouchStart={resetHideTimer}
       onClick={togglePlay}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
     >
       {/* Loading */}
       {loading && (
@@ -289,7 +341,7 @@ export default function HlsPlayer({
         playsInline
       />
 
-      {/* Controles customizados (sem barra de tempo) */}
+      {/* Controles customizados */}
       {!loading && !error && (
         <div
           className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-4 py-3 transition-opacity duration-300 ${
@@ -297,8 +349,28 @@ export default function HlsPlayer({
           }`}
           onClick={(e) => e.stopPropagation()}
         >
+          {/* Barra de progresso (apenas modo gravacao) */}
+          {!live && duration > 0 && (
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-white text-xs min-w-[40px]">{formatTime(currentTime)}</span>
+              <input
+                type="range"
+                min={0}
+                max={duration}
+                step={0.1}
+                value={currentTime}
+                onChange={handleSeek}
+                onMouseDown={() => setSeeking(true)}
+                onMouseUp={() => setSeeking(false)}
+                onTouchStart={() => setSeeking(true)}
+                onTouchEnd={() => setSeeking(false)}
+                className="flex-1 h-1 accent-white cursor-pointer appearance-none bg-white/30 rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full"
+              />
+              <span className="text-white text-xs min-w-[40px] text-right">{formatTime(duration)}</span>
+            </div>
+          )}
+
           <div className="flex items-center justify-between gap-3">
-            {/* Esquerda: Play/Pause + Mute + Badge AO VIVO */}
             <div className="flex items-center gap-3">
               <button
                 onClick={togglePlay}
@@ -332,20 +404,48 @@ export default function HlsPlayer({
                 )}
               </button>
 
-              {/* Badge AO VIVO */}
-              <button
-                onClick={() => {
-                  seekToLive();
-                  const video = videoRef.current;
-                  if (video?.paused) {
-                    video.play().catch(() => {});
-                  }
-                }}
-                className="flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-2 py-1 rounded transition-colors"
-              >
-                <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                AO VIVO
-              </button>
+              {/* Botoes -5s / +5s (apenas modo gravacao) */}
+              {!live && (
+                <>
+                  <button
+                    onClick={() => {
+                      const v = videoRef.current;
+                      if (v) v.currentTime = Math.max(v.currentTime - 5, 0);
+                    }}
+                    className="text-white hover:text-white/80 transition-colors text-xs font-bold px-1.5 py-0.5 border border-white/40 rounded"
+                    aria-label="Voltar 5 segundos"
+                  >
+                    -5s
+                  </button>
+                  <button
+                    onClick={() => {
+                      const v = videoRef.current;
+                      if (v) v.currentTime = Math.min(v.currentTime + 5, v.duration);
+                    }}
+                    className="text-white hover:text-white/80 transition-colors text-xs font-bold px-1.5 py-0.5 border border-white/40 rounded"
+                    aria-label="Avançar 5 segundos"
+                  >
+                    +5s
+                  </button>
+                </>
+              )}
+
+              {/* Badge AO VIVO (apenas modo live) */}
+              {live && (
+                <button
+                  onClick={() => {
+                    seekToLive();
+                    const video = videoRef.current;
+                    if (video?.paused) {
+                      video.play().catch(() => {});
+                    }
+                  }}
+                  className="flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-2 py-1 rounded transition-colors"
+                >
+                  <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                  AO VIVO
+                </button>
+              )}
             </div>
 
             {/* Direita: Qualidade + Fullscreen */}
