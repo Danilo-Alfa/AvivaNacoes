@@ -17,7 +17,8 @@
       "Bash(find:*)",
       "Bash(where:*)",
       "Bash(ls:*)",
-      "Bash(\"C:/Users/danilo.henrique/Documents/projetos/outros/AvivaNacoesApp/node_modules/.bin/tsc\" --noEmit --project \"C:/Users/danilo.henrique/Documents/projetos/outros/AvivaNacoesApp/tsconfig.json\")"
+      "Bash(\"C:/Users/danilo.henrique/Documents/projetos/outros/AvivaNacoesApp/node_modules/.bin/tsc\" --noEmit --project \"C:/Users/danilo.henrique/Documents/projetos/outros/AvivaNacoesApp/tsconfig.json\")",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
